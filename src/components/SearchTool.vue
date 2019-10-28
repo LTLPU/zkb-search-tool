@@ -3,9 +3,45 @@
     <h1>zkb-search-tool</h1>
     <hr />
     <p class="generatedUrl">
-      <a :href="generatedUrl" target="_blank">{{ generatedUrl }}</a>
+      <a
+        :href="generatedUrl"
+        target="_blank"
+      >{{ generatedUrl }}</a>
     </p>
-    <input type="button" value="Kills" v-on:click="addKills()"/>
+    <ul>
+      <li
+        v-for="criteria in criteriaList"
+        :key="criteria.getCriteriaType()"
+      >
+        {{ criteria.getCriteriaView() }}
+      </li>
+    </ul>
+    <hr />
+    <input
+      type="button"
+      value="Kills"
+      v-on:click="addKills()"
+    />
+    <input
+      type="button"
+      value="Losses"
+      v-on:click="addLosses()"
+    />
+    <input
+      type="button"
+      value="Clear"
+      v-on:click="clear()"
+    />
+    <input
+      type="text"
+      v-model="inputText"
+    />
+    <input
+      type="button"
+      value="Character"
+      v-on:click="addCharacter()"
+    />
+
   </div>
 </template>
 
@@ -18,17 +54,90 @@ export default {
   data: function () {
     return {
       generatedUrl: '',
-      criteriaList: new CriteriaListModel()
+      criteriaList: {},
+      inputText: ''
     }
   },
   created: function () {
-    console.log(this.criteriaList instanceof CriteriaListModel) // => false
+    this.criteriaList = []
+    this.updateUrl()
   },
   methods: {
+    /**
+     * kills/を追加する。
+     */
     addKills: function () {
-      console.log(this.criteriaList instanceof CriteriaListModel)
-      this.criteriaList.add(KillCriteriaCreator.create())
-      this.generatedUrl = generateSearchURL(this.criteriaList)
+      this.addCriteria(KillCriteriaCreator.create())
+      this.updateUrl()
+    },
+    /**
+     * losses/を追加する。
+     */
+    addLosses: function () {
+      this.addCriteria(LossCriteriaCreator.create())
+      this.updateUrl()
+    },
+    addCharacter: function () {
+      this.addCriteria(CharacterCriteriaCreator.create(this.inputText))
+      this.updateUrl()
+      this.inputText = ''
+    },
+    /**
+     * 中身をクリアする。
+     */
+    clear: function () {
+      this.criteriaList = []
+      this.updateUrl()
+    },
+    /**
+     * generatedUrlを更新する。
+     */
+    updateUrl: function () {
+      this.generatedUrl = this.generateSearchURL()
+    },
+    /**
+     * 条件を追加する。
+     *
+     * @param {Criteria} newCriteria 追加する条件
+     */
+    addCriteria: function (newCriteria) {
+      if (!(newCriteria instanceof Criteria)) {
+        throw new Error('newCriteria is not Criteria')
+      }
+
+      const type = newCriteria.getCriteriaType()
+
+      // Typeが一致するものを検索
+      const findIndex = this.criteriaList.findIndex(criteria => {
+        return criteria.getCriteriaType() === type
+      })
+      // 重複が認められていないTypeは上書きする
+      if (!TYPES[type].isMultiple) {
+        if (findIndex < 0) {
+          // 追加
+          this.criteriaList.push(newCriteria)
+        } else {
+          // 上書き
+          this.criteriaList.splice(findIndex, 1, newCriteria)
+        }
+      } else {
+        // 重複が認められているTypeは追加
+        this.criteriaList.push(newCriteria)
+      }
+    },
+    /**
+     * リストを展開してUrlを返す。
+     */
+    generateSearchURL: function () {
+      let url = 'https://zkillboard.com/'
+
+      for (let criteria of this.criteriaList) {
+        if (criteria instanceof Criteria) {
+          url += criteria.getUrlString()
+        }
+      }
+
+      return url
     }
   }
 }
@@ -46,7 +155,7 @@ const TYPE_SYSTEM = 'type_system'
 const TYPE_REGION = 'type_region'
 
 // データ構造
-export const TYPES = {}
+const TYPES = {}
 TYPES[TYPE_KILLLOSS] = {
   isMultiple: false,
   isParameterRequired: false
@@ -88,11 +197,15 @@ TYPES[TYPE_REGION] = {
   isParameterRequired: true
 }
 
-export class Criteria {
+class Criteria {
   constructor () {
     this._criteriaType = ''
     this._searchType = ''
-    this._searchValue = ''
+    this._searchValue = []
+  }
+
+  addSearchValue (value) {
+    this._searchValue.push(value)
   }
 
   getCriteriaType () {
@@ -101,9 +214,17 @@ export class Criteria {
 
   getUrlString () {
     if (this._searchValue !== '') {
-      return this._searchType + '/' + this._searchValue + '/'
+      return this._searchType + '/' + this._searchValue.join(', ') + '/'
     } else {
       return this._searchType + '/'
+    }
+  }
+
+  getCriteriaView () {
+    if (this._searchValue !== '') {
+      return this._searchType + ' : ' + this._searchValue.join(', ')
+    } else {
+      return this._searchType
     }
   }
 }
@@ -113,7 +234,6 @@ class KillCriteria extends Criteria {
     super()
     this._criteriaType = TYPE_KILLLOSS
     this._searchType = 'kills'
-    this._searchValue = ''
   }
 }
 
@@ -122,7 +242,6 @@ class LossCriteria extends Criteria {
     super()
     this._criteriaType = TYPE_KILLLOSS
     this._searchType = 'losses'
-    this._searchValue = ''
   }
 }
 
@@ -131,44 +250,7 @@ class CharacterCriteria extends Criteria {
     super()
     this._criteriaType = TYPE_CHARACTER
     this._searchType = 'character'
-    this._searchValue = characterId
-  }
-}
-
-class CriteriaListModel extends Array {
-  constructor () {
-    super()
-    console.log('criteriaListModel')
-  }
-  /**
-   * 条件を追加する。
-   *
-   * @param {Criteria} newCriteria 追加する条件
-   */
-  add (newCriteria) {
-    if (!(newCriteria instanceof Criteria)) {
-      throw new Error('newCriteria is not Criteria')
-    }
-
-    const type = newCriteria.getCriteriaType()
-
-    // 重複が認められていないTypeは上書きする
-    if (!TYPES[type].isMultiple) {
-      // Typeが一致するものを検索
-      let findCriteria = this.find(criteria => {
-        return criteria.getCriteriaType() === type
-      })
-      if (typeof findCriteria === 'undefined') {
-        // 追加
-        this.push(newCriteria)
-      } else {
-        // 上書き
-        findCriteria = newCriteria
-      }
-    } else {
-      // 重複が認められているTypeは追加
-      this.push(newCriteria)
-    }
+    this._searchValue.push(characterId)
   }
 }
 
@@ -199,17 +281,6 @@ class CharacterCriteriaCreator extends CriteriaCreator {
   }
 }
 
-const generateSearchURL = (criteriaList) => {
-  let url = 'https://zkillboard.com/'
-
-  for (let criteria of criteriaList) {
-    if (criteria instanceof Criteria) {
-      url += criteria.getUrlString()
-    }
-  }
-
-  return url
-}
 </script>
 
 <style>
