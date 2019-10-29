@@ -1,18 +1,30 @@
-import * as criterias from './Criteria.js'
-import * as types from './Types.js'
+import { Criteria } from './Criteria.js'
+import { CriteriaTypeInfo } from './CriteriaType.js'
 
 export class CriteriaListModel {
   constructor () {
     this._criteriaList = []
   }
+
+  /**
+   * CriteriaListModelのIterator
+   */
+  * [Symbol.iterator] () {
+    for (const criteria of this._criteriaList) {
+      yield criteria
+    }
+  }
+
   /**
    * 条件を追加する。
    *
    * @param {Criteria} newCriteria 追加する条件
    */
-  addCriteria = newCriteria => {
-    if (!(newCriteria instanceof criterias.Criteria)) {
-      throw new Error('newCriteria is not Criteria')
+  addCriteria (newCriteria) {
+    // TODO CriteriaTypeInfo.conflictKey を見るように書き変える。
+
+    if (!(newCriteria instanceof Criteria)) {
+      throw new Error('newCriteria is not Criteria.')
     }
 
     const type = newCriteria.getCriteriaType()
@@ -22,7 +34,7 @@ export class CriteriaListModel {
       return criteria.getCriteriaType() === type
     })
     // 重複が認められていないTypeは上書きする
-    if (!types.TYPES[type].isMultiple) {
+    if (!CriteriaTypeInfo[type].isMultiple) {
       if (findIndex < 0) {
         // 追加
         this._criteriaList.push(newCriteria)
@@ -46,17 +58,17 @@ export class CriteriaListModel {
   /**
    * リストを展開してUrlを返す。
    */
-  getSearchUrl = () => {
+  getSearchUrl () {
     let url = 'https://zkillboard.com/'
 
-    for (let criteria of this._criteriaList) {
-      if (criteria instanceof criterias.Criteria) {
-        url += criteria.getUrlString()
-      }
+    for (const criteria of this._criteriaList) {
+      url += criteria.getUrlString()
     }
 
     return url
   }
 
-  // TODO Iteratorを実装する。
+  clear () {
+    this._criteriaList = []
+  }
 }

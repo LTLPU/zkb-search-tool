@@ -46,8 +46,9 @@
 </template>
 
 <script>
-import * as criteriaCreators from './entity/CriteriaCreators.js'
-import * as criteriaListModel from './entity/CriteriaListModel.js'
+import { CriteriaCreator } from './entity/CriteriaCreator.js'
+import { CriteriaListModel } from './entity/CriteriaListModel.js'
+import { CriteriaType } from './entity/CriteriaType.js'
 
 export default {
   name: 'SearchTool',
@@ -62,26 +63,26 @@ export default {
     }
   },
   created: function () {
-    this.criteriaList = new criteriaListModel.CriteriaListModel()
-    console.log(this.criteriaList instanceof criteriaListModel.CriteriaListModel)
+    this.criteriaList = new CriteriaListModel()
+    // console.log(this.criteriaList instanceof CriteriaListModel)
   },
   methods: {
     /**
      * kills/を追加する。
      */
     addKills: function () {
-      this.addCriteria(criteriaCreators.KillCriteriaCreator.create())
+      this.criteriaList.addCriteria(CriteriaCreator.create(CriteriaType.TYPE_KILLS))
       this.updateUrl()
     },
     /**
      * losses/を追加する。
      */
     addLosses: function () {
-      this.addCriteria(criteriaCreators.LossCriteriaCreator.create())
+      this.criteriaList.addCriteria(CriteriaCreator.create(CriteriaType.TYPE_LOSSES))
       this.updateUrl()
     },
     addCharacter: function () {
-      this.addCriteria(criteriaCreators.CharacterCriteriaCreator.create(this.inputText))
+      this.criteriaList.addCriteria(CriteriaCreator.create(CriteriaType.TYPE_CHARACTER), this.inputText)
       this.updateUrl()
       this.inputText = ''
     },
@@ -89,14 +90,14 @@ export default {
      * 中身をクリアする。
      */
     clear: function () {
-      this.criteriaList = []
+      this.criteriaList.clear()
       this.updateUrl()
     },
     /**
      * generatedUrlを更新する。
      */
     updateUrl: function () {
-      this.generatedUrl = this.generateSearchURL()
+      this.generatedUrl = this.criteriaList.getSearchUrl()
     }
   }
 }

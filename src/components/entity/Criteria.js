@@ -1,33 +1,13 @@
-import * as types from './Types.js'
-
 export class Criteria {
-  constructor () {
-    this._criteriaType = ''
-    this._searchType = ''
-    this._searchValue = []
+  constructor (criteriaType, searchType, searchValue) {
+    this._criteriaType = criteriaType !== undefined ? criteriaType : ''
+    this._searchType = searchType !== undefined ? searchType : ''
+    this._searchValue = searchValue !== undefined ? [searchValue] : []
   }
 
   addSearchValue (value) {
     this._searchValue.push(value)
   }
-
-  merge (criteria) {
-    if (!(criteria instanceof Criteria)) {
-      throw new Error('Criteriaではない')
-    }
-    if (this._criteriaType !== criteria._criteriaType) {
-      throw new Error('CriteriaTypeが一致しない')
-    }
-    if (this._searchType !== criteria._searchType) {
-      throw new Error('SearchTypeが一致しない')
-    }
-
-    for (const value of criteria.getSearchValue()) {
-      this.addSearchValue(value)
-    }
-  }
-
-  // TODO 同じCriteriaType, SearchTypeのCriteriaがきた場合、SearchValueを統合する処理を作る。
 
   getCriteriaType () {
     return this._criteriaType
@@ -52,29 +32,21 @@ export class Criteria {
       return this._searchType
     }
   }
-}
 
-export class KillCriteria extends Criteria {
-  constructor () {
-    super()
-    this._criteriaType = types.TYPE_KILLLOSS
-    this._searchType = 'kills'
-  }
-}
+  // TODO 消すかも
+  merge (criteria) {
+    if (!(criteria instanceof Criteria)) {
+      throw new Error('Criteriaではない')
+    }
+    if (this._criteriaType !== criteria._criteriaType) {
+      throw new Error('CriteriaTypeが一致しない')
+    }
+    if (this._searchType !== criteria._searchType) {
+      throw new Error('SearchTypeが一致しない')
+    }
 
-export class LossCriteria extends Criteria {
-  constructor () {
-    super()
-    this._criteriaType = types.TYPE_KILLLOSS
-    this._searchType = 'losses'
-  }
-}
-
-export class CharacterCriteria extends Criteria {
-  constructor (characterId) {
-    super()
-    this._criteriaType = types.TYPE_CHARACTER
-    this._searchType = 'character'
-    this._searchValue.push(characterId)
+    for (const value of criteria.getSearchValue()) {
+      this.addSearchValue(value)
+    }
   }
 }
