@@ -3,9 +3,9 @@ export const CriteriaType = {
   // TYPE_KILLLOSS: 'type_killloss',
   TYPE_KILLS: 'TYPE_KILLS',
   TYPE_LOSSES: 'TYPE_LOSSES',
+  TYPE_GANKED: 'TYPE_GANKED',
   // TYPE_KILLTYPE: 'type_killtype',
   TYPE_SOLO: 'TYPE_SOLO',
-  TYPE_GANKED: 'TYPE_GANKED',
   // TYPE_SECURITY: 'type_sercurity',
   TYPE_HIGHSEC: 'TYPE_HIGHSEC',
   TYPE_LOWSEC: 'TYPE_LOWSEC',
@@ -35,16 +35,16 @@ CriteriaTypeInfo[CriteriaType.TYPE_LOSSES] = {
   type: 'losses',
   conflictKey: 1
 }
-CriteriaTypeInfo[CriteriaType.TYPE_SOLO] = {
-  isMultiple: false,
-  isParameterRequired: false,
-  type: 'solo',
-  conflictKey: 2
-}
 CriteriaTypeInfo[CriteriaType.TYPE_GANKED] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'ganked',
+  conflictKey: 1
+}
+CriteriaTypeInfo[CriteriaType.TYPE_SOLO] = {
+  isMultiple: false,
+  isParameterRequired: false,
+  type: 'solo',
   conflictKey: 2
 }
 CriteriaTypeInfo[CriteriaType.TYPE_HIGHSEC] = {
@@ -84,22 +84,22 @@ CriteriaTypeInfo[CriteriaType.TYPE_SHIP] = {
   conflictKey: 4
 }
 CriteriaTypeInfo[CriteriaType.TYPE_ALLIANCE] = {
-  isMultiple: false,
+  isMultiple: true,
   isParameterRequired: true,
   type: 'alliance',
   conflictKey: 6
 }
 CriteriaTypeInfo[CriteriaType.TYPE_CORPORATION] = {
-  isMultiple: false,
+  isMultiple: true,
   isParameterRequired: true,
   type: 'corporation',
-  conflictKey: 6
+  conflictKey: 7
 }
 CriteriaTypeInfo[CriteriaType.TYPE_CHARACTER] = {
   isMultiple: true,
   isParameterRequired: true,
   type: 'character',
-  conflictKey: 6
+  conflictKey: 8
 }
 CriteriaTypeInfo[CriteriaType.TYPE_SYSTEM] = {
   isMultiple: false,

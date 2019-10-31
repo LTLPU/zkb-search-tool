@@ -1,5 +1,5 @@
 import { Criteria } from './Criteria.js'
-import { CriteriaTypeInfo } from './CriteriaType.js'
+import { CriteriaType, CriteriaTypeInfo } from './CriteriaType.js'
 
 export class CriteriaListModel {
   constructor () {
@@ -27,30 +27,21 @@ export class CriteriaListModel {
       throw new Error('newCriteria is not Criteria.')
     }
 
-    const type = newCriteria.getCriteriaType()
+    const typeInfo = newCriteria.getTypeInfo()
 
-    // Typeが一致するものを検索
+    // CriteriaTypeInfo.conflictKeyが一致するものを検索
     const findIndex = this._criteriaList.findIndex(criteria => {
-      return criteria.getCriteriaType() === type
+      return typeInfo.conflictKey === criteria.getTypeInfo().conflictKey
     })
-    // 重複が認められていないTypeは上書きする
-    if (!CriteriaTypeInfo[type].isMultiple) {
-      if (findIndex < 0) {
-        // 追加
-        this._criteriaList.push(newCriteria)
-      } else {
-        // 上書き
-        this._criteriaList.splice(findIndex, 1, newCriteria)
+
+    if (!typeInfo.isMultiple) {
+      // 重複が認められないCriteriaは削除→追加
+      if (findIndex >= 0) {
+        this._criteriaList.splice(findIndex, 1)
       }
+      this._criteriaList.push(newCriteria)
     } else {
       // 重複が認められているTypeは追加
-      if (findIndex < 0) {
-        // 新規追加
-        this._criteriaList.push(newCriteria)
-      } else {
-        // 既存のものデータを統合
-        this._criteriaList[findIndex].merge(newCriteria)
-      }
       this._criteriaList.push(newCriteria)
     }
   }
@@ -59,10 +50,47 @@ export class CriteriaListModel {
    * リストを展開してUrlを返す。
    */
   getSearchUrl () {
+    const sortOrder = [
+      CriteriaType.TYPE_CHARACTER,
+      CriteriaType.TYPE_ALLIANCE,
+      CriteriaType.TYPE_CORPORATION,
+      CriteriaType.TYPE_KILLS,
+      CriteriaType.TYPE_LOSSES
+    ]
+
     let url = 'https://zkillboard.com/'
 
-    for (const criteria of this._criteriaList) {
-      url += criteria.getUrlString()
+    for (const typeKey of sortOrder) {
+      // CriteriaTypeが一致するCriteriaリストを取得
+      const filtered = this._criteriaList.filter((current) => {
+        return current.getType() === typeKey
+      })
+
+      if (filtered.length < 1) {
+        // 該当のCriteriaTypeが存在しない場合
+        continue
+      }
+
+      if (!CriteriaTypeInfo[typeKey].isParameterRequired) {
+        url += CriteriaTypeInfo[typeKey].type + '/'
+        continue
+      }
+
+      if (filtered.length === 1) {
+        // 該当のCriteriaTypeが存在する場合
+        url += CriteriaTypeInfo[typeKey].type + '/' + filtered[0].getValue() + '/'
+      } else {
+        // 該当のCriteriaTypeが複数存在する場合
+        // valueを連結する
+        const values = filtered.reduce((accum, current, idx) => {
+          if (idx === 0) {
+            return current.getValue()
+          } else {
+            return accum + ',' + current.getValue()
+          }
+        }, '')
+        url += CriteriaTypeInfo[typeKey].type + '/' + values + '/'
+      }
     }
 
     return url

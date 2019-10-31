@@ -2,13 +2,17 @@ import { Criteria } from './Criteria.js'
 import { CriteriaType, CriteriaTypeInfo } from './CriteriaType.js'
 
 export class CriteriaCreator {
-  static create (criteriaType, value) {
-    if (!CriteriaType.hasOwnProperty(criteriaType)) {
-      throw new Error('criteriaType is not CriteriaType.')
+  static create (type, value) {
+    if (!CriteriaType.hasOwnProperty(type)) {
+      throw new Error('type is not CriteriaType.')
     }
 
-    const typeInfo = CriteriaTypeInfo[criteriaType]
+    const typeInfo = CriteriaTypeInfo[type]
 
-    return new Criteria(criteriaType, typeInfo.type, value)
+    if (typeInfo.isParameterRequired && !value) {
+      throw new Error('value is required.')
+    }
+
+    return new Criteria(type, typeInfo.type, value)
   }
 }

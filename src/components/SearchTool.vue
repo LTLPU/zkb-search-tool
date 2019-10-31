@@ -11,7 +11,7 @@
     <ul>
       <li
         v-for="criteria in criteriaList"
-        :key="criteria.getCriteriaType()"
+        :key="criteria.getType() + criteria.getValue()"
       >
         {{ criteria.getCriteriaView() }}
       </li>
@@ -27,19 +27,32 @@
       value="Losses"
       v-on:click="addLosses()"
     />
-    <input
-      type="button"
-      value="Clear"
-      v-on:click="clear()"
-    />
+    <br>
     <input
       type="text"
       v-model="inputText"
+    />
+    <br>
+    <input
+      type="button"
+      value="Alliance"
+      v-on:click="addAlliance()"
+    />
+    <input
+      type="button"
+      value="Corporation"
+      v-on:click="addCorporation()"
     />
     <input
       type="button"
       value="Character"
       v-on:click="addCharacter()"
+    />
+    <br>
+    <input
+      type="button"
+      value="Clear"
+      v-on:click="clear()"
     />
 
   </div>
@@ -64,30 +77,40 @@ export default {
   },
   created: function () {
     this.criteriaList = new CriteriaListModel()
-    // console.log(this.criteriaList instanceof CriteriaListModel)
   },
   methods: {
     /**
      * kills/を追加する。
      */
     addKills: function () {
-      this.criteriaList.addCriteria(CriteriaCreator.create(CriteriaType.TYPE_KILLS))
-      this.updateUrl()
+      this.addCriteria(CriteriaType.TYPE_KILLS)
     },
-    /**
-     * losses/を追加する。
-     */
     addLosses: function () {
-      this.criteriaList.addCriteria(CriteriaCreator.create(CriteriaType.TYPE_LOSSES))
-      this.updateUrl()
+      this.addCriteria(CriteriaType.TYPE_LOSSES)
+    },
+    addAlliance: function () {
+      this.addCriteria(CriteriaType.TYPE_ALLIANCE, this.inputText)
+    },
+    addCorporation: function () {
+      this.addCriteria(CriteriaType.TYPE_CORPORATION, this.inputText)
     },
     addCharacter: function () {
-      this.criteriaList.addCriteria(CriteriaCreator.create(CriteriaType.TYPE_CHARACTER), this.inputText)
-      this.updateUrl()
-      this.inputText = ''
+      this.addCriteria(CriteriaType.TYPE_CHARACTER, this.inputText)
     },
     /**
-     * 中身をクリアする。
+     * 条件を追加する。
+     */
+    addCriteria: function (type, value) {
+      this.criteriaList.addCriteria(
+        CriteriaCreator.create(type, value)
+      )
+      this.updateUrl()
+      if (!value) {
+        this.inputText = ''
+      }
+    },
+    /**
+     * 条件をクリアする。
      */
     clear: function () {
       this.criteriaList.clear()
