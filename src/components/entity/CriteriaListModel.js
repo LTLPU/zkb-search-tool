@@ -54,8 +54,21 @@ export class CriteriaListModel {
       CriteriaType.TYPE_CHARACTER,
       CriteriaType.TYPE_ALLIANCE,
       CriteriaType.TYPE_CORPORATION,
+      CriteriaType.TYPE_SHIP,
+      CriteriaType.TYPE_GROUP,
       CriteriaType.TYPE_KILLS,
-      CriteriaType.TYPE_LOSSES
+      CriteriaType.TYPE_LOSSES,
+      CriteriaType.TYPE_GANKED,
+      CriteriaType.TYPE_SOLO,
+      CriteriaType.TYPE_REGION,
+      CriteriaType.TYPE_CONSTERATION,
+      CriteriaType.TYPE_SYSTEM,
+      CriteriaType.TYPE_HIGHSEC,
+      CriteriaType.TYPE_LOWSEC,
+      CriteriaType.TYPE_NULLSEC,
+      CriteriaType.TYPE_ABYSSAL,
+      CriteriaType.TYPE_GANKED
+
     ]
 
     let url = 'https://zkillboard.com/'
@@ -66,21 +79,18 @@ export class CriteriaListModel {
         return current.getType() === typeKey
       })
 
+      // TODO デバッグ用
+      console.log(typeof filtered)
+
       if (filtered.length < 1) {
         // 該当のCriteriaTypeが存在しない場合
         continue
       }
 
       if (!CriteriaTypeInfo[typeKey].isParameterRequired) {
+        // url = type/
         url += CriteriaTypeInfo[typeKey].type + '/'
-        continue
-      }
-
-      if (filtered.length === 1) {
-        // 該当のCriteriaTypeが存在する場合
-        url += CriteriaTypeInfo[typeKey].type + '/' + filtered[0].getValue() + '/'
       } else {
-        // 該当のCriteriaTypeが複数存在する場合
         // valueを連結する
         const values = filtered.reduce((accum, current, idx) => {
           if (idx === 0) {
@@ -89,6 +99,7 @@ export class CriteriaListModel {
             return accum + ',' + current.getValue()
           }
         }, '')
+        // url = type/value,value.../
         url += CriteriaTypeInfo[typeKey].type + '/' + values + '/'
       }
     }

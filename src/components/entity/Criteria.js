@@ -23,14 +23,6 @@ export class Criteria {
     return this._searchValue
   }
 
-  getUrlString () {
-    if (Array.isArray(this._searchValue) && this._searchValue.length > 0) {
-      return this._searchType + '/' + this._searchValue.join(', ') + '/'
-    } else {
-      return this._searchType + '/'
-    }
-  }
-
   getCriteriaView () {
     if (Array.isArray(this._searchValue) && this._searchValue.length > 0) {
       return this._searchType + ' : ' + this._searchValue.join(', ')

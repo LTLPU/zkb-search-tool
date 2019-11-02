@@ -1,12 +1,9 @@
 // 条件のタイプ
 export const CriteriaType = {
-  // TYPE_KILLLOSS: 'type_killloss',
   TYPE_KILLS: 'TYPE_KILLS',
   TYPE_LOSSES: 'TYPE_LOSSES',
   TYPE_GANKED: 'TYPE_GANKED',
-  // TYPE_KILLTYPE: 'type_killtype',
   TYPE_SOLO: 'TYPE_SOLO',
-  // TYPE_SECURITY: 'type_sercurity',
   TYPE_HIGHSEC: 'TYPE_HIGHSEC',
   TYPE_LOWSEC: 'TYPE_LOWSEC',
   TYPE_NULLSEC: 'TYPE_NULLSEC',
