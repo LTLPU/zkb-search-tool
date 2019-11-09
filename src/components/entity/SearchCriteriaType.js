@@ -1,5 +1,5 @@
 // 条件のタイプ
-export const CriteriaType = {
+export const SearchCriteriaType = {
   TYPE_KILLS: 'TYPE_KILLS',
   TYPE_LOSSES: 'TYPE_LOSSES',
   TYPE_GANKED: 'TYPE_GANKED',
@@ -19,92 +19,92 @@ export const CriteriaType = {
 }
 
 // 各タイプのパラメータ
-export const CriteriaTypeInfo = {}
-CriteriaTypeInfo[CriteriaType.TYPE_KILLS] = {
+export const SearchCriteriaTypeInfo = {}
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_KILLS] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'kills',
   conflictKey: 1
 }
-CriteriaTypeInfo[CriteriaType.TYPE_LOSSES] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_LOSSES] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'losses',
   conflictKey: 1
 }
-CriteriaTypeInfo[CriteriaType.TYPE_GANKED] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_GANKED] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'ganked',
   conflictKey: 1
 }
-CriteriaTypeInfo[CriteriaType.TYPE_SOLO] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_SOLO] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'solo',
   conflictKey: 2
 }
-CriteriaTypeInfo[CriteriaType.TYPE_HIGHSEC] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_HIGHSEC] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'highsec',
   conflictKey: 3
 }
-CriteriaTypeInfo[CriteriaType.TYPE_LOWSEC] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_LOWSEC] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'lowsec',
   conflictKey: 3
 }
-CriteriaTypeInfo[CriteriaType.TYPE_NULLSEC] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_NULLSEC] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'nullsec',
   conflictKey: 3
 }
-CriteriaTypeInfo[CriteriaType.TYPE_ABYSSAL] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_ABYSSAL] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'abyssal',
   conflictKey: 3
 }
-CriteriaTypeInfo[CriteriaType.TYPE_GROUP] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_GROUP] = {
   isMultiple: true,
   isParameterRequired: true,
   type: 'group',
   conflictKey: 4
 }
-CriteriaTypeInfo[CriteriaType.TYPE_SHIP] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_SHIP] = {
   isMultiple: true,
   isParameterRequired: true,
   type: 'ship',
   conflictKey: 4
 }
-CriteriaTypeInfo[CriteriaType.TYPE_ALLIANCE] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_ALLIANCE] = {
   isMultiple: true,
   isParameterRequired: true,
   type: 'alliance',
   conflictKey: 6
 }
-CriteriaTypeInfo[CriteriaType.TYPE_CORPORATION] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_CORPORATION] = {
   isMultiple: true,
   isParameterRequired: true,
   type: 'corporation',
   conflictKey: 7
 }
-CriteriaTypeInfo[CriteriaType.TYPE_CHARACTER] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_CHARACTER] = {
   isMultiple: true,
   isParameterRequired: true,
   type: 'character',
   conflictKey: 8
 }
-CriteriaTypeInfo[CriteriaType.TYPE_SYSTEM] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_SYSTEM] = {
   isMultiple: false,
   isParameterRequired: true,
   type: 'system',
   conflictKey: 9
 }
-CriteriaTypeInfo[CriteriaType.TYPE_REGION] = {
+SearchCriteriaTypeInfo[SearchCriteriaType.TYPE_REGION] = {
   isMultiple: false,
   isParameterRequired: false,
   type: 'region',

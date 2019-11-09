@@ -59,9 +59,9 @@
 </template>
 
 <script>
-import { CriteriaCreator } from './entity/CriteriaCreator.js'
-import { CriteriaListModel } from './entity/CriteriaListModel.js'
-import { CriteriaType } from './entity/CriteriaType.js'
+import { SearchCriteriaCreator } from './entity/SearchCriteriaCreator.js'
+import { SearchCriteriaListModel } from './entity/SearchCriteriaListModel.js'
+import { SearchCriteriaType } from './entity/SearchCriteriaType.js'
 
 export default {
   name: 'SearchTool',
@@ -76,33 +76,33 @@ export default {
     }
   },
   created: function () {
-    this.criteriaList = new CriteriaListModel()
+    this.criteriaList = new SearchCriteriaListModel()
   },
   methods: {
     /**
      * kills/を追加する。
      */
     addKills: function () {
-      this.addCriteria(CriteriaType.TYPE_KILLS)
+      this.addCriteria(SearchCriteriaType.TYPE_KILLS)
     },
     addLosses: function () {
-      this.addCriteria(CriteriaType.TYPE_LOSSES)
+      this.addCriteria(SearchCriteriaType.TYPE_LOSSES)
     },
     addAlliance: function () {
-      this.addCriteria(CriteriaType.TYPE_ALLIANCE, this.inputText)
+      this.addCriteria(SearchCriteriaType.TYPE_ALLIANCE, this.inputText)
     },
     addCorporation: function () {
-      this.addCriteria(CriteriaType.TYPE_CORPORATION, this.inputText)
+      this.addCriteria(SearchCriteriaType.TYPE_CORPORATION, this.inputText)
     },
     addCharacter: function () {
-      this.addCriteria(CriteriaType.TYPE_CHARACTER, this.inputText)
+      this.addCriteria(SearchCriteriaType.TYPE_CHARACTER, this.inputText)
     },
     /**
      * 条件を追加する。
      */
     addCriteria: function (type, value) {
       this.criteriaList.addCriteria(
-        CriteriaCreator.create(type, value)
+        SearchCriteriaCreator.create(type, value)
       )
       this.updateUrl()
       if (!value) {

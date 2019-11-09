@@ -1,6 +1,6 @@
-import { CriteriaTypeInfo } from './CriteriaType.js'
+import { SearchCriteriaTypeInfo } from './SearchCriteriaType.js'
 
-export class Criteria {
+export class SearchCriteria {
   constructor (type, searchType, searchValue) {
     this._type = type !== undefined ? type : ''
     this._searchType = searchType !== undefined ? searchType : ''
@@ -16,7 +16,7 @@ export class Criteria {
   }
 
   getTypeInfo () {
-    return CriteriaTypeInfo[this._type]
+    return SearchCriteriaTypeInfo[this._type]
   }
 
   getValue () {
