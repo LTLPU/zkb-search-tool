@@ -8,11 +8,12 @@
         target="_blank"
       >{{ generatedUrl }}</a>
     </p>
-    <ul>
+    <ul class="searchCriteria">
       <li
         v-for="criteria in criteriaList"
         :key="criteria.idx"
         class="searchCriteria"
+        :style="{ borderColor: criteria.obj.color }"
       >
         <span :style="{ color: criteria.obj.color }">◆</span> {{ criteria.obj.label }} <input type="button" value="×" v-on:click="remove(criteria.idx)">
       </li>
@@ -177,7 +178,16 @@ export default {
 
 </script>
 <style>
-.searchCriteria {
+p.generatedUrl {
+  font-size: 150%
+}
+
+ul.searchCriteria {
+  list-style-type: none;
+  padding: 0;
+}
+
+li.searchCriteria {
   display: inline;
   border: 1px solid #000;
   border-radius: 10px;
