@@ -11,9 +11,9 @@
     <ul>
       <li
         v-for="criteria in criteriaList"
-        :key="criteria.getType() + criteria.getValue()"
+        :key="criteria.idx"
       >
-        {{ criteria.getCriteriaView() }}
+        <span :style="{ color: criteria.obj.color }">◆</span> {{ criteria.obj.label }} <input type="button" value="×" v-on:click="remove(criteria.idx)">
       </li>
     </ul>
     <hr />
@@ -26,6 +26,32 @@
       type="button"
       value="Losses"
       v-on:click="addLosses()"
+    />
+    <input
+      type="button"
+      value="Solo"
+      v-on:click="addSolo()"
+    />
+    <br>
+    <input
+      type="button"
+      value="Highsec"
+      v-on:click="addHighsec()"
+    />
+    <input
+      type="button"
+      value="Lowsec"
+      v-on:click="addLowsec()"
+    />
+    <input
+      type="button"
+      value="Nullsec"
+      v-on:click="addNullsec()"
+    />
+    <input
+      type="button"
+      value="Abyssal"
+      v-on:click="addAbyssal()"
     />
     <br>
     <input
@@ -59,9 +85,17 @@
 </template>
 
 <script>
-import { SearchCriteriaCreator } from './entity/SearchCriteriaCreator.js'
+import { KillsSearchCriteria,
+  LossesSearchCriteria,
+  CharacterSearchCriteria,
+  AllianceSearchCriteria,
+  CorporationSearchCriteria,
+  SoloSearchCriteria,
+  HighsecSearchCriteria,
+  LowsecSearchCriteria,
+  NullsecSearchCriteria,
+  AbyssalSearchCriteria } from './entity/SearchCriteria.js'
 import { SearchCriteriaListModel } from './entity/SearchCriteriaListModel.js'
-import { SearchCriteriaType } from './entity/SearchCriteriaType.js'
 
 export default {
   name: 'SearchTool',
@@ -83,37 +117,54 @@ export default {
      * kills/を追加する。
      */
     addKills: function () {
-      this.addCriteria(SearchCriteriaType.TYPE_KILLS)
+      this.addCriteria(new KillsSearchCriteria())
     },
     addLosses: function () {
-      this.addCriteria(SearchCriteriaType.TYPE_LOSSES)
+      this.addCriteria(new LossesSearchCriteria())
+    },
+    addSolo: function () {
+      this.addCriteria(new SoloSearchCriteria())
+    },
+    addHighsec: function () {
+      this.addCriteria(new HighsecSearchCriteria())
+    },
+    addLowsec: function () {
+      this.addCriteria(new LowsecSearchCriteria())
+    },
+    addNullsec: function () {
+      this.addCriteria(new NullsecSearchCriteria())
+    },
+    addAbyssal: function () {
+      this.addCriteria(new AbyssalSearchCriteria())
     },
     addAlliance: function () {
-      this.addCriteria(SearchCriteriaType.TYPE_ALLIANCE, this.inputText)
+      this.addCriteria(new AllianceSearchCriteria(this.inputText, this.inputText))
     },
     addCorporation: function () {
-      this.addCriteria(SearchCriteriaType.TYPE_CORPORATION, this.inputText)
+      this.addCriteria(new CorporationSearchCriteria(this.inputText, this.inputText))
     },
     addCharacter: function () {
-      this.addCriteria(SearchCriteriaType.TYPE_CHARACTER, this.inputText)
+      this.addCriteria(new CharacterSearchCriteria(this.inputText, this.inputText))
     },
     /**
      * 条件を追加する。
      */
-    addCriteria: function (type, value) {
+    addCriteria: function (criteria) {
       this.criteriaList.addCriteria(
-        SearchCriteriaCreator.create(type, value)
+        criteria
       )
       this.updateUrl()
-      if (!value) {
-        this.inputText = ''
-      }
+    },
+    remove: function (idx) {
+      this.criteriaList.deleteSearchCriteria(idx)
+      this.updateUrl()
     },
     /**
      * 条件をクリアする。
      */
     clear: function () {
       this.criteriaList.clear()
+      this.inputText = ''
       this.updateUrl()
     },
     /**

@@ -1,9 +1,20 @@
-import { SearchCriteria } from './SearchCriteria.js'
-import { SearchCriteriaType, SearchCriteriaTypeInfo } from './SearchCriteriaType.js'
+import { SearchCriteria,
+  KillsSearchCriteria,
+  LossesSearchCriteria,
+  CharacterSearchCriteria,
+  AllianceSearchCriteria,
+  CorporationSearchCriteria,
+  GankedSearchCriteria,
+  SoloSearchCriteria,
+  HighsecSearchCriteria,
+  LowsecSearchCriteria,
+  NullsecSearchCriteria,
+  AbyssalSearchCriteria } from './SearchCriteria.js'
 
 export class SearchCriteriaListModel {
   constructor () {
     this._searchCriteriaList = []
+    this._idx = 0
   }
 
   /**
@@ -18,31 +29,44 @@ export class SearchCriteriaListModel {
   /**
    * 条件を追加する。
    *
-   * @param {SearchCriteria} newCriteria 追加する条件
+   * @param {SearchCriteria} newSearchCriteria 追加する条件
    */
-  addCriteria (newCriteria) {
-    // TODO SearchCriteriaTypeInfo.conflictKey を見るように書き変える。
+  addCriteria (newSearchCriteria) {
+    console.log(newSearchCriteria)
 
-    if (!(newCriteria instanceof SearchCriteria)) {
-      throw new Error('newCriteria is not Criteria.')
+    if (!(newSearchCriteria instanceof SearchCriteria)) {
+      throw new Error('newSearchCriteria is not SearchCriteria.')
     }
 
-    const typeInfo = newCriteria.getTypeInfo()
+    // 重複が認められないCriteriaを無視
+    // conflictDecisionListのconflictKeyで判断
+    const newSearchCriteriaConflictKey = getConflictKey(newSearchCriteria)
 
-    // SearchCriteriaTypeInfo.conflictKeyが一致するものを検索
-    const findIndex = this._searchCriteriaList.findIndex(searchCriteria => {
-      return typeInfo.conflictKey === searchCriteria.getTypeInfo().conflictKey
+    if (newSearchCriteriaConflictKey > 0) {
+      for (const searchCriteria of this._searchCriteriaList) {
+        if (newSearchCriteriaConflictKey === getConflictKey(searchCriteria.obj)) {
+          throw new Error('newSearchCriteria can not conflict.')
+        }
+      }
+    }
+
+    // SearchCriteriaを追加
+    this._searchCriteriaList.push({
+      obj: newSearchCriteria,
+      idx: this._idx
     })
 
-    if (!typeInfo.isMultiple) {
-      // 重複が認められないCriteriaは削除→追加
-      if (findIndex >= 0) {
-        this._searchCriteriaList.splice(findIndex, 1)
-      }
-      this._searchCriteriaList.push(newCriteria)
-    } else {
-      // 重複が認められているTypeは追加
-      this._searchCriteriaList.push(newCriteria)
+    // idxを加算
+    this._idx += 1
+  }
+
+  deleteSearchCriteria (key) {
+    const findIdx = this._searchCriteriaList.findIndex(current => {
+      return current.idx === key
+    })
+
+    if (findIdx > -1) {
+      this._searchCriteriaList.splice(findIdx)
     }
   }
 
@@ -50,57 +74,26 @@ export class SearchCriteriaListModel {
    * リストを展開してUrlを返す。
    */
   getSearchUrl () {
-    const sortOrder = [
-      SearchCriteriaType.TYPE_CHARACTER,
-      SearchCriteriaType.TYPE_ALLIANCE,
-      SearchCriteriaType.TYPE_CORPORATION,
-      SearchCriteriaType.TYPE_SHIP,
-      SearchCriteriaType.TYPE_GROUP,
-      SearchCriteriaType.TYPE_KILLS,
-      SearchCriteriaType.TYPE_LOSSES,
-      SearchCriteriaType.TYPE_GANKED,
-      SearchCriteriaType.TYPE_SOLO,
-      SearchCriteriaType.TYPE_REGION,
-      SearchCriteriaType.TYPE_CONSTERATION,
-      SearchCriteriaType.TYPE_SYSTEM,
-      SearchCriteriaType.TYPE_HIGHSEC,
-      SearchCriteriaType.TYPE_LOWSEC,
-      SearchCriteriaType.TYPE_NULLSEC,
-      SearchCriteriaType.TYPE_ABYSSAL,
-      SearchCriteriaType.TYPE_GANKED
-
-    ]
-
     let url = 'https://zkillboard.com/'
 
-    for (const typeKey of sortOrder) {
-      // SearchCriteriaTypeが一致するCriteriaリストを取得
+    for (const criteriaClass of sortOrderClasses) {
+      // クラスが一致するSearchCriteriaのリストを取得
       const filtered = this._searchCriteriaList.filter((current) => {
-        return current.getType() === typeKey
+        return current instanceof criteriaClass
       })
 
-      // TODO デバッグ用
-      console.log(typeof filtered)
-
+      // 該当のSearchCriteriaが存在しない場合
       if (filtered.length < 1) {
-        // 該当のSearchCriteriaTypeが存在しない場合
         continue
       }
 
-      if (!SearchCriteriaTypeInfo[typeKey].isParameterRequired) {
-        // url = type/
-        url += SearchCriteriaTypeInfo[typeKey].type + '/'
-      } else {
-        // valueを連結する
-        const values = filtered.reduce((accum, current, idx) => {
-          if (idx === 0) {
-            return current.getValue()
-          } else {
-            return accum + ',' + current.getValue()
-          }
-        }, '')
-        // url = type/value,value.../
-        url += SearchCriteriaTypeInfo[typeKey].type + '/' + values + '/'
+      url += filtered[0].type + '/'
+      if (filtered[0].hasValue) {
+        // value配列抽出
+        const values = filtered.map(current => {
+          return current.value
+        })
+        url += values.join(',') + '/'
       }
     }
 
@@ -111,3 +104,57 @@ export class SearchCriteriaListModel {
     this._searchCriteriaList = []
   }
 }
+
+const conflictDecisionList = [
+  { searchCriteriaClass: KillsSearchCriteria, conflictKey: 1 },
+  { searchCriteriaClass: LossesSearchCriteria, conflictKey: 1 },
+  { searchCriteriaClass: GankedSearchCriteria, conflictKey: 2 },
+  { searchCriteriaClass: SoloSearchCriteria, conflictKey: 3 },
+  { searchCriteriaClass: HighsecSearchCriteria, conflictKey: 4 },
+  { searchCriteriaClass: LowsecSearchCriteria, conflictKey: 4 },
+  { searchCriteriaClass: NullsecSearchCriteria, conflictKey: 4 },
+  { searchCriteriaClass: AbyssalSearchCriteria, conflictKey: 4 }
+]
+
+function getConflictKey (searchCriteriaClass) {
+  for (const listObj of conflictDecisionList) {
+    if (searchCriteriaClass instanceof listObj.searchCriteriaClass) {
+      return listObj.conflictKey
+    }
+  }
+  return null
+}
+
+const sortOrderClasses = [
+  CharacterSearchCriteria,
+  AllianceSearchCriteria,
+  CorporationSearchCriteria,
+  KillsSearchCriteria,
+  LossesSearchCriteria,
+  HighsecSearchCriteria,
+  LowsecSearchCriteria,
+  NullsecSearchCriteria,
+  AbyssalSearchCriteria,
+  GankedSearchCriteria,
+  SoloSearchCriteria
+]
+
+/* ソート順メモ
+  SearchCriteriaType.TYPE_CHARACTER,
+  SearchCriteriaType.TYPE_ALLIANCE,
+  SearchCriteriaType.TYPE_CORPORATION,
+  SearchCriteriaType.TYPE_SHIP,
+  SearchCriteriaType.TYPE_GROUP,
+  SearchCriteriaType.TYPE_KILLS,
+  SearchCriteriaType.TYPE_LOSSES,
+  SearchCriteriaType.TYPE_GANKED,
+  SearchCriteriaType.TYPE_SOLO,
+  SearchCriteriaType.TYPE_REGION,
+  SearchCriteriaType.TYPE_CONSTERATION,
+  SearchCriteriaType.TYPE_SYSTEM,
+  SearchCriteriaType.TYPE_HIGHSEC,
+  SearchCriteriaType.TYPE_LOWSEC,
+  SearchCriteriaType.TYPE_NULLSEC,
+  SearchCriteriaType.TYPE_ABYSSAL,
+  SearchCriteriaType.TYPE_GANKED
+ */
