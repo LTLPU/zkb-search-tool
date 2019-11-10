@@ -64,7 +64,7 @@ export class SearchCriteriaListModel {
     })
 
     if (findIdx > -1) {
-      this._searchCriteriaList.splice(findIdx)
+      this._searchCriteriaList.splice(findIdx, 1)
     }
   }
 
