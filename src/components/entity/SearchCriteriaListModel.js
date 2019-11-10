@@ -6,10 +6,15 @@ import { SearchCriteria,
   CorporationSearchCriteria,
   GankedSearchCriteria,
   SoloSearchCriteria,
+  RegionSearchCriteria,
+  ConsterationSearchCriteria,
+  SystemSearchCriteria,
   HighsecSearchCriteria,
   LowsecSearchCriteria,
   NullsecSearchCriteria,
-  AbyssalSearchCriteria } from './SearchCriteria.js'
+  AbyssalSearchCriteria,
+  GroupSearchCriteria,
+  ShipSearchCriteria } from './SearchCriteria.js'
 
 export class SearchCriteriaListModel {
   constructor () {
@@ -127,8 +132,13 @@ const sortOrderClasses = [
   CharacterSearchCriteria,
   AllianceSearchCriteria,
   CorporationSearchCriteria,
+  GroupSearchCriteria,
+  ShipSearchCriteria,
   KillsSearchCriteria,
   LossesSearchCriteria,
+  RegionSearchCriteria,
+  ConsterationSearchCriteria,
+  SystemSearchCriteria,
   HighsecSearchCriteria,
   LowsecSearchCriteria,
   NullsecSearchCriteria,
@@ -136,23 +146,3 @@ const sortOrderClasses = [
   GankedSearchCriteria,
   SoloSearchCriteria
 ]
-
-/* ソート順メモ
-  SearchCriteriaType.TYPE_CHARACTER,
-  SearchCriteriaType.TYPE_ALLIANCE,
-  SearchCriteriaType.TYPE_CORPORATION,
-  SearchCriteriaType.TYPE_SHIP,
-  SearchCriteriaType.TYPE_GROUP,
-  SearchCriteriaType.TYPE_KILLS,
-  SearchCriteriaType.TYPE_LOSSES,
-  SearchCriteriaType.TYPE_GANKED,
-  SearchCriteriaType.TYPE_SOLO,
-  SearchCriteriaType.TYPE_REGION,
-  SearchCriteriaType.TYPE_CONSTERATION,
-  SearchCriteriaType.TYPE_SYSTEM,
-  SearchCriteriaType.TYPE_HIGHSEC,
-  SearchCriteriaType.TYPE_LOWSEC,
-  SearchCriteriaType.TYPE_NULLSEC,
-  SearchCriteriaType.TYPE_ABYSSAL,
-  SearchCriteriaType.TYPE_GANKED
- */

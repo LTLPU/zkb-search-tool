@@ -184,23 +184,91 @@ export class AbyssalSearchCriteria extends SearchCriteria {
 }
 
 /**
-// 条件のタイプ
-export const SearchCriteriaType = {
-  // TYPE_KILLS: 'TYPE_KILLS',
-  // TYPE_LOSSES: 'TYPE_LOSSES',
-  TYPE_GANKED: 'TYPE_GANKED',
-  TYPE_SOLO: 'TYPE_SOLO',
-  TYPE_HIGHSEC: 'TYPE_HIGHSEC',
-  TYPE_LOWSEC: 'TYPE_LOWSEC',
-  TYPE_NULLSEC: 'TYPE_NULLSEC',
-  TYPE_ABYSSAL: 'TYPE_ABYSSAL',
-  TYPE_SHIP: 'TYPE_SHIP',
-  TYPE_GROUP: 'TYPE_GROUP',
-  TYPE_ALLIANCE: 'TYPE_ALLIANCE',
-  TYPE_CORPORATION: 'TYPE_CORPORATION',
-  TYPE_CHARACTER: 'TYPE_CHARACTER',
-  TYPE_REGION: 'TYPE_REGION',
-  TYPE_CONSTERATION: 'TYPE_CONSTERATION',
-  TYPE_SYSTEM: 'TYPE_SYSTEM'
+ * Group
+ */
+export class GroupSearchCriteria extends SearchCriteria {
+  /**
+   *
+   * @param {String} value GroupId
+   * @param {String} label GroupName
+   */
+  constructor (value, label) {
+    super()
+    this._type = 'group'
+    this._value = value
+    this._label = label
+    this._color = '#000000'
+  }
 }
-  */
+
+/**
+ * Ship
+ */
+export class ShipSearchCriteria extends SearchCriteria {
+  /**
+   *
+   * @param {String} value ItemId
+   * @param {String} label ItemName
+   */
+  constructor (value, label) {
+    super()
+    this._type = 'group'
+    this._value = value
+    this._label = label
+    this._color = '#000000'
+  }
+}
+
+/**
+ * Region
+ */
+export class RegionSearchCriteria extends SearchCriteria {
+  /**
+   *
+   * @param {String} value RegionId
+   * @param {String} label RegionName
+   */
+  constructor (value, label) {
+    super()
+    this._type = 'group'
+    this._value = value
+    this._label = label
+    this._color = '#000000'
+  }
+}
+
+/**
+ * Consteration
+ */
+export class ConsterationSearchCriteria extends SearchCriteria {
+  /**
+   *
+   * @param {String} value ConsterationId
+   * @param {String} label ConsterationName
+   */
+  constructor (value, label) {
+    super()
+    this._type = 'consteration'
+    this._value = value
+    this._label = label
+    this._color = '#000000'
+  }
+}
+
+/**
+ * System
+ */
+export class SystemSearchCriteria extends SearchCriteria {
+  /**
+   *
+   * @param {String} value SystemId
+   * @param {String} label SystemName
+   */
+  constructor (value, label) {
+    super()
+    this._type = 'group'
+    this._value = value
+    this._label = label
+    this._color = '#000000'
+  }
+}
