@@ -12,6 +12,7 @@
       <li
         v-for="criteria in criteriaList"
         :key="criteria.idx"
+        class="searchCriteria"
       >
         <span :style="{ color: criteria.obj.color }">◆</span> {{ criteria.obj.label }} <input type="button" value="×" v-on:click="remove(criteria.idx)">
       </li>
@@ -175,6 +176,12 @@ export default {
 }
 
 </script>
-
 <style>
+.searchCriteria {
+  display: inline;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+}
 </style>
