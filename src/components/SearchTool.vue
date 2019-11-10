@@ -53,12 +53,11 @@
       value="Abyssal"
       v-on:click="addAbyssal()"
     />
-    <br>
+    <hr>
     <input
       type="text"
       v-model="inputText"
     />
-    <br>
     <input
       type="button"
       value="Alliance"
@@ -111,6 +110,7 @@ export default {
   },
   created: function () {
     this.criteriaList = new SearchCriteriaListModel()
+    this.updateUrl()
   },
   methods: {
     /**
@@ -150,9 +150,7 @@ export default {
      * 条件を追加する。
      */
     addCriteria: function (criteria) {
-      this.criteriaList.addCriteria(
-        criteria
-      )
+      this.criteriaList.addCriteria(criteria)
       this.updateUrl()
     },
     remove: function (idx) {

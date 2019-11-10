@@ -32,8 +32,6 @@ export class SearchCriteriaListModel {
    * @param {SearchCriteria} newSearchCriteria 追加する条件
    */
   addCriteria (newSearchCriteria) {
-    console.log(newSearchCriteria)
-
     if (!(newSearchCriteria instanceof SearchCriteria)) {
       throw new Error('newSearchCriteria is not SearchCriteria.')
     }
@@ -79,7 +77,7 @@ export class SearchCriteriaListModel {
     for (const criteriaClass of sortOrderClasses) {
       // クラスが一致するSearchCriteriaのリストを取得
       const filtered = this._searchCriteriaList.filter((current) => {
-        return current instanceof criteriaClass
+        return current.obj instanceof criteriaClass
       })
 
       // 該当のSearchCriteriaが存在しない場合
@@ -87,11 +85,11 @@ export class SearchCriteriaListModel {
         continue
       }
 
-      url += filtered[0].type + '/'
-      if (filtered[0].hasValue) {
+      url += filtered[0].obj.type + '/'
+      if (filtered[0].obj.hasValue) {
         // value配列抽出
         const values = filtered.map(current => {
-          return current.value
+          return current.obj.value
         })
         url += values.join(',') + '/'
       }
