@@ -108,6 +108,23 @@ export class SearchCriteriaListModel {
   }
 }
 
+/**
+ * ConflictKey取得
+ *
+ * @param {SearchCriteria} searchCriteriaClass SearchCriteriaClass
+ */
+function getConflictKey (searchCriteriaClass) {
+  for (const listObj of conflictDecisionList) {
+    if (searchCriteriaClass instanceof listObj.searchCriteriaClass) {
+      return listObj.conflictKey
+    }
+  }
+  return null
+}
+
+/**
+ * Conflict検証用リスト
+ */
 const conflictDecisionList = [
   { searchCriteriaClass: KillsSearchCriteria, conflictKey: 1 },
   { searchCriteriaClass: LossesSearchCriteria, conflictKey: 1 },
@@ -119,15 +136,9 @@ const conflictDecisionList = [
   { searchCriteriaClass: AbyssalSearchCriteria, conflictKey: 4 }
 ]
 
-function getConflictKey (searchCriteriaClass) {
-  for (const listObj of conflictDecisionList) {
-    if (searchCriteriaClass instanceof listObj.searchCriteriaClass) {
-      return listObj.conflictKey
-    }
-  }
-  return null
-}
-
+/**
+ * ソート順
+ */
 const sortOrderClasses = [
   CharacterSearchCriteria,
   AllianceSearchCriteria,
