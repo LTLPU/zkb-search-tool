@@ -1,25 +1,24 @@
-import { SearchCriteria,
-  KillsSearchCriteria,
-  LossesSearchCriteria,
-  CharacterSearchCriteria,
-  AllianceSearchCriteria,
-  CorporationSearchCriteria,
-  GankedSearchCriteria,
-  SoloSearchCriteria,
-  RegionSearchCriteria,
-  ConsterationSearchCriteria,
-  SystemSearchCriteria,
-  HighsecSearchCriteria,
-  LowsecSearchCriteria,
-  NullsecSearchCriteria,
-  AbyssalSearchCriteria,
-  GroupSearchCriteria,
-  ShipSearchCriteria } from './SearchCriteria.js'
+import { SearchCriteriaListItem,
+  KillsSearchCriteriaListItem,
+  LossesSearchCriteriaListItem,
+  CharacterSearchCriteriaListItem,
+  AllianceSearchCriteriaListItem,
+  CorporationSearchCriteriaListItem,
+  GankedSearchCriteriaListItem,
+  SoloSearchCriteriaListItem,
+  RegionSearchCriteriaListItem,
+  ConsterationSearchCriteriaListItem,
+  SystemSearchCriteriaListItem,
+  HighsecSearchCriteriaListItem,
+  LowsecSearchCriteriaListItem,
+  NullsecSearchCriteriaListItem,
+  AbyssalSearchCriteriaListItem,
+  GroupSearchCriteriaListItem,
+  ShipSearchCriteriaListItem } from './SearchCriteriaListItem'
 
 export class SearchCriteriaListModel {
   constructor () {
     this._searchCriteriaList = []
-    this._idx = 0
   }
 
   /**
@@ -34,36 +33,33 @@ export class SearchCriteriaListModel {
   /**
    * 条件を追加する。
    *
-   * @param {SearchCriteria} newSearchCriteria 追加する条件
+   * @param {SearchCriteriaListItem} newSearchCriteriaListItem 追加する条件
    */
-  addCriteria (newSearchCriteria) {
-    if (!(newSearchCriteria instanceof SearchCriteria)) {
-      throw new Error('newSearchCriteria is not SearchCriteria.')
+  add (newSearchCriteriaListItem) {
+    if (!(newSearchCriteriaListItem instanceof SearchCriteriaListItem)) {
+      throw new Error('newSearchCriteriaListItem is not SearchCriteriaListItem.')
     }
 
     // 重複が認められないCriteriaを無視
     // conflictDecisionListのconflictKeyで判断
-    const newSearchCriteriaConflictKey = getConflictKey(newSearchCriteria)
+    const newSearchCriteriaConflictKey = getConflictKey(newSearchCriteriaListItem)
 
     if (newSearchCriteriaConflictKey > 0) {
       for (const searchCriteria of this._searchCriteriaList) {
         if (newSearchCriteriaConflictKey === getConflictKey(searchCriteria.obj)) {
-          throw new Error('newSearchCriteria can not conflict.')
+          throw new Error('newSearchCriteriaListItem can not conflict.')
         }
       }
     }
 
-    // SearchCriteriaを追加
-    this._searchCriteriaList.push({
-      obj: newSearchCriteria,
-      idx: this._idx
-    })
+    // SearchCriteriaListItemを追加
+    this._searchCriteriaList.push(newSearchCriteriaListItem)
 
     // idxを加算
     this._idx += 1
   }
 
-  deleteSearchCriteria (key) {
+  remove (key) {
     const findIdx = this._searchCriteriaList.findIndex(current => {
       return current.idx === key
     })
@@ -80,12 +76,12 @@ export class SearchCriteriaListModel {
     let url = 'https://zkillboard.com/'
 
     for (const criteriaClass of sortOrderClasses) {
-      // クラスが一致するSearchCriteriaのリストを取得
+      // クラスが一致するSearchCriteriaListItemのリストを取得
       const filtered = this._searchCriteriaList.filter((current) => {
         return current.obj instanceof criteriaClass
       })
 
-      // 該当のSearchCriteriaが存在しない場合
+      // 該当のSearchCriteriaListItemが存在しない場合
       if (filtered.length < 1) {
         continue
       }
@@ -111,7 +107,7 @@ export class SearchCriteriaListModel {
 /**
  * ConflictKey取得
  *
- * @param {SearchCriteria} searchCriteriaClass SearchCriteriaClass
+ * @param {SearchCriteriaListItem} searchCriteriaClass SearchCriteriaClass
  */
 function getConflictKey (searchCriteriaClass) {
   for (const listObj of conflictDecisionList) {
@@ -126,34 +122,34 @@ function getConflictKey (searchCriteriaClass) {
  * Conflict検証用リスト
  */
 const conflictDecisionList = [
-  { searchCriteriaClass: KillsSearchCriteria, conflictKey: 1 },
-  { searchCriteriaClass: LossesSearchCriteria, conflictKey: 1 },
-  { searchCriteriaClass: GankedSearchCriteria, conflictKey: 2 },
-  { searchCriteriaClass: SoloSearchCriteria, conflictKey: 3 },
-  { searchCriteriaClass: HighsecSearchCriteria, conflictKey: 4 },
-  { searchCriteriaClass: LowsecSearchCriteria, conflictKey: 4 },
-  { searchCriteriaClass: NullsecSearchCriteria, conflictKey: 4 },
-  { searchCriteriaClass: AbyssalSearchCriteria, conflictKey: 4 }
+  { searchCriteriaClass: KillsSearchCriteriaListItem, conflictKey: 1 },
+  { searchCriteriaClass: LossesSearchCriteriaListItem, conflictKey: 1 },
+  { searchCriteriaClass: GankedSearchCriteriaListItem, conflictKey: 2 },
+  { searchCriteriaClass: SoloSearchCriteriaListItem, conflictKey: 3 },
+  { searchCriteriaClass: HighsecSearchCriteriaListItem, conflictKey: 4 },
+  { searchCriteriaClass: LowsecSearchCriteriaListItem, conflictKey: 4 },
+  { searchCriteriaClass: NullsecSearchCriteriaListItem, conflictKey: 4 },
+  { searchCriteriaClass: AbyssalSearchCriteriaListItem, conflictKey: 4 }
 ]
 
 /**
  * ソート順
  */
 const sortOrderClasses = [
-  CharacterSearchCriteria,
-  AllianceSearchCriteria,
-  CorporationSearchCriteria,
-  GroupSearchCriteria,
-  ShipSearchCriteria,
-  KillsSearchCriteria,
-  LossesSearchCriteria,
-  RegionSearchCriteria,
-  ConsterationSearchCriteria,
-  SystemSearchCriteria,
-  HighsecSearchCriteria,
-  LowsecSearchCriteria,
-  NullsecSearchCriteria,
-  AbyssalSearchCriteria,
-  GankedSearchCriteria,
-  SoloSearchCriteria
+  CharacterSearchCriteriaListItem,
+  AllianceSearchCriteriaListItem,
+  CorporationSearchCriteriaListItem,
+  GroupSearchCriteriaListItem,
+  ShipSearchCriteriaListItem,
+  KillsSearchCriteriaListItem,
+  LossesSearchCriteriaListItem,
+  RegionSearchCriteriaListItem,
+  ConsterationSearchCriteriaListItem,
+  SystemSearchCriteriaListItem,
+  HighsecSearchCriteriaListItem,
+  LowsecSearchCriteriaListItem,
+  NullsecSearchCriteriaListItem,
+  AbyssalSearchCriteriaListItem,
+  GankedSearchCriteriaListItem,
+  SoloSearchCriteriaListItem
 ]

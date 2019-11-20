@@ -11,11 +11,15 @@
     <ul class="searchCriteria">
       <li
         v-for="criteria in criteriaList"
-        :key="criteria.idx"
+        :key="criteria.key"
         class="searchCriteria"
-        :style="{ borderColor: criteria.obj.color }"
+        :style="{ borderColor: criteria.color }"
       >
-        <span :style="{ color: criteria.obj.color }">◆</span> {{ criteria.obj.label }} <input type="button" value="×" v-on:click="remove(criteria.idx)">
+        <span :style="{ color: criteria.color }">◆</span> {{ criteria.label }} <input
+          type="button"
+          value="×"
+          v-on:click="remove(criteria.key)"
+        >
       </li>
     </ul>
     <hr />
@@ -86,16 +90,16 @@
 </template>
 
 <script>
-import { KillsSearchCriteria,
-  LossesSearchCriteria,
-  CharacterSearchCriteria,
-  AllianceSearchCriteria,
-  CorporationSearchCriteria,
-  SoloSearchCriteria,
-  HighsecSearchCriteria,
-  LowsecSearchCriteria,
-  NullsecSearchCriteria,
-  AbyssalSearchCriteria } from './entity/SearchCriteria.js'
+import { KillsSearchCriteriaListItem,
+  LossesSearchCriteriaListItem,
+  CharacterSearchCriteriaListItem,
+  AllianceSearchCriteriaListItem,
+  CorporationSearchCriteriaListItem,
+  SoloSearchCriteriaListItem,
+  HighsecSearchCriteriaListItem,
+  LowsecSearchCriteriaListItem,
+  NullsecSearchCriteriaListItem,
+  AbyssalSearchCriteriaListItem } from './entity/SearchCriteriaListItem.js'
 import { SearchCriteriaListModel } from './entity/SearchCriteriaListModel.js'
 
 export default {
@@ -119,44 +123,44 @@ export default {
      * kills/を追加する。
      */
     addKills: function () {
-      this.addCriteria(new KillsSearchCriteria())
+      this.addCriteria(new KillsSearchCriteriaListItem())
     },
     addLosses: function () {
-      this.addCriteria(new LossesSearchCriteria())
+      this.addCriteria(new LossesSearchCriteriaListItem())
     },
     addSolo: function () {
-      this.addCriteria(new SoloSearchCriteria())
+      this.addCriteria(new SoloSearchCriteriaListItem())
     },
     addHighsec: function () {
-      this.addCriteria(new HighsecSearchCriteria())
+      this.addCriteria(new HighsecSearchCriteriaListItem())
     },
     addLowsec: function () {
-      this.addCriteria(new LowsecSearchCriteria())
+      this.addCriteria(new LowsecSearchCriteriaListItem())
     },
     addNullsec: function () {
-      this.addCriteria(new NullsecSearchCriteria())
+      this.addCriteria(new NullsecSearchCriteriaListItem())
     },
     addAbyssal: function () {
-      this.addCriteria(new AbyssalSearchCriteria())
+      this.addCriteria(new AbyssalSearchCriteriaListItem())
     },
     addAlliance: function () {
-      this.addCriteria(new AllianceSearchCriteria(this.inputText, this.inputText))
+      this.addCriteria(new AllianceSearchCriteriaListItem(this.inputText, this.inputText))
     },
     addCorporation: function () {
-      this.addCriteria(new CorporationSearchCriteria(this.inputText, this.inputText))
+      this.addCriteria(new CorporationSearchCriteriaListItem(this.inputText, this.inputText))
     },
     addCharacter: function () {
-      this.addCriteria(new CharacterSearchCriteria(this.inputText, this.inputText))
+      this.addCriteria(new CharacterSearchCriteriaListItem(this.inputText, this.inputText))
     },
     /**
      * 条件を追加する。
      */
     addCriteria: function (criteria) {
-      this.criteriaList.addCriteria(criteria)
+      this.criteriaList.add(criteria)
       this.updateUrl()
     },
     remove: function (idx) {
-      this.criteriaList.deleteSearchCriteria(idx)
+      this.criteriaList.remove(idx)
       this.updateUrl()
     },
     /**

@@ -1,11 +1,18 @@
-export class SearchCriteria {
+let key = 0
+
+export class SearchCriteriaListItem {
   constructor (value) {
     // インスタンス作成時に指定(引数)
+    this._key = key++
     this._value = value
     this._label = ''
     // Class側で指定(固定)
     this._type = ''
     this._color = '#FFFFFF'
+  }
+
+  get key () {
+    return this._index
   }
 
   // Getter (表示用)
@@ -36,7 +43,7 @@ export class SearchCriteria {
 /**
  * Kills
  */
-export class KillsSearchCriteria extends SearchCriteria {
+export class KillsSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'kills'
@@ -48,7 +55,7 @@ export class KillsSearchCriteria extends SearchCriteria {
 /**
  * Losses
  */
-export class LossesSearchCriteria extends SearchCriteria {
+export class LossesSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'losses'
@@ -60,7 +67,7 @@ export class LossesSearchCriteria extends SearchCriteria {
 /**
  * Ganked
  */
-export class GankedSearchCriteria extends SearchCriteria {
+export class GankedSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'ganked'
@@ -72,7 +79,7 @@ export class GankedSearchCriteria extends SearchCriteria {
 /**
  * Solo
  */
-export class SoloSearchCriteria extends SearchCriteria {
+export class SoloSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'solo'
@@ -84,7 +91,7 @@ export class SoloSearchCriteria extends SearchCriteria {
 /**
  * Alliance
  */
-export class AllianceSearchCriteria extends SearchCriteria {
+export class AllianceSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value AllianceId
@@ -102,7 +109,7 @@ export class AllianceSearchCriteria extends SearchCriteria {
 /**
  * Corporation
  */
-export class CorporationSearchCriteria extends SearchCriteria {
+export class CorporationSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value CorporationId
@@ -120,7 +127,7 @@ export class CorporationSearchCriteria extends SearchCriteria {
 /**
  * Character
  */
-export class CharacterSearchCriteria extends SearchCriteria {
+export class CharacterSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value CharacterId
@@ -138,7 +145,7 @@ export class CharacterSearchCriteria extends SearchCriteria {
 /**
  * Highsec
  */
-export class HighsecSearchCriteria extends SearchCriteria {
+export class HighsecSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'highsec'
@@ -150,7 +157,7 @@ export class HighsecSearchCriteria extends SearchCriteria {
 /**
  * Lowsec
  */
-export class LowsecSearchCriteria extends SearchCriteria {
+export class LowsecSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'lowsec'
@@ -162,7 +169,7 @@ export class LowsecSearchCriteria extends SearchCriteria {
 /**
  * Nullsec
  */
-export class NullsecSearchCriteria extends SearchCriteria {
+export class NullsecSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'nullsec'
@@ -174,7 +181,7 @@ export class NullsecSearchCriteria extends SearchCriteria {
 /**
  * Abyssal
  */
-export class AbyssalSearchCriteria extends SearchCriteria {
+export class AbyssalSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'abyssal'
@@ -186,7 +193,7 @@ export class AbyssalSearchCriteria extends SearchCriteria {
 /**
  * Group
  */
-export class GroupSearchCriteria extends SearchCriteria {
+export class GroupSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value GroupId
@@ -204,7 +211,7 @@ export class GroupSearchCriteria extends SearchCriteria {
 /**
  * Ship
  */
-export class ShipSearchCriteria extends SearchCriteria {
+export class ShipSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value ItemId
@@ -222,7 +229,7 @@ export class ShipSearchCriteria extends SearchCriteria {
 /**
  * Region
  */
-export class RegionSearchCriteria extends SearchCriteria {
+export class RegionSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value RegionId
@@ -240,7 +247,7 @@ export class RegionSearchCriteria extends SearchCriteria {
 /**
  * Consteration
  */
-export class ConsterationSearchCriteria extends SearchCriteria {
+export class ConsterationSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value ConsterationId
@@ -258,7 +265,7 @@ export class ConsterationSearchCriteria extends SearchCriteria {
 /**
  * System
  */
-export class SystemSearchCriteria extends SearchCriteria {
+export class SystemSearchCriteriaListItem extends SearchCriteriaListItem {
   /**
    *
    * @param {String} value SystemId
