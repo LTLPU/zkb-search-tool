@@ -10,16 +10,12 @@
     </p>
     <ul class="searchCriteria">
       <li
-        v-for="criteria in criteriaList"
-        :key="criteria.key"
+        v-for="criteriaItem in criteriaList"
+        :key="criteriaItem.key"
         class="searchCriteria"
-        :style="{ borderColor: criteria.color }"
+        v-on:click="removeCriteria(criteriaItem.key)"
       >
-        <span :style="{ color: criteria.color }">◆</span> {{ criteria.label }} <input
-          type="button"
-          value="×"
-          v-on:click="remove(criteria.key)"
-        >
+        <span>◆</span> {{ criteriaItem.label }}
       </li>
     </ul>
     <hr />
@@ -64,32 +60,32 @@
       type="text"
       v-model="inputText"
     />
-    <input
-      type="button"
-      value="Alliance"
-      v-on:click="addAlliance()"
-    />
-    <input
-      type="button"
-      value="Corporation"
-      v-on:click="addCorporation()"
-    />
-    <input
-      type="button"
-      value="Character"
-      v-on:click="addCharacter()"
-    />
     <br>
     <input
       type="button"
       value="Clear"
       v-on:click="clear()"
     />
-
+    <hr>
+    <ul class="searchResult">
+      <li
+        v-for="resultItem in searchResultList"
+        :key="resultItem.key"
+      >
+        <span
+          v-on:click="addSearchItem(resultItem)"
+        >
+          {{ resultItem.label }}
+        </span>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
+import axios from 'axios'
+
 import { KillsSearchCriteriaListItem,
   LossesSearchCriteriaListItem,
   CharacterSearchCriteriaListItem,
@@ -99,8 +95,12 @@ import { KillsSearchCriteriaListItem,
   HighsecSearchCriteriaListItem,
   LowsecSearchCriteriaListItem,
   NullsecSearchCriteriaListItem,
-  AbyssalSearchCriteriaListItem } from './entity/SearchCriteriaListItem.js'
+  AbyssalSearchCriteriaListItem,
+  GroupSearchCriteriaListItem,
+  ShipSearchCriteriaListItem } from './entity/SearchCriteriaListItem.js'
 import { SearchCriteriaListModel } from './entity/SearchCriteriaListModel.js'
+import { SearchResultListItem } from './entity/SearchResultListItem.js'
+import { SearchResultListModel } from './entity/SearchResultListModel.js'
 
 export default {
   name: 'SearchTool',
@@ -111,11 +111,16 @@ export default {
     return {
       generatedUrl: '',
       criteriaList: {},
+      searchResultList: {},
       inputText: ''
     }
   },
   created: function () {
+    this.debouncedSearch = _.debounce(this.search, 500)
+
     this.criteriaList = new SearchCriteriaListModel()
+    this.searchResultList = new SearchResultListModel()
+
     this.updateUrl()
   },
   methods: {
@@ -143,30 +148,51 @@ export default {
     addAbyssal: function () {
       this.addCriteria(new AbyssalSearchCriteriaListItem())
     },
-    addAlliance: function () {
-      this.addCriteria(new AllianceSearchCriteriaListItem(this.inputText, this.inputText))
+    addSearchItem: function (resultItem) {
+      switch (resultItem.type) {
+        case 'character':
+          this.addCriteria(
+            new CharacterSearchCriteriaListItem(
+              resultItem.id, resultItem.label
+            ))
+          break
+        case 'corporation':
+          this.addCriteria(
+            new CorporationSearchCriteriaListItem(
+              resultItem.id, resultItem.label
+            ))
+          break
+        case 'alliance':
+          this.addCriteria(
+            new AllianceSearchCriteriaListItem(
+              resultItem.id, resultItem.label
+            ))
+          break
+        case 'group':
+          this.addCriteria(
+            new GroupSearchCriteriaListItem(
+              resultItem.id, resultItem.label
+            ))
+          break
+        case 'ship':
+          this.addCriteria(
+            new ShipSearchCriteriaListItem(
+              resultItem.id, resultItem.label
+            ))
+          break
+        default:
+          throw new Error('something wrong')
+      }
     },
-    addCorporation: function () {
-      this.addCriteria(new CorporationSearchCriteriaListItem(this.inputText, this.inputText))
-    },
-    addCharacter: function () {
-      this.addCriteria(new CharacterSearchCriteriaListItem(this.inputText, this.inputText))
-    },
-    /**
-     * 条件を追加する。
-     */
     addCriteria: function (criteria) {
       this.criteriaList.add(criteria)
       this.updateUrl()
     },
-    remove: function (idx) {
+    removeCriteria: function (idx) {
       this.criteriaList.remove(idx)
       this.updateUrl()
     },
-    /**
-     * 条件をクリアする。
-     */
-    clear: function () {
+    clearCriteria: function () {
       this.criteriaList.clear()
       this.inputText = ''
       this.updateUrl()
@@ -176,6 +202,48 @@ export default {
      */
     updateUrl: function () {
       this.generatedUrl = this.criteriaList.getSearchUrl()
+    },
+    search: function (searchWord) {
+      this.searchResultList.clear()
+
+      const searchResultList = new SearchResultListModel()
+
+      axios
+        .get(`https://esi.evetech.net/latest/search/?categories=character&datasource=tranquility&language=en-us&strict=false&search=${searchWord}`)
+        .then(response => {
+          response.data.character.some(characterId => {
+            axios
+              .get(`https://esi.evetech.net/latest/characters/${characterId}/?datasource=tranquility`)
+              .then(response2 => {
+                searchResultList.add(
+                  new SearchResultListItem(
+                    'character'
+                    , characterId
+                    , response2.data.name
+                    , 'character.jpg'
+                  )
+                )
+              })
+              .catch(function (error) {
+                // TODO キャラクター名検索エラー処理実装
+                console.log(error)
+              })
+          })
+        })
+        .catch(function (error) {
+          // TODO キャラクター検索エラー処理実装
+          console.log(error)
+        })
+
+      this.searchResultList = searchResultList
+    }
+  },
+  watch: {
+    inputText: {
+      handler (n, o) {
+        this.debouncedSearch(n)
+      },
+      deep: true
     }
   }
 }

@@ -1,21 +1,31 @@
 let key = 0
 
 export class SearchCriteriaListItem {
-  constructor (value) {
-    // インスタンス作成時に指定(引数)
+  constructor () {
+    // 自動で設定
     this._key = key++
-    this._value = value
-    this._label = ''
-    // Class側で指定(固定)
     this._type = ''
-    this._color = '#FFFFFF'
+    this._class = ''
+    this._conflictKey = -1
+    this._sortOrder = -1
+
+    // 引数で設定
+    this._value = ''
+    this._label = ''
   }
 
   get key () {
-    return this._index
+    return this._key
   }
 
-  // Getter (表示用)
+  get type () {
+    return this._type
+  }
+
+  get class () {
+    return this._class
+  }
+
   get value () {
     return this._value
   }
@@ -24,19 +34,28 @@ export class SearchCriteriaListItem {
     return this._label
   }
 
-  get type () {
-    return this._type
+  get conflictKey () {
+    return this._conflictKey
   }
 
-  get hasValue () {
-    if (typeof this._value === 'undefined') {
-      return false
-    }
-    return true
+  get sortOrder () {
+    return this._sortOrder
   }
 
-  get color () {
-    return this._color
+  get urlString () {
+    return this._type + '/'
+  }
+}
+
+export class SearchCriteriaValueListItem extends SearchCriteriaListItem {
+  constructor (value, label) {
+    super()
+    this._value = value
+    this._label = label
+  }
+
+  get urlString () {
+    return this._type + '/' + this._value + '/'
   }
 }
 
@@ -47,8 +66,10 @@ export class KillsSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'kills'
+    this._class = 'kills'
     this._label = 'Kills'
-    this._color = '#00FF00'
+    this._conflictKey = 1
+    this._sortOrder = 6
   }
 }
 
@@ -59,8 +80,10 @@ export class LossesSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'losses'
+    this._class = 'losses'
     this._label = 'Losses'
-    this._color = '#FF0000'
+    this._conflictKey = 1
+    this._sortOrder = 6
   }
 }
 
@@ -71,8 +94,10 @@ export class GankedSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'ganked'
+    this._class = 'ganked'
     this._label = 'Ganked'
-    this._color = '#00FF33'
+    this._conflictKey = 3
+    this._sortOrder = 11
   }
 }
 
@@ -83,62 +108,64 @@ export class SoloSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'solo'
+    this._class = 'solo'
     this._label = 'Solo'
-    this._color = '#0033FF'
+    this._conflictKey = 4
+    this._sortOrder = 11
   }
 }
 
 /**
  * Alliance
  */
-export class AllianceSearchCriteriaListItem extends SearchCriteriaListItem {
+export class AllianceSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value AllianceId
    * @param {String} label AllianceName
    */
   constructor (value, label) {
-    super()
+    super(value, label)
     this._type = 'alliance'
-    this._value = value
-    this._label = label
-    this._color = '#FFCC00'
+    this._class = 'alliance'
+    this._conflictKey = -1
+    this._sortOrder = 2
   }
 }
 
 /**
  * Corporation
  */
-export class CorporationSearchCriteriaListItem extends SearchCriteriaListItem {
+export class CorporationSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value CorporationId
    * @param {String} label CorporationName
    */
   constructor (value, label) {
-    super()
+    super(value, label)
     this._type = 'corporation'
-    this._value = value
-    this._label = label
-    this._color = '#FFFF00'
+    this._class = 'corporation'
+    this._conflictKey = -1
+    this._sortOrder = 3
   }
 }
 
 /**
  * Character
  */
-export class CharacterSearchCriteriaListItem extends SearchCriteriaListItem {
+export class CharacterSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value CharacterId
    * @param {String} label CharacterName
    */
   constructor (value, label) {
-    super()
+    super(value, label)
     this._type = 'character'
-    this._value = value
-    this._label = label
-    this._color = '#FF0000'
+    this._class = 'character'
+    this._conflictKey = -1
+    this._sortOrder = 1
   }
 }
 
@@ -149,8 +176,10 @@ export class HighsecSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'highsec'
+    this._class = 'highsec'
     this._label = 'Highsec'
-    this._color = '#00FF00'
+    this._conflictKey = 2
+    this._sortOrder = 7
   }
 }
 
@@ -161,8 +190,10 @@ export class LowsecSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'lowsec'
+    this._class = 'lowsec'
     this._label = 'Lowsec'
-    this._color = '#FFFF00'
+    this._conflictKey = 2
+    this._sortOrder = 7
   }
 }
 
@@ -173,8 +204,10 @@ export class NullsecSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'nullsec'
+    this._class = 'nullsec'
     this._label = 'Nullsec'
-    this._color = '#FF0000'
+    this._conflictKey = 2
+    this._sortOrder = 7
   }
 }
 
@@ -185,62 +218,64 @@ export class AbyssalSearchCriteriaListItem extends SearchCriteriaListItem {
   constructor () {
     super()
     this._type = 'abyssal'
+    this._class = 'abyssal'
     this._label = 'Abyssal'
-    this._color = '#000000'
+    this._conflictKey = 2
+    this._sortOrder = 7
   }
 }
 
 /**
  * Group
  */
-export class GroupSearchCriteriaListItem extends SearchCriteriaListItem {
+export class GroupSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value GroupId
    * @param {String} label GroupName
    */
   constructor (value, label) {
-    super()
+    super(value, label)
     this._type = 'group'
-    this._value = value
-    this._label = label
-    this._color = '#000000'
+    this._class = 'group'
+    this._conflictKey = -1
+    this._sortOrder = 4
   }
 }
 
 /**
  * Ship
  */
-export class ShipSearchCriteriaListItem extends SearchCriteriaListItem {
+export class ShipSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value ItemId
    * @param {String} label ItemName
    */
   constructor (value, label) {
-    super()
-    this._type = 'group'
-    this._value = value
-    this._label = label
-    this._color = '#000000'
+    super(value, label)
+    this._type = 'item'
+    this._class = 'item'
+    this._conflictKey = -1
+    this._sortOrder = 5
   }
 }
 
 /**
  * Region
  */
-export class RegionSearchCriteriaListItem extends SearchCriteriaListItem {
+export class RegionSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value RegionId
    * @param {String} label RegionName
    */
   constructor (value, label) {
-    super()
-    this._type = 'group'
-    this._value = value
-    this._label = label
-    this._color = '#000000'
+    super(value, label)
+    this._type = 'region'
+    this._class = 'region'
+    this._conflictKey = -1
+    this._sortOrder = 8
   }
 }
 
@@ -254,11 +289,11 @@ export class ConsterationSearchCriteriaListItem extends SearchCriteriaListItem {
    * @param {String} label ConsterationName
    */
   constructor (value, label) {
-    super()
+    super(value, label)
     this._type = 'consteration'
-    this._value = value
-    this._label = label
-    this._color = '#000000'
+    this._class = 'consteration'
+    this._conflictKey = -1
+    this._sortOrder = 9
   }
 }
 
@@ -272,10 +307,10 @@ export class SystemSearchCriteriaListItem extends SearchCriteriaListItem {
    * @param {String} label SystemName
    */
   constructor (value, label) {
-    super()
-    this._type = 'group'
-    this._value = value
-    this._label = label
-    this._color = '#000000'
+    super(value, label)
+    this._type = 'system'
+    this._class = 'system'
+    this._conflictKey = -1
+    this._sortOrder = 10
   }
 }
