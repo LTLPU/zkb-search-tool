@@ -21,4 +21,8 @@ export class SearchResultListModel {
   clear () {
     this._searchResultList = []
   }
+
+  appendList (searchResultList) {
+    this._searchResultList.concat(searchResultList._searchResultList)
+  }
 }

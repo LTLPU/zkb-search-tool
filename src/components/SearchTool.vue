@@ -204,36 +204,7 @@ export default {
       this.generatedUrl = this.criteriaList.getSearchUrl()
     },
     search: function (searchWord) {
-      this.searchResultList.clear()
-
-      const searchResultList = new SearchResultListModel()
-
-      axios
-        .get(`https://esi.evetech.net/latest/search/?categories=character&datasource=tranquility&language=en-us&strict=false&search=${searchWord}`)
-        .then(response => {
-          response.data.character.some(characterId => {
-            axios
-              .get(`https://esi.evetech.net/latest/characters/${characterId}/?datasource=tranquility`)
-              .then(response2 => {
-                searchResultList.add(
-                  new SearchResultListItem(
-                    'character'
-                    , characterId
-                    , response2.data.name
-                    , 'character.jpg'
-                  )
-                )
-              })
-              .catch(function (error) {
-                // TODO キャラクター名検索エラー処理実装
-                console.log(error)
-              })
-          })
-        })
-        .catch(function (error) {
-          // TODO キャラクター検索エラー処理実装
-          console.log(error)
-        })
+      const searchResultList = searchEntity(searchWord)
 
       this.searchResultList = searchResultList
     }
@@ -246,6 +217,189 @@ export default {
       deep: true
     }
   }
+}
+
+function searchEntity (searchWord) {
+  const searchResultList = new SearchResultListModel()
+
+  // 検索値 : alliance,character,constellation,corporation,region,solar_system
+  axios
+    .get(`https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=false`)
+    .then(response => {
+      if ('character' in response.data) {
+        searchResultList.appendList(searchCharacter(response.data.character))
+      }
+      if ('alliance' in response.data) {
+        searchResultList.appendList(searchAlliance(response.data.alliance))
+      }
+      if ('corpoartion' in response.data) {
+        searchResultList.appendList(searchCorporation(response.data.corpoartion))
+      }
+      if ('solar_system' in response.data) {
+        searchResultList.appendList(searchSystem(response.data.solar_system))
+      }
+      if ('constellation' in response.data) {
+        searchResultList.appendList(searchConstellation(response.data.constellation))
+      }
+      if ('region' in response.data) {
+        searchResultList.appendList(searchRegion(response.data.region))
+      }
+      return searchResultList
+    })
+    .catch(error => {
+      // TODO 検索エラー処理実装
+      console.log(`検索時エラー Key=${searchWord} Error=${error}`)
+    })
+}
+
+function searchCharacter (characterIds) {
+  const searchResultList = new SearchResultListModel()
+
+  characterIds.some(characterId => {
+    axios
+      .get(`https://esi.evetech.net/latest/characters/${characterId}/?datasource=tranquility`)
+      .then(response => {
+        // TODO キャラクター画像アドレス取得
+        searchResultList.add(
+          new SearchResultListItem(
+            'character'
+            , characterId
+            , `${response.data.name} (Character)`
+            , 'character.jpg'
+          )
+        )
+        return searchResultList
+      })
+      .catch(error => {
+        // TODO キャラクター名検索エラー処理実装
+        console.log(`キャラクター検索時エラー CharacterId=${characterId}} Error=${error}`)
+      })
+  })
+}
+
+function searchAlliance (allianceIds) {
+  const searchResultList = new SearchResultListModel()
+
+  allianceIds.some(allianceId => {
+    axios
+      .get(`https://esi.evetech.net/latest/alliances/${allianceId}/?datasource=tranquility`)
+      .then(response => {
+        // TODO アライアンス画像アドレス取得
+        searchResultList.add(
+          new SearchResultListItem(
+            'alliance'
+            , allianceId
+            , `${response.data.name} (Alliance)`
+            , 'alliance.jpg'
+          )
+        )
+        return searchResultList
+      })
+      .catch(error => {
+        // TODO アライアンス名検索エラー処理実装
+        console.log(`アライアンス検索時エラー AllianceId=${allianceId}} Error=${error}`)
+      })
+  })
+}
+
+function searchCorporation (corporationIds) {
+  const searchResultList = new SearchResultListModel()
+
+  corporationIds.some(corporationId => {
+    axios
+      .get(`https://esi.evetech.net/latest/corporations/${corporationId}/?datasource=tranquility`)
+      .then(response => {
+        // TODO コーポレーション画像アドレス取得
+        searchResultList.add(
+          new SearchResultListItem(
+            'corporation'
+            , corporationId
+            , `${response.data.name} (Corporation)`
+            , 'corporation.jpg'
+          )
+        )
+        return searchResultList
+      })
+      .catch(error => {
+        // TODO コーポレーション名検索エラー処理実装
+        console.log(`コーポレーション検索時エラー CorporationId=${corporationId}} Error=${error}`)
+      })
+  })
+}
+
+function searchSystem (systemIds) {
+  const searchResultList = new SearchResultListModel()
+
+  systemIds.some(systemId => {
+    axios
+      .get(`https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility&language=en-us`)
+      .then(response => {
+        // TODO ソーラーシステム画像アドレス取得
+        searchResultList.add(
+          new SearchResultListItem(
+            'system'
+            , systemId
+            , `${response.data.name} (System)`
+            , 'system.jpg'
+          )
+        )
+        return searchResultList
+      })
+      .catch(error => {
+        // TODO ソーラーシステム名検索エラー処理実装
+        console.log(`ソーラーシステム検索時エラー SystemId=${systemId}} Error=${error}`)
+      })
+  })
+}
+
+function searchConstellation (constellationIds) {
+  const searchResultList = new SearchResultListModel()
+
+  constellationIds.some(constellationId => {
+    axios
+      .get(`https://esi.evetech.net/latest/universe/constellations/${constellationId}/?datasource=tranquility&language=en-us`)
+      .then(response => {
+        // TODO コンステレーション画像アドレス取得
+        searchResultList.add(
+          new SearchResultListItem(
+            'constellation'
+            , constellationId
+            , `${response.data.name} (COnstellation)`
+            , 'constellation.jpg'
+          )
+        )
+        return searchResultList
+      })
+      .catch(error => {
+        // TODO コンステレーション名検索エラー処理実装
+        console.log(`コンステレーション検索時エラー ConstellationId=${constellationId}} Error=${error}`)
+      })
+  })
+}
+
+function searchRegion (regionIds) {
+  const searchResultList = new SearchResultListModel()
+
+  regionIds.some(regionId => {
+    axios
+      .get(`https://esi.evetech.net/latest/universe/regions/${regionId}/?datasource=tranquility&language=en-us`)
+      .then(response => {
+        // TODO リージョン画像アドレス取得
+        searchResultList.add(
+          new SearchResultListItem(
+            'region'
+            , regionId
+            , `${response.data.name} (Region)`
+            , 'region.jpg'
+          )
+        )
+        return searchResultList
+      })
+      .catch(error => {
+        // TODO リージョン名検索エラー処理実装
+        console.log(`リージョン検索時エラー RegionId=${regionId}} Error=${error}`)
+      })
+  })
 }
 
 </script>
