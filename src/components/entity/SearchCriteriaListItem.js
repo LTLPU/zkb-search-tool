@@ -282,7 +282,7 @@ export class RegionSearchCriteriaListItem extends SearchCriteriaValueListItem {
 /**
  * Consteration
  */
-export class ConsterationSearchCriteriaListItem extends SearchCriteriaListItem {
+export class ConsterationSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value ConsterationId
@@ -300,7 +300,7 @@ export class ConsterationSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * System
  */
-export class SystemSearchCriteriaListItem extends SearchCriteriaListItem {
+export class SystemSearchCriteriaListItem extends SearchCriteriaValueListItem {
   /**
    *
    * @param {String} value SystemId

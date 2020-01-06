@@ -23,6 +23,6 @@ export class SearchResultListModel {
   }
 
   appendList (searchResultList) {
-    this._searchResultList.concat(searchResultList._searchResultList)
+    this._searchResultList = this._searchResultList.concat(searchResultList._searchResultList)
   }
 }

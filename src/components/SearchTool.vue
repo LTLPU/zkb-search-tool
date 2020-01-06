@@ -97,7 +97,8 @@ import { KillsSearchCriteriaListItem,
   NullsecSearchCriteriaListItem,
   AbyssalSearchCriteriaListItem,
   GroupSearchCriteriaListItem,
-  ShipSearchCriteriaListItem } from './entity/SearchCriteriaListItem.js'
+  ShipSearchCriteriaListItem,
+  SystemSearchCriteriaListItem } from './entity/SearchCriteriaListItem.js'
 import { SearchCriteriaListModel } from './entity/SearchCriteriaListModel.js'
 import { SearchResultListItem } from './entity/SearchResultListItem.js'
 import { SearchResultListModel } from './entity/SearchResultListModel.js'
@@ -168,6 +169,12 @@ export default {
               resultItem.id, resultItem.label
             ))
           break
+        case 'system':
+          this.addCriteria(
+            new SystemSearchCriteriaListItem(
+              resultItem.id, resultItem.label
+            ))
+          break
         case 'group':
           this.addCriteria(
             new GroupSearchCriteriaListItem(
@@ -183,6 +190,9 @@ export default {
         default:
           throw new Error('something wrong')
       }
+
+      this.searchResultList.clear()
+      this.inputText = ''
     },
     addCriteria: function (criteria) {
       this.criteriaList.add(criteria)
@@ -204,9 +214,13 @@ export default {
       this.generatedUrl = this.criteriaList.getSearchUrl()
     },
     search: function (searchWord) {
-      const searchResultList = searchEntity(searchWord)
-
-      this.searchResultList = searchResultList
+      getSearchResultItems(searchWord)
+        .then(response => {
+          this.searchResultList = response
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   watch: {
@@ -219,48 +233,74 @@ export default {
   }
 }
 
-function searchEntity (searchWord) {
+function getSearchResultItems (searchWord) {
   const searchResultList = new SearchResultListModel()
 
   // 検索値 : alliance,character,constellation,corporation,region,solar_system
-  axios
-    .get(`https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=false`)
-    .then(response => {
-      if ('character' in response.data) {
-        searchResultList.appendList(searchCharacter(response.data.character))
-      }
-      if ('alliance' in response.data) {
-        searchResultList.appendList(searchAlliance(response.data.alliance))
-      }
-      if ('corpoartion' in response.data) {
-        searchResultList.appendList(searchCorporation(response.data.corpoartion))
-      }
-      if ('solar_system' in response.data) {
-        searchResultList.appendList(searchSystem(response.data.solar_system))
-      }
-      if ('constellation' in response.data) {
-        searchResultList.appendList(searchConstellation(response.data.constellation))
-      }
-      if ('region' in response.data) {
-        searchResultList.appendList(searchRegion(response.data.region))
-      }
-      return searchResultList
-    })
-    .catch(error => {
-      // TODO 検索エラー処理実装
-      console.log(`検索時エラー Key=${searchWord} Error=${error}`)
-    })
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=false`)
+      .then(response => {
+        const promises = []
+        if ('character' in response.data) {
+          promises.push(getEntityItems(response.data.character, getCharacterItem))
+        }
+        if ('alliance' in response.data) {
+          promises.push(getEntityItems(response.data.alliance, getAllianceItem))
+        }
+        if ('corporation' in response.data) {
+          promises.push(getEntityItems(response.data.corporation, getCorporationItem))
+        }
+        if ('solar_system' in response.data) {
+          promises.push(getEntityItems(response.data.solar_system, getSystemItem))
+        }
+        if ('constellation' in response.data) {
+          promises.push(getEntityItems(response.data.constellation, getConstellationItem))
+        }
+        if ('region' in response.data) {
+          promises.push(getEntityItems(response.data.region, getRegionItem))
+        }
+        return Promise.all(promises)
+      })
+      .then(responses => {
+        for (const response of responses) {
+          searchResultList.appendList(response)
+        }
+        resolve(searchResultList)
+      })
+      .catch(error => {
+        // TODO 検索エラー処理実装
+        reject(error)
+      })
+  })
 }
 
-function searchCharacter (characterIds) {
+function getEntityItems (ids, searchFunc) {
   const searchResultList = new SearchResultListModel()
 
-  characterIds.some(characterId => {
-    axios
-      .get(`https://esi.evetech.net/latest/characters/${characterId}/?datasource=tranquility`)
+  return new Promise((resolve, reject) => {
+    Promise.all(
+      ids.map(id => {
+        return searchFunc(id)
+      })
+    ).then(responses => {
+      responses.map(response => {
+        searchResultList.add(response)
+      })
+      resolve(searchResultList)
+    })
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+
+function getCharacterItem (characterId) {
+  return new Promise((resolve, reject) => {
+    axios.get(`https://esi.evetech.net/latest/characters/${characterId}/?datasource=tranquility`)
       .then(response => {
         // TODO キャラクター画像アドレス取得
-        searchResultList.add(
+        resolve(
           new SearchResultListItem(
             'character'
             , characterId
@@ -268,24 +308,20 @@ function searchCharacter (characterIds) {
             , 'character.jpg'
           )
         )
-        return searchResultList
       })
       .catch(error => {
-        // TODO キャラクター名検索エラー処理実装
-        console.log(`キャラクター検索時エラー CharacterId=${characterId}} Error=${error}`)
+        reject(new Error(`キャラクター検索時エラー CharacterId=${characterId} Error=${error}`))
       })
   })
 }
 
-function searchAlliance (allianceIds) {
-  const searchResultList = new SearchResultListModel()
-
-  allianceIds.some(allianceId => {
+function getAllianceItem (allianceId) {
+  return new Promise((resolve, reject) => {
     axios
       .get(`https://esi.evetech.net/latest/alliances/${allianceId}/?datasource=tranquility`)
       .then(response => {
         // TODO アライアンス画像アドレス取得
-        searchResultList.add(
+        resolve(
           new SearchResultListItem(
             'alliance'
             , allianceId
@@ -293,7 +329,6 @@ function searchAlliance (allianceIds) {
             , 'alliance.jpg'
           )
         )
-        return searchResultList
       })
       .catch(error => {
         // TODO アライアンス名検索エラー処理実装
@@ -302,15 +337,13 @@ function searchAlliance (allianceIds) {
   })
 }
 
-function searchCorporation (corporationIds) {
-  const searchResultList = new SearchResultListModel()
-
-  corporationIds.some(corporationId => {
+function getCorporationItem (corporationId) {
+  return new Promise((resolve, reject) => {
     axios
       .get(`https://esi.evetech.net/latest/corporations/${corporationId}/?datasource=tranquility`)
       .then(response => {
         // TODO コーポレーション画像アドレス取得
-        searchResultList.add(
+        resolve(
           new SearchResultListItem(
             'corporation'
             , corporationId
@@ -318,7 +351,6 @@ function searchCorporation (corporationIds) {
             , 'corporation.jpg'
           )
         )
-        return searchResultList
       })
       .catch(error => {
         // TODO コーポレーション名検索エラー処理実装
@@ -327,15 +359,13 @@ function searchCorporation (corporationIds) {
   })
 }
 
-function searchSystem (systemIds) {
-  const searchResultList = new SearchResultListModel()
-
-  systemIds.some(systemId => {
+function getSystemItem (systemId) {
+  return new Promise((resolve, reject) => {
     axios
       .get(`https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility&language=en-us`)
       .then(response => {
         // TODO ソーラーシステム画像アドレス取得
-        searchResultList.add(
+        resolve(
           new SearchResultListItem(
             'system'
             , systemId
@@ -343,24 +373,21 @@ function searchSystem (systemIds) {
             , 'system.jpg'
           )
         )
-        return searchResultList
       })
       .catch(error => {
-        // TODO ソーラーシステム名検索エラー処理実装
+      // TODO ソーラーシステム名検索エラー処理実装
         console.log(`ソーラーシステム検索時エラー SystemId=${systemId}} Error=${error}`)
       })
   })
 }
 
-function searchConstellation (constellationIds) {
-  const searchResultList = new SearchResultListModel()
-
-  constellationIds.some(constellationId => {
+function getConstellationItem (constellationId) {
+  return new Promise((resolve, reject) => {
     axios
       .get(`https://esi.evetech.net/latest/universe/constellations/${constellationId}/?datasource=tranquility&language=en-us`)
       .then(response => {
         // TODO コンステレーション画像アドレス取得
-        searchResultList.add(
+        resolve(
           new SearchResultListItem(
             'constellation'
             , constellationId
@@ -368,7 +395,6 @@ function searchConstellation (constellationIds) {
             , 'constellation.jpg'
           )
         )
-        return searchResultList
       })
       .catch(error => {
         // TODO コンステレーション名検索エラー処理実装
@@ -377,15 +403,13 @@ function searchConstellation (constellationIds) {
   })
 }
 
-function searchRegion (regionIds) {
-  const searchResultList = new SearchResultListModel()
-
-  regionIds.some(regionId => {
+function getRegionItem (regionId) {
+  return new Promise((resolve, reject) => {
     axios
       .get(`https://esi.evetech.net/latest/universe/regions/${regionId}/?datasource=tranquility&language=en-us`)
       .then(response => {
         // TODO リージョン画像アドレス取得
-        searchResultList.add(
+        resolve(
           new SearchResultListItem(
             'region'
             , regionId
@@ -393,7 +417,6 @@ function searchRegion (regionIds) {
             , 'region.jpg'
           )
         )
-        return searchResultList
       })
       .catch(error => {
         // TODO リージョン名検索エラー処理実装
