@@ -219,6 +219,7 @@ export default {
           this.searchResultList = response
         })
         .catch(error => {
+          // TODO エラー処理実装
           alert(error)
         })
     }
@@ -331,8 +332,7 @@ function getAllianceItem (allianceId) {
         )
       })
       .catch(error => {
-        // TODO アライアンス名検索エラー処理実装
-        alert(`アライアンス検索時エラー AllianceId=${allianceId}} Error=${error}`)
+        reject(new Error(`アライアンス検索時エラー AllianceId=${allianceId}} Error=${error}`))
       })
   })
 }
@@ -353,8 +353,7 @@ function getCorporationItem (corporationId) {
         )
       })
       .catch(error => {
-        // TODO コーポレーション名検索エラー処理実装
-        alert(`コーポレーション検索時エラー CorporationId=${corporationId}} Error=${error}`)
+        reject(new Error(`コーポレーション検索時エラー CorporationId=${corporationId}} Error=${error}`))
       })
   })
 }
@@ -375,8 +374,7 @@ function getSystemItem (systemId) {
         )
       })
       .catch(error => {
-      // TODO ソーラーシステム名検索エラー処理実装
-        alert(`ソーラーシステム検索時エラー SystemId=${systemId}} Error=${error}`)
+        reject(new Error(`ソーラーシステム検索時エラー SystemId=${systemId}} Error=${error}`))
       })
   })
 }
@@ -397,8 +395,7 @@ function getConstellationItem (constellationId) {
         )
       })
       .catch(error => {
-        // TODO コンステレーション名検索エラー処理実装
-        alert(`コンステレーション検索時エラー ConstellationId=${constellationId}} Error=${error}`)
+        reject(new Error(`コンステレーション検索時エラー ConstellationId=${constellationId}} Error=${error}`))
       })
   })
 }
@@ -419,8 +416,7 @@ function getRegionItem (regionId) {
         )
       })
       .catch(error => {
-        // TODO リージョン名検索エラー処理実装
-        alert(`リージョン検索時エラー RegionId=${regionId}} Error=${error}`)
+        reject(new Error(`リージョン検索時エラー RegionId=${regionId}} Error=${error}`))
       })
   })
 }
