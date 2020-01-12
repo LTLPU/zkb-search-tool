@@ -1,6 +1,13 @@
 import axios from 'axios'
 import { WordSearchResultItem } from '../entity/WordSearchResultItem.js'
 
+const CHARACTER_MAX = 20
+const ALLIANCE_MAX = 10
+const CORPORATION_MAX = 10
+const SYSTEM_MAX = 5
+const CONSTELLATION_MAX = 5
+const REGION_MAX = 5
+
 export class WordSearchService {
   constructor (searchResultList) {
     this._searchResultList = searchResultList
@@ -25,38 +32,67 @@ async function getSearchResultItems (searchResultList, searchWord) {
     .then(response => {
       const promises = []
 
+      console.log(response)
+
       if ('character' in response.data) {
-        response.data.character.forEach(characterId => {
-          promises.push(getCharacterItem(characterId))
-        })
+        for (
+          let i = 0;
+          i < CHARACTER_MAX && i < response.data.character.length;
+          i++
+        ) {
+          promises.push(getCharacterItem(response.data.character[i]))
+        }
       }
       if ('alliance' in response.data) {
-        response.data.alliance.forEach(allianceId => {
-          promises.push(getAllianceItem(allianceId))
-        })
+        for (
+          let i = 0;
+          i < ALLIANCE_MAX && i < response.data.alliance.length;
+          i++
+        ) {
+          promises.push(getAllianceItem(response.data.alliance[i]))
+        }
       }
       if ('corporation' in response.data) {
-        response.data.corporation.forEach(corporationId => {
-          promises.push(getCorporationItem(corporationId))
-        })
+        for (
+          let i = 0;
+          i < CORPORATION_MAX && i < response.data.corporation.length;
+          i++
+        ) {
+          promises.push(getCorporationItem(response.data.corporation[i]))
+        }
       }
       if ('solar_system' in response.data) {
-        response.data.solar_system.forEach(systemId => {
-          promises.push(getSystemItem(systemId))
-        })
+        for (
+          let i = 0;
+          i < SYSTEM_MAX && i < response.data.solar_system.length;
+          i++
+        ) {
+          promises.push(getSystemItem(response.data.solar_system[i]))
+        }
       }
       if ('constellation' in response.data) {
-        response.data.constellation.forEach(constellationId => {
-          promises.push(getConstellationItem(constellationId))
-        })
+        for (
+          let i = 0;
+          i < CONSTELLATION_MAX && i < response.data.constellation.length;
+          i++
+        ) {
+          promises.push(getConstellationItem(response.data.constellation[i]))
+        }
       }
       if ('region' in response.data) {
-        response.data.region.forEach(regionId => {
-          promises.push(getRegionItem(regionId))
-        })
+        for (
+          let i = 0;
+          i < REGION_MAX && i < response.data.region.length;
+          i++
+        ) {
+          promises.push(getRegionItem(response.data.region[i]))
+        }
       }
 
+      console.log(promises)
+
       Promise.all(promises).then(responses => {
+        console.log(responses.length)
         responses.forEach(response => {
           searchResultList.add(response)
         })
@@ -128,11 +164,13 @@ function getCorporationItem (corporationId) {
       )
       .then(response => {
         // TODO キャラクタ画像取得
-        return new WordSearchResultItem(
-          'corporation',
-          corporationId,
-          `${response.data.name} (Corporation)`,
-          'corporation.jpg'
+        resolve(
+          new WordSearchResultItem(
+            'corporation',
+            corporationId,
+            `${response.data.name} (Corporation)`,
+            'corporation.jpg'
+          )
         )
       })
       .catch(error => {
@@ -153,11 +191,13 @@ function getSystemItem (systemId) {
       )
       .then(response => {
         // TODO ソーラーシステム画像取得
-        return new WordSearchResultItem(
-          'system',
-          systemId,
-          `${response.data.name} (System)`,
-          'system.jpg'
+        resolve(
+          new WordSearchResultItem(
+            'system',
+            systemId,
+            `${response.data.name} (System)`,
+            'system.jpg'
+          )
         )
       })
       .catch(error => {
@@ -178,11 +218,13 @@ function getConstellationItem (constellationId) {
       )
       .then(response => {
         // TODO コンステレーション画像アドレス取得
-        return new WordSearchResultItem(
-          'constellation',
-          constellationId,
-          `${response.data.name} (COnstellation)`,
-          'constellation.jpg'
+        resolve(
+          new WordSearchResultItem(
+            'constellation',
+            constellationId,
+            `${response.data.name} (COnstellation)`,
+            'constellation.jpg'
+          )
         )
       })
       .catch(error => {
@@ -203,11 +245,13 @@ function getRegionItem (regionId) {
       )
       .then(response => {
         // TODO リージョン画像アドレス取得
-        return new WordSearchResultItem(
-          'region',
-          regionId,
-          `${response.data.name} (Region)`,
-          'region.jpg'
+        resolve(
+          new WordSearchResultItem(
+            'region',
+            regionId,
+            `${response.data.name} (Region)`,
+            'region.jpg'
+          )
         )
       })
       .catch(error => {

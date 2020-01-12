@@ -162,6 +162,9 @@ export default {
       this._zkbSearchCriteriaService.removeAllCriteria()
       this.updateUrl()
     },
+    clear: function () {
+      this._wordSearchService.clear()
+    },
     updateUrl: function () {
       this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
