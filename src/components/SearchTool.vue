@@ -1,12 +1,7 @@
 <template>
   <div class="searchTool">
-    <h1>zkb-search-tool</h1>
-    <hr />
     <p class="generatedUrl">
-      <a
-        :href="generatedUrl"
-        target="_blank"
-      >{{ generatedUrl }}</a>
+      <a :href="generatedUrl" target="_blank">{{ generatedUrl }}</a>
     </p>
     <ul class="searchCriteria">
       <li
@@ -19,62 +14,22 @@
       </li>
     </ul>
     <hr />
-    <input
-      type="button"
-      value="Kills"
-      v-on:click="addKills()"
-    />
-    <input
-      type="button"
-      value="Losses"
-      v-on:click="addLosses()"
-    />
-    <input
-      type="button"
-      value="Solo"
-      v-on:click="addSolo()"
-    />
-    <br>
-    <input
-      type="button"
-      value="Highsec"
-      v-on:click="addHighsec()"
-    />
-    <input
-      type="button"
-      value="Lowsec"
-      v-on:click="addLowsec()"
-    />
-    <input
-      type="button"
-      value="Nullsec"
-      v-on:click="addNullsec()"
-    />
-    <input
-      type="button"
-      value="Abyssal"
-      v-on:click="addAbyssal()"
-    />
-    <hr>
-    <input
-      type="text"
-      v-model="inputText"
-    />
-    <br>
-    <input
-      type="button"
-      value="Clear"
-      v-on:click="clear()"
-    />
-    <hr>
+    <input type="button" value="Kills" v-on:click="addKills()" />
+    <input type="button" value="Losses" v-on:click="addLosses()" />
+    <input type="button" value="Solo" v-on:click="addSolo()" />
+    <br />
+    <input type="button" value="Highsec" v-on:click="addHighsec()" />
+    <input type="button" value="Lowsec" v-on:click="addLowsec()" />
+    <input type="button" value="Nullsec" v-on:click="addNullsec()" />
+    <input type="button" value="Abyssal" v-on:click="addAbyssal()" />
+    <hr />
+    <input type="text" v-model="inputText" />
+    <br />
+    <input type="button" value="Clear" v-on:click="clear()" />
+    <hr />
     <ul class="searchResult">
-      <li
-        v-for="resultItem in searchResultList"
-        :key="resultItem.key"
-      >
-        <span
-          v-on:click="addSearchItem(resultItem)"
-        >
+      <li v-for="resultItem in searchResultList" :key="resultItem.key">
+        <span v-on:click="addSearchItem(resultItem)">
           {{ resultItem.label }}
         </span>
       </li>
@@ -84,24 +39,11 @@
 
 <script>
 import _ from 'lodash'
-import axios from 'axios'
-
-import { KillsSearchCriteriaListItem,
-  LossesSearchCriteriaListItem,
-  CharacterSearchCriteriaListItem,
-  AllianceSearchCriteriaListItem,
-  CorporationSearchCriteriaListItem,
-  SoloSearchCriteriaListItem,
-  HighsecSearchCriteriaListItem,
-  LowsecSearchCriteriaListItem,
-  NullsecSearchCriteriaListItem,
-  AbyssalSearchCriteriaListItem,
-  GroupSearchCriteriaListItem,
-  ShipSearchCriteriaListItem,
-  SystemSearchCriteriaListItem } from './entity/SearchCriteriaListItem.js'
-import { SearchCriteriaListModel } from './entity/SearchCriteriaListModel.js'
-import { SearchResultListItem } from './entity/SearchResultListItem.js'
-import { SearchResultListModel } from './entity/SearchResultListModel.js'
+import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService.js'
+import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
+import { WordSearchService } from './service/WordSearchService.js'
+import { WordSearchResultList } from './entity/WordSearchResultList.js'
+import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
 
 export default {
   name: 'SearchTool',
@@ -112,15 +54,21 @@ export default {
     return {
       generatedUrl: '',
       criteriaList: {},
-      searchResultList: {},
-      inputText: ''
+      inputText: '',
+      searchResultList: {}
     }
   },
   created: function () {
     this.debouncedSearch = _.debounce(this.search, 500)
 
-    this.criteriaList = new SearchCriteriaListModel()
-    this.searchResultList = new SearchResultListModel()
+    this.criteriaList = new ZkbSearchCriteriaList()
+    this.searchResultList = new WordSearchResultList()
+
+    this._zkbSearchCriteriaService = new ZkbSearchCriteriaService(
+      this.criteriaList
+    )
+
+    this._wordSearchService = new WordSearchService(this.searchResultList)
 
     this.updateUrl()
   },
@@ -129,99 +77,96 @@ export default {
      * kills/を追加する。
      */
     addKills: function () {
-      this.addCriteria(new KillsSearchCriteriaListItem())
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Kills)
     },
     addLosses: function () {
-      this.addCriteria(new LossesSearchCriteriaListItem())
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Losses)
     },
     addSolo: function () {
-      this.addCriteria(new SoloSearchCriteriaListItem())
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Solo)
     },
     addHighsec: function () {
-      this.addCriteria(new HighsecSearchCriteriaListItem())
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Highsec)
     },
     addLowsec: function () {
-      this.addCriteria(new LowsecSearchCriteriaListItem())
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Lowsec)
     },
     addNullsec: function () {
-      this.addCriteria(new NullsecSearchCriteriaListItem())
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Nullsec)
     },
     addAbyssal: function () {
-      this.addCriteria(new AbyssalSearchCriteriaListItem())
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Abyssal)
     },
     addSearchItem: function (resultItem) {
+      // 検索条件追加
       switch (resultItem.type) {
         case 'character':
           this.addCriteria(
-            new CharacterSearchCriteriaListItem(
-              resultItem.id, resultItem.label
-            ))
+            ZkbSearchCriteriaItemTypes.Character,
+            resultItem.id,
+            resultItem.label
+          )
           break
         case 'corporation':
           this.addCriteria(
-            new CorporationSearchCriteriaListItem(
-              resultItem.id, resultItem.label
-            ))
+            ZkbSearchCriteriaItemTypes.Corporation,
+            resultItem.id,
+            resultItem.label
+          )
           break
         case 'alliance':
           this.addCriteria(
-            new AllianceSearchCriteriaListItem(
-              resultItem.id, resultItem.label
-            ))
+            ZkbSearchCriteriaItemTypes.Alliance,
+            resultItem.id,
+            resultItem.label
+          )
           break
         case 'system':
           this.addCriteria(
-            new SystemSearchCriteriaListItem(
-              resultItem.id, resultItem.label
-            ))
+            ZkbSearchCriteriaItemTypes.System,
+            resultItem.id,
+            resultItem.label
+          )
           break
         case 'group':
           this.addCriteria(
-            new GroupSearchCriteriaListItem(
-              resultItem.id, resultItem.label
-            ))
+            ZkbSearchCriteriaItemTypes.Group,
+            resultItem.id,
+            resultItem.label
+          )
           break
         case 'ship':
           this.addCriteria(
-            new ShipSearchCriteriaListItem(
-              resultItem.id, resultItem.label
-            ))
+            ZkbSearchCriteriaItemTypes.Ship,
+            resultItem.id,
+            resultItem.label
+          )
           break
         default:
           throw new Error('something wrong')
       }
 
-      this.searchResultList.clear()
+      // 入力状態クリア
       this.inputText = ''
+      this._wordSearchService.clear()
     },
-    addCriteria: function (criteria) {
-      this.criteriaList.add(criteria)
+    addCriteria: function (itemType, value, label) {
+      this._zkbSearchCriteriaService.addCriteria(itemType, value, label)
       this.updateUrl()
     },
     removeCriteria: function (idx) {
-      this.criteriaList.remove(idx)
+      this._zkbSearchCriteriaService.removeCriteria(idx)
       this.updateUrl()
     },
     clearCriteria: function () {
-      this.criteriaList.clear()
-      this.inputText = ''
+      this._zkbSearchCriteriaService.removeAllCriteria()
       this.updateUrl()
     },
-    /**
-     * generatedUrlを更新する。
-     */
     updateUrl: function () {
-      this.generatedUrl = this.criteriaList.getSearchUrl()
+      this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
     search: function (searchWord) {
-      getSearchResultItems(searchWord)
-        .then(response => {
-          this.searchResultList = response
-        })
-        .catch(error => {
-          // TODO エラー処理実装
-          alert(error)
-        })
+      this._wordSearchService.search(searchWord)
     }
   },
   watch: {
@@ -233,198 +178,10 @@ export default {
     }
   }
 }
-
-function getSearchResultItems (searchWord) {
-  const searchResultList = new SearchResultListModel()
-
-  // 検索値 : alliance,character,constellation,corporation,region,solar_system
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=false`)
-      .then(response => {
-        const promises = []
-        if ('character' in response.data) {
-          promises.push(getEntityItems(response.data.character, getCharacterItem))
-        }
-        if ('alliance' in response.data) {
-          promises.push(getEntityItems(response.data.alliance, getAllianceItem))
-        }
-        if ('corporation' in response.data) {
-          promises.push(getEntityItems(response.data.corporation, getCorporationItem))
-        }
-        if ('solar_system' in response.data) {
-          promises.push(getEntityItems(response.data.solar_system, getSystemItem))
-        }
-        if ('constellation' in response.data) {
-          promises.push(getEntityItems(response.data.constellation, getConstellationItem))
-        }
-        if ('region' in response.data) {
-          promises.push(getEntityItems(response.data.region, getRegionItem))
-        }
-        return Promise.all(promises)
-      })
-      .then(responses => {
-        for (const response of responses) {
-          searchResultList.appendList(response)
-        }
-        resolve(searchResultList)
-      })
-      .catch(error => {
-        // TODO 検索エラー処理実装
-        reject(error)
-      })
-  })
-}
-
-function getEntityItems (ids, searchFunc) {
-  const searchResultList = new SearchResultListModel()
-
-  return new Promise((resolve, reject) => {
-    Promise.all(
-      ids.map(id => {
-        return searchFunc(id)
-      })
-    ).then(responses => {
-      responses.map(response => {
-        searchResultList.add(response)
-      })
-      resolve(searchResultList)
-    })
-      .catch(error => {
-        reject(error)
-      })
-  })
-}
-
-function getCharacterItem (characterId) {
-  return new Promise((resolve, reject) => {
-    axios.get(`https://esi.evetech.net/latest/characters/${characterId}/?datasource=tranquility`)
-      .then(response => {
-        // TODO キャラクター画像アドレス取得
-        resolve(
-          new SearchResultListItem(
-            'character'
-            , characterId
-            , `${response.data.name} (Character)`
-            , 'character.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(new Error(`キャラクター検索時エラー CharacterId=${characterId} Error=${error}`))
-      })
-  })
-}
-
-function getAllianceItem (allianceId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`https://esi.evetech.net/latest/alliances/${allianceId}/?datasource=tranquility`)
-      .then(response => {
-        // TODO アライアンス画像アドレス取得
-        resolve(
-          new SearchResultListItem(
-            'alliance'
-            , allianceId
-            , `${response.data.name} (Alliance)`
-            , 'alliance.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(new Error(`アライアンス検索時エラー AllianceId=${allianceId}} Error=${error}`))
-      })
-  })
-}
-
-function getCorporationItem (corporationId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`https://esi.evetech.net/latest/corporations/${corporationId}/?datasource=tranquility`)
-      .then(response => {
-        // TODO コーポレーション画像アドレス取得
-        resolve(
-          new SearchResultListItem(
-            'corporation'
-            , corporationId
-            , `${response.data.name} (Corporation)`
-            , 'corporation.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(new Error(`コーポレーション検索時エラー CorporationId=${corporationId}} Error=${error}`))
-      })
-  })
-}
-
-function getSystemItem (systemId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility&language=en-us`)
-      .then(response => {
-        // TODO ソーラーシステム画像アドレス取得
-        resolve(
-          new SearchResultListItem(
-            'system'
-            , systemId
-            , `${response.data.name} (System)`
-            , 'system.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(new Error(`ソーラーシステム検索時エラー SystemId=${systemId}} Error=${error}`))
-      })
-  })
-}
-
-function getConstellationItem (constellationId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`https://esi.evetech.net/latest/universe/constellations/${constellationId}/?datasource=tranquility&language=en-us`)
-      .then(response => {
-        // TODO コンステレーション画像アドレス取得
-        resolve(
-          new SearchResultListItem(
-            'constellation'
-            , constellationId
-            , `${response.data.name} (COnstellation)`
-            , 'constellation.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(new Error(`コンステレーション検索時エラー ConstellationId=${constellationId}} Error=${error}`))
-      })
-  })
-}
-
-function getRegionItem (regionId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`https://esi.evetech.net/latest/universe/regions/${regionId}/?datasource=tranquility&language=en-us`)
-      .then(response => {
-        // TODO リージョン画像アドレス取得
-        resolve(
-          new SearchResultListItem(
-            'region'
-            , regionId
-            , `${response.data.name} (Region)`
-            , 'region.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(new Error(`リージョン検索時エラー RegionId=${regionId}} Error=${error}`))
-      })
-  })
-}
-
 </script>
 <style>
 p.generatedUrl {
-  font-size: 150%
+  font-size: 150%;
 }
 
 ul.searchCriteria {

@@ -1,6 +1,6 @@
-import { SearchCriteriaListItem } from './SearchCriteriaListItem.js'
+import { ZkbSearchCriteriaItem } from './ZkbSearchCriteriaItem.js'
 
-export class SearchCriteriaListModel {
+export class ZkbSearchCriteriaList {
   constructor () {
     this._searchCriteriaList = []
   }
@@ -17,15 +17,15 @@ export class SearchCriteriaListModel {
   /**
    * 条件を追加する。
    *
-   * @param {SearchCriteriaListItem} newItem 追加する条件
+   * @param {SearchCriteriaItem} newItem 追加する条件
    */
   add (newItem) {
-    if (!(newItem instanceof SearchCriteriaListItem)) {
-      throw new Error('newItem must be SearchCriteriaListItem.')
+    if (!(newItem instanceof ZkbSearchCriteriaItem)) {
+      throw new Error('newItem must be ZkbSearchCriteriaItem.')
     }
 
     if (this._isConflict(newItem)) {
-      throw new Error('newSearchCriteriaListItem can not conflict.')
+      throw new Error('newSearchCriteriaItem can not conflict.')
     }
 
     this._searchCriteriaList.push(newItem)
@@ -51,7 +51,7 @@ export class SearchCriteriaListModel {
   getSearchUrl () {
     let url = 'https://zkillboard.com/'
 
-    // TODO SearchCriteriaListItemよりSortOrderをとるように変更
+    // TODO SearchCriteriaItemよりSortOrderをとるように変更
     let sortedList = this._getSortedList()
 
     for (const listItem of sortedList) {
@@ -76,7 +76,7 @@ export class SearchCriteriaListModel {
 
   /**
    * 重複判定結果を返す。
-   * @param {SearchCriteriaListItem} newItem 追加する条件
+   * @param {SearchCriteriaItem} newItem 追加する条件
    */
   _isConflict (newItem) {
     if (newItem.conflictKey < 0) {

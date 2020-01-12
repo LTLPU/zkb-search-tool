@@ -1,6 +1,66 @@
 let key = 0
 
-export class SearchCriteriaListItem {
+export class ZkbSearchCriteriaItemFactory {
+  create (itemType, value, label) {
+    switch (itemType) {
+      case ZkbSearchCriteriaItemTypes.Kills:
+        return new KillsSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Losses:
+        return new LossesSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Ganked:
+        return new GankedSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Solo:
+        return new SoloSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Alliance:
+        return new AllianceSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.Corporation:
+        return new CorporationSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.Character:
+        return new CharacterSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.Highsec:
+        return new HighsecSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Lowsec:
+        return new LowsecSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Nullsec:
+        return new NullsecSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Abyssal:
+        return new AbyssalSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.Group:
+        return new GroupSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.Ship:
+        return new ShipSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.Region:
+        return new RegionSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.Consteration:
+        return new ConsterationSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.System:
+        return new SystemSearchCriteriaListItem(value, label)
+      default:
+        throw new Error(`invalid itemtype = ${itemType}`)
+    }
+  }
+}
+
+export const ZkbSearchCriteriaItemTypes = {
+  Kills: 'kills',
+  Losses: 'losses',
+  Ganked: 'ganked',
+  Solo: 'solo',
+  Alliance: 'alliance',
+  Corporation: 'corporation',
+  Character: 'character',
+  Highsec: 'highsec',
+  Lowsec: 'lowsec',
+  Nullsec: 'nullsec',
+  Abyssal: 'abyssal',
+  Group: 'group',
+  Ship: 'ship',
+  Region: 'region',
+  Consteration: 'consteration',
+  System: 'system'
+}
+
+export class ZkbSearchCriteriaItem {
   constructor () {
     // 自動で設定
     this._key = key++
@@ -47,7 +107,7 @@ export class SearchCriteriaListItem {
   }
 }
 
-export class SearchCriteriaValueListItem extends SearchCriteriaListItem {
+export class ZkbSearchCriteriaValueItem extends ZkbSearchCriteriaItem {
   constructor (value, label) {
     super()
     this._value = value
@@ -62,7 +122,7 @@ export class SearchCriteriaValueListItem extends SearchCriteriaListItem {
 /**
  * Kills
  */
-export class KillsSearchCriteriaListItem extends SearchCriteriaListItem {
+export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'kills'
@@ -76,7 +136,7 @@ export class KillsSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Losses
  */
-export class LossesSearchCriteriaListItem extends SearchCriteriaListItem {
+export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'losses'
@@ -90,7 +150,7 @@ export class LossesSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Ganked
  */
-export class GankedSearchCriteriaListItem extends SearchCriteriaListItem {
+export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'ganked'
@@ -104,7 +164,7 @@ export class GankedSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Solo
  */
-export class SoloSearchCriteriaListItem extends SearchCriteriaListItem {
+export class SoloSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'solo'
@@ -118,7 +178,7 @@ export class SoloSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Alliance
  */
-export class AllianceSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class AllianceSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value AllianceId
@@ -136,7 +196,7 @@ export class AllianceSearchCriteriaListItem extends SearchCriteriaValueListItem 
 /**
  * Corporation
  */
-export class CorporationSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class CorporationSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value CorporationId
@@ -154,7 +214,7 @@ export class CorporationSearchCriteriaListItem extends SearchCriteriaValueListIt
 /**
  * Character
  */
-export class CharacterSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value CharacterId
@@ -172,7 +232,7 @@ export class CharacterSearchCriteriaListItem extends SearchCriteriaValueListItem
 /**
  * Highsec
  */
-export class HighsecSearchCriteriaListItem extends SearchCriteriaListItem {
+export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'highsec'
@@ -186,7 +246,7 @@ export class HighsecSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Lowsec
  */
-export class LowsecSearchCriteriaListItem extends SearchCriteriaListItem {
+export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'lowsec'
@@ -200,7 +260,7 @@ export class LowsecSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Nullsec
  */
-export class NullsecSearchCriteriaListItem extends SearchCriteriaListItem {
+export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'nullsec'
@@ -214,7 +274,7 @@ export class NullsecSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Abyssal
  */
-export class AbyssalSearchCriteriaListItem extends SearchCriteriaListItem {
+export class AbyssalSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = 'abyssal'
@@ -228,7 +288,7 @@ export class AbyssalSearchCriteriaListItem extends SearchCriteriaListItem {
 /**
  * Group
  */
-export class GroupSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class GroupSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value GroupId
@@ -246,7 +306,7 @@ export class GroupSearchCriteriaListItem extends SearchCriteriaValueListItem {
 /**
  * Ship
  */
-export class ShipSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class ShipSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value ItemId
@@ -264,7 +324,7 @@ export class ShipSearchCriteriaListItem extends SearchCriteriaValueListItem {
 /**
  * Region
  */
-export class RegionSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class RegionSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value RegionId
@@ -282,7 +342,7 @@ export class RegionSearchCriteriaListItem extends SearchCriteriaValueListItem {
 /**
  * Consteration
  */
-export class ConsterationSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class ConsterationSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value ConsterationId
@@ -300,7 +360,7 @@ export class ConsterationSearchCriteriaListItem extends SearchCriteriaValueListI
 /**
  * System
  */
-export class SystemSearchCriteriaListItem extends SearchCriteriaValueListItem {
+export class SystemSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
    * @param {String} value SystemId
