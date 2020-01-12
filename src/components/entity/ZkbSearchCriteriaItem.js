@@ -314,8 +314,8 @@ export class ShipSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'item'
-    this._class = 'item'
+    this._type = 'ship'
+    this._class = 'ship'
     this._conflictKey = -1
     this._sortOrder = 5
   }

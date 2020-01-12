@@ -8,6 +8,9 @@ const SYSTEM_MAX = 5
 const CONSTELLATION_MAX = 5
 const REGION_MAX = 5
 
+const GROUPS_PATH = './Groups.json'
+const SHIPS_PATH = './Ships.json'
+
 export class WordSearchService {
   constructor (searchResultList) {
     this._searchResultList = searchResultList
@@ -15,12 +18,43 @@ export class WordSearchService {
 
   async search (searchWord) {
     this._searchResultList.clear()
-    await getSearchResultItems(this._searchResultList, searchWord)
+    if (searchWord.length > 2) {
+      await getSearchResultItems(this._searchResultList, searchWord)
+      await getSearchResultItemsFromCsv(this._searchResultList, searchWord)
+    }
   }
 
   clear () {
     this._searchResultList.clear()
   }
+}
+
+async function getSearchResultItemsFromCsv (searchResultList, searchWord) {
+  searchCsv(GROUPS_PATH, searchWord)
+    .then(response => {
+      response.forEach(item => {
+        searchResultList.add(
+          new WordSearchResultItem(
+            'group',
+            item.typeId,
+            `${item.name} (Group)`,
+            'groups.png'
+          )
+        )
+      })
+    })
+  searchCsv(SHIPS_PATH, searchWord).then(response => {
+    response.forEach(item => {
+      searchResultList.add(
+        new WordSearchResultItem(
+          'ship',
+          item.typeId,
+          `${item.name} (Ship)`,
+          'ships.png'
+        )
+      )
+    })
+  })
 }
 
 async function getSearchResultItems (searchResultList, searchWord) {
@@ -31,8 +65,6 @@ async function getSearchResultItems (searchResultList, searchWord) {
     )
     .then(response => {
       const promises = []
-
-      console.log(response)
 
       if ('character' in response.data) {
         for (
@@ -89,10 +121,7 @@ async function getSearchResultItems (searchResultList, searchWord) {
         }
       }
 
-      console.log(promises)
-
       Promise.all(promises).then(responses => {
-        console.log(responses.length)
         responses.forEach(response => {
           searchResultList.add(response)
         })
@@ -260,6 +289,23 @@ function getRegionItem (regionId) {
             `リージョン検索時エラー RegionId=${regionId}} Error=${error}`
           )
         )
+      })
+  })
+}
+
+function searchCsv (fileName, searchWord) {
+  const regExp = new RegExp(searchWord, 'i')
+  return new Promise((resolve, reject) => {
+    axios
+      .get(fileName)
+      .then(response => {
+        const resultList = response.data.filter(item => {
+          return item.name.match(regExp) !== null
+        })
+        resolve(resultList)
+      })
+      .catch(error => {
+        reject(error)
       })
   })
 }
