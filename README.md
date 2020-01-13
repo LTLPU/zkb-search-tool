@@ -1,5 +1,7 @@
 # zkb-search-tool
 
+Heroku: <https://zkb-search-tool.herokuapp.com/>
+
 zKillboardの検索URLを生成するツール。
 
 - 複数条件付与できるようにする。
