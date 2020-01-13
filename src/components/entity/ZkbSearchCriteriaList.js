@@ -24,11 +24,9 @@ export class ZkbSearchCriteriaList {
       throw new Error('newItem must be ZkbSearchCriteriaItem.')
     }
 
-    const conflictItem = this._getConflictItem(newItem)
-
-    if (conflictItem !== null) {
+    this._getConflictItem(newItem).forEach(conflictItem => {
       this.remove(conflictItem.key)
-    }
+    })
 
     this._searchCriteriaList.push(newItem)
   }
@@ -82,14 +80,11 @@ export class ZkbSearchCriteriaList {
    */
   _getConflictItem (newItem) {
     if (newItem.conflictKey < 0) {
-      return false
+      return []
     }
 
-    for (const listItem of this._searchCriteriaList) {
-      if (listItem.conflictKey === newItem.conflictKey) {
-        return listItem
-      }
-    }
-    return null
+    return this._searchCriteriaList.filter(listItem => {
+      return listItem.conflictKey === newItem.conflictKey
+    })
   }
 }
