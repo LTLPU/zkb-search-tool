@@ -17,27 +17,29 @@ export class ZkbSearchCriteriaList {
   /**
    * 条件を追加する。
    *
-   * @param {SearchCriteriaItem} newItem 追加する条件
+   * @param {ZkbSearchCriteriaItem} newItem 追加する条件
    */
   add (newItem) {
     if (!(newItem instanceof ZkbSearchCriteriaItem)) {
       throw new Error('newItem must be ZkbSearchCriteriaItem.')
     }
 
-    if (this._isConflict(newItem)) {
-      throw new Error('newSearchCriteriaItem can not conflict.')
+    const conflictItem = this._getConflictItem(newItem)
+
+    if (conflictItem !== null) {
+      this.remove(conflictItem.key)
     }
 
     this._searchCriteriaList.push(newItem)
   }
 
   remove (key) {
-    const findIdx = this._searchCriteriaList.findIndex(current => {
+    const findKey = this._searchCriteriaList.findIndex(current => {
       return current.key === key
     })
 
-    if (findIdx > -1) {
-      this._searchCriteriaList.splice(findIdx, 1)
+    if (findKey > -1) {
+      this._searchCriteriaList.splice(findKey, 1)
     }
   }
 
@@ -75,19 +77,19 @@ export class ZkbSearchCriteriaList {
   }
 
   /**
-   * 重複判定結果を返す。
-   * @param {SearchCriteriaItem} newItem 追加する条件
+   * 重複するオブジェクトを返す。
+   * @param {ZkbSearchCriteriaItem} newItem 追加する条件
    */
-  _isConflict (newItem) {
+  _getConflictItem (newItem) {
     if (newItem.conflictKey < 0) {
       return false
     }
 
     for (const listItem of this._searchCriteriaList) {
       if (listItem.conflictKey === newItem.conflictKey) {
-        return true
+        return listItem
       }
     }
-    return false
+    return null
   }
 }
