@@ -65,11 +65,11 @@ export class ZkbSearchCriteriaList {
    * ソート済のSearchCriteriaListを返す。
    */
   _getSortedList () {
-    let sortedList = []
+    const sortedList = []
 
-    for (const itemList of this._searchCriteriaList) {
-      sortedList.push(itemList)
-    }
+    this._searchCriteriaList.forEach(listItem => {
+      sortedList.push(listItem)
+    })
 
     return sortedList
   }
