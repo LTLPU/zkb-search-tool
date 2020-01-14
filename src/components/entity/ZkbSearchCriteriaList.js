@@ -6,11 +6,17 @@ export class ZkbSearchCriteriaList {
   }
 
   /**
-   * CriteriaListModelのIterator
+   * iterator
    */
   * [Symbol.iterator] () {
-    for (const searchCriteria of this._searchCriteriaList) {
-      yield searchCriteria
+    for (const list of this._searchCriteriaList) {
+      if (!Array.isArray(list)) {
+        continue
+      }
+
+      for (const item of list) {
+        yield item
+      }
     }
   }
 
@@ -28,17 +34,22 @@ export class ZkbSearchCriteriaList {
       this.remove(conflictItem.key)
     })
 
-    this._searchCriteriaList.push(newItem)
+    if (!Array.isArray(this._searchCriteriaList[newItem.sortOrder])) {
+      this._searchCriteriaList[newItem.sortOrder] = []
+    }
+
+    this._searchCriteriaList[newItem.sortOrder].push(newItem)
   }
 
   remove (key) {
-    const findKey = this._searchCriteriaList.findIndex(current => {
-      return current.key === key
+    this._searchCriteriaList.forEach(list => {
+      const find = list.findIndex(current => {
+        return current.key === key
+      })
+      if (find !== -1) {
+        list.splice(find, 1)
+      }
     })
-
-    if (findKey > -1) {
-      this._searchCriteriaList.splice(findKey, 1)
-    }
   }
 
   clear () {
@@ -59,19 +70,6 @@ export class ZkbSearchCriteriaList {
     }
 
     return url
-  }
-
-  /**
-   * ソート済のSearchCriteriaListを返す。
-   */
-  _getSortedList () {
-    const sortedList = []
-
-    this._searchCriteriaList.forEach(listItem => {
-      sortedList.push(listItem)
-    })
-
-    return sortedList
   }
 
   /**

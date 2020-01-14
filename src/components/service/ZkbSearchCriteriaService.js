@@ -7,7 +7,11 @@ export class ZkbSearchCriteriaService {
 
   /** 検索条件追加 */
   addCriteria (itemType, value, label) {
-    const criteriaItem = new ZkbSearchCriteriaItemFactory().create(itemType, value, label)
+    const criteriaItem = new ZkbSearchCriteriaItemFactory().create(
+      itemType,
+      value,
+      label
+    )
     this._zkbSearchCriteriaList.add(criteriaItem)
   }
 
