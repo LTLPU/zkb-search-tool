@@ -125,7 +125,7 @@ export class ZkbSearchCriteriaValueItem extends ZkbSearchCriteriaItem {
 export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'kills'
+    this._type = ZkbSearchCriteriaItemTypes.Kills
     this._class = 'kills'
     this._label = 'Kills'
     this._conflictKey = 1
@@ -139,7 +139,7 @@ export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'losses'
+    this._type = ZkbSearchCriteriaItemTypes.Losses
     this._class = 'losses'
     this._label = 'Losses'
     this._conflictKey = 1
@@ -153,7 +153,7 @@ export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'ganked'
+    this._type = ZkbSearchCriteriaItemTypes.Ganked
     this._class = 'ganked'
     this._label = 'Ganked'
     this._conflictKey = 3
@@ -167,7 +167,7 @@ export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class SoloSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'solo'
+    this._type = ZkbSearchCriteriaItemTypes.Solo
     this._class = 'solo'
     this._label = 'Solo'
     this._conflictKey = 4
@@ -186,7 +186,7 @@ export class AllianceSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'alliance'
+    this._type = ZkbSearchCriteriaItemTypes.Alliance
     this._class = 'alliance'
     this._conflictKey = -1
     this._sortOrder = 2
@@ -204,7 +204,7 @@ export class CorporationSearchCriteriaListItem extends ZkbSearchCriteriaValueIte
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'corporation'
+    this._type = ZkbSearchCriteriaItemTypes.Corporation
     this._class = 'corporation'
     this._conflictKey = -1
     this._sortOrder = 3
@@ -222,7 +222,7 @@ export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem 
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'character'
+    this._type = ZkbSearchCriteriaItemTypes.Character
     this._class = 'character'
     this._conflictKey = -1
     this._sortOrder = 1
@@ -235,7 +235,7 @@ export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem 
 export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'highsec'
+    this._type = ZkbSearchCriteriaItemTypes.Highsec
     this._class = 'highsec'
     this._label = 'Highsec'
     this._conflictKey = 2
@@ -249,7 +249,7 @@ export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'lowsec'
+    this._type = ZkbSearchCriteriaItemTypes.Lowsec
     this._class = 'lowsec'
     this._label = 'Lowsec'
     this._conflictKey = 2
@@ -263,7 +263,7 @@ export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'nullsec'
+    this._type = ZkbSearchCriteriaItemTypes.Nullsec
     this._class = 'nullsec'
     this._label = 'Nullsec'
     this._conflictKey = 2
@@ -277,7 +277,7 @@ export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class AbyssalSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
-    this._type = 'abyssal'
+    this._type = ZkbSearchCriteriaItemTypes.Abyssal
     this._class = 'abyssal'
     this._label = 'Abyssal'
     this._conflictKey = 2
@@ -296,7 +296,7 @@ export class GroupSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'group'
+    this._type = ZkbSearchCriteriaItemTypes.Group
     this._class = 'group'
     this._conflictKey = -1
     this._sortOrder = 4
@@ -314,7 +314,7 @@ export class ShipSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'ship'
+    this._type = ZkbSearchCriteriaItemTypes.Ship
     this._class = 'ship'
     this._conflictKey = -1
     this._sortOrder = 5
@@ -332,7 +332,7 @@ export class RegionSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'region'
+    this._type = ZkbSearchCriteriaItemTypes.Region
     this._class = 'region'
     this._conflictKey = -1
     this._sortOrder = 8
@@ -350,7 +350,7 @@ export class ConsterationSearchCriteriaListItem extends ZkbSearchCriteriaValueIt
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'consteration'
+    this._type = ZkbSearchCriteriaItemTypes.Consteration
     this._class = 'consteration'
     this._conflictKey = -1
     this._sortOrder = 9
@@ -368,7 +368,7 @@ export class SystemSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor (value, label) {
     super(value, label)
-    this._type = 'system'
+    this._type = ZkbSearchCriteriaItemTypes.System
     this._class = 'system'
     this._conflictKey = -1
     this._sortOrder = 10

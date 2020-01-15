@@ -29,9 +29,13 @@ export class ZkbSearchCriteriaService {
   getSearchUrl () {
     let url = 'https://zkillboard.com/'
 
-    for (const listItem of this._zkbSearchCriteriaList) {
-      url = url + listItem.urlString
-    }
+    const criteriaList = Array.from(this._zkbSearchCriteriaList)
+
+    const sortedList = criteriaList.sort((a, b) => a.sortOrder - b.sortOrder)
+
+    sortedList.forEach(listItem => {
+      url += listItem.urlString
+    })
 
     return url
   }
