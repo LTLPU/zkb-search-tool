@@ -1,32 +1,155 @@
 <template>
-  <div class="searchTool">
-    <p class="generatedUrl">
-      <a :href="generatedUrl" target="_blank">{{ generatedUrl }}</a>
-    </p>
-    <ul class="searchCriteria">
-      <li
-        v-for="criteriaItem in criteriaList"
-        :key="criteriaItem.key"
-        class="searchCriteria"
-        v-on:click="removeCriteria(criteriaItem.key)"
+  <v-container>
+    <v-layout
+      wrap
+    >
+      <v-flex xs12>
+        <v-row>
+          <v-col justify="center">
+            <vue-responsive-text
+              :transition="Number(100)"
+              class="display-4 font-weight-bold"
+            >
+              <a
+                :href="generatedUrl"
+                target="_blank"
+              >
+                  {{ generatedUrl }}
+              </a>
+            </vue-responsive-text>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col
+            min-height="56px"
+          >
+            <v-chip-group
+              column
+            >
+              <v-chip
+                v-for="criteriaItem in criteriaList"
+                :key="criteriaItem.key"
+                v-on:click="removeCriteria(criteriaItem.key)"
+                @click:close="removeCriteria(criteriaItem.key)"
+                class="ma-2"
+                color="indigo"
+                text-color="white"
+                label
+                close
+              >
+                <v-avatar left>
+                  <v-icon>{{ criteriaItem.class }}</v-icon>
+                </v-avatar>
+                {{ criteriaItem.label }}
+              </v-chip>
+            </v-chip-group>
+          </v-col>
+        </v-row>
+      </v-flex>
+
+      <v-flex
+        mb-5
+        xs12
       >
-        <span>◆</span> {{ criteriaItem.label }}
-      </li>
-    </ul>
-    <hr />
-    <input type="button" value="Kills" v-on:click="addKills()" />
-    <input type="button" value="Losses" v-on:click="addLosses()" />
-    <input type="button" value="Solo" v-on:click="addSolo()" />
-    <br />
-    <input type="button" value="Highsec" v-on:click="addHighsec()" />
-    <input type="button" value="Lowsec" v-on:click="addLowsec()" />
-    <input type="button" value="Nullsec" v-on:click="addNullsec()" />
-    <input type="button" value="Abyssal" v-on:click="addAbyssal()" />
-    <hr />
-    <input type="text" v-model="inputText" />
-    <br />
-    <input type="button" value="Clear" v-on:click="clear()" />
-    <hr />
+        <v-row>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="green lighten-2"
+                  v-on:click="addKills()"
+                >
+                  Kills
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="red lighten-2"
+                  v-on:click="addLosses()"
+                >
+                  Losses
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  depressed
+                  color="blue lighten-2"
+                  v-on:click="addSolo()"
+                >
+                  Solo
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="blue lighten-2"
+                  v-on:click="addHighsec()"
+                >
+                  Highsec
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="orange lighten-2"
+                  v-on:click="addLowsec()"
+                >
+                  Lowsec
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="red lighten-2"
+                  v-on:click="addNullsec()"
+                >
+                  Nullsec
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="grey lighten-2"
+                  v-on:click="addAbyssal()"
+                >
+                  Abyssal
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-flex>
+
+      <v-flex
+        mb-5
+        xs12
+      >
+        <v-layout>
+          <v-text-field
+            v-model="inputText"
+            label="Keyword"
+            outlined
+          ></v-text-field>
+        </v-layout>
+      </v-flex>
+    </v-layout>
     <ul class="searchResult">
       <li v-for="resultItem in searchResultList" :key="resultItem.key">
         <span v-on:click="addSearchItem(resultItem)">
@@ -34,11 +157,12 @@
         </span>
       </li>
     </ul>
-  </div>
+  </v-container>
 </template>
 
 <script>
 import _ from 'lodash'
+import VueResponsiveText from 'vue-responsive-text'
 import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService.js'
 import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
 import { WordSearchService } from './service/WordSearchService.js'
@@ -47,6 +171,9 @@ import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
 
 export default {
   name: 'SearchTool',
+  components: {
+    VueResponsiveText
+  },
   props: {
     msg: String
   },
@@ -55,7 +182,8 @@ export default {
       generatedUrl: '',
       criteriaList: {},
       inputText: '',
-      searchResultList: {}
+      searchResultList: {},
+      urlStringTransitionTime: 500
     }
   },
   created: function () {
@@ -182,21 +310,3 @@ export default {
   }
 }
 </script>
-<style>
-p.generatedUrl {
-  font-size: 150%;
-}
-
-ul.searchCriteria {
-  list-style-type: none;
-  padding: 0;
-}
-
-li.searchCriteria {
-  display: inline;
-  border: 1px solid #000;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 5px;
-}
-</style>

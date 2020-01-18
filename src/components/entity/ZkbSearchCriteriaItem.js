@@ -126,7 +126,7 @@ export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Kills
-    this._class = 'kills'
+    this._class = 'mdi-circle-double'
     this._label = 'Kills'
     this._conflictKey = 1
     this._sortOrder = 6
@@ -140,7 +140,7 @@ export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Losses
-    this._class = 'losses'
+    this._class = 'mdi-circle-double'
     this._label = 'Losses'
     this._conflictKey = 1
     this._sortOrder = 6
@@ -154,7 +154,7 @@ export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Ganked
-    this._class = 'ganked'
+    this._class = 'mdi-circle-double'
     this._label = 'Ganked'
     this._conflictKey = 3
     this._sortOrder = 11
@@ -168,7 +168,7 @@ export class SoloSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Solo
-    this._class = 'solo'
+    this._class = 'mdi-circle-double'
     this._label = 'Solo'
     this._conflictKey = 4
     this._sortOrder = 11
@@ -187,7 +187,7 @@ export class AllianceSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Alliance
-    this._class = 'alliance'
+    this._class = 'mdi-account-supervisor-circle'
     this._conflictKey = -1
     this._sortOrder = 2
   }
@@ -205,7 +205,7 @@ export class CorporationSearchCriteriaListItem extends ZkbSearchCriteriaValueIte
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Corporation
-    this._class = 'corporation'
+    this._class = 'mdi-account-supervisor-circle'
     this._conflictKey = -1
     this._sortOrder = 3
   }
@@ -223,7 +223,7 @@ export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem 
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Character
-    this._class = 'character'
+    this._class = 'mdi-account-circle'
     this._conflictKey = -1
     this._sortOrder = 1
   }
@@ -236,7 +236,7 @@ export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Highsec
-    this._class = 'highsec'
+    this._class = 'mdi-diameter'
     this._label = 'Highsec'
     this._conflictKey = 2
     this._sortOrder = 7
@@ -250,7 +250,7 @@ export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Lowsec
-    this._class = 'lowsec'
+    this._class = 'mdi-diameter'
     this._label = 'Lowsec'
     this._conflictKey = 2
     this._sortOrder = 7
@@ -264,7 +264,7 @@ export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Nullsec
-    this._class = 'nullsec'
+    this._class = 'mdi-diameter'
     this._label = 'Nullsec'
     this._conflictKey = 2
     this._sortOrder = 7
@@ -278,7 +278,7 @@ export class AbyssalSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor () {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Abyssal
-    this._class = 'abyssal'
+    this._class = 'mdi-diameter'
     this._label = 'Abyssal'
     this._conflictKey = 2
     this._sortOrder = 7
@@ -297,7 +297,7 @@ export class GroupSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Group
-    this._class = 'group'
+    this._class = 'mdi-circle-double'
     this._conflictKey = -1
     this._sortOrder = 4
   }
@@ -315,7 +315,7 @@ export class ShipSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Ship
-    this._class = 'ship'
+    this._class = 'mdi-circle-double'
     this._conflictKey = -1
     this._sortOrder = 5
   }
@@ -333,7 +333,7 @@ export class RegionSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Region
-    this._class = 'region'
+    this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 8
   }
@@ -351,7 +351,7 @@ export class ConsterationSearchCriteriaListItem extends ZkbSearchCriteriaValueIt
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Consteration
-    this._class = 'consteration'
+    this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 9
   }
@@ -369,7 +369,7 @@ export class SystemSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   constructor (value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.System
-    this._class = 'system'
+    this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 10
   }
