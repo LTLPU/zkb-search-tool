@@ -31,8 +31,8 @@ export class ZkbSearchCriteriaItemFactory {
         return new ShipSearchCriteriaListItem(value, label)
       case ZkbSearchCriteriaItemTypes.Region:
         return new RegionSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.Consteration:
-        return new ConsterationSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaItemTypes.Constellation:
+        return new ConstellationSearchCriteriaListItem(value, label)
       case ZkbSearchCriteriaItemTypes.System:
         return new SystemSearchCriteriaListItem(value, label)
       default:
@@ -56,7 +56,7 @@ export const ZkbSearchCriteriaItemTypes = {
   Group: 'group',
   Ship: 'ship',
   Region: 'region',
-  Consteration: 'consteration',
+  Constellation: 'constellation',
   System: 'system'
 }
 
@@ -340,17 +340,17 @@ export class RegionSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
 }
 
 /**
- * Consteration
+ * Constellation
  */
-export class ConsterationSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
+export class ConstellationSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
   /**
    *
-   * @param {String} value ConsterationId
-   * @param {String} label ConsterationName
+   * @param {String} value ConstellationId
+   * @param {String} label ConstellationName
    */
   constructor (value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Consteration
+    this._type = ZkbSearchCriteriaItemTypes.Constellation
     this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 9

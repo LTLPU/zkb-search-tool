@@ -66,21 +66,6 @@ async function getSearchResultItems (searchWord) {
       `https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=false`
     )
 
-  if ('character' in searchResult.data) {
-    for (let i = 0; i < CHARACTER_MAX && i < searchResult.data.character.length; i++) {
-      searchResultList.push(await getCharacterItem(searchResult.data.character[i]))
-    }
-  }
-  if ('alliance' in searchResult.data) {
-    for (let i = 0; i < ALLIANCE_MAX && i < searchResult.data.alliance.length; i++) {
-      searchResultList.push(await getAllianceItem(searchResult.data.alliance[i]))
-    }
-  }
-  if ('corporation' in searchResult.data) {
-    for (let i = 0; i < CORPORATION_MAX && i < searchResult.data.corporation.length; i++) {
-      searchResultList.push(await getCorporationItem(searchResult.data.corporation[i]))
-    }
-  }
   if ('solar_system' in searchResult.data) {
     for (let i = 0; i < SYSTEM_MAX && i < searchResult.data.solar_system.length; i++) {
       searchResultList.push(await getSystemItem(searchResult.data.solar_system[i]))
@@ -94,6 +79,21 @@ async function getSearchResultItems (searchWord) {
   if ('region' in searchResult.data) {
     for (let i = 0; i < REGION_MAX && i < searchResult.data.region.length; i++) {
       searchResultList.push(await getRegionItem(searchResult.data.region[i]))
+    }
+  }
+  if ('character' in searchResult.data) {
+    for (let i = 0; i < CHARACTER_MAX && i < searchResult.data.character.length; i++) {
+      searchResultList.push(await getCharacterItem(searchResult.data.character[i]))
+    }
+  }
+  if ('corporation' in searchResult.data) {
+    for (let i = 0; i < CORPORATION_MAX && i < searchResult.data.corporation.length; i++) {
+      searchResultList.push(await getCorporationItem(searchResult.data.corporation[i]))
+    }
+  }
+  if ('alliance' in searchResult.data) {
+    for (let i = 0; i < ALLIANCE_MAX && i < searchResult.data.alliance.length; i++) {
+      searchResultList.push(await getAllianceItem(searchResult.data.alliance[i]))
     }
   }
 
@@ -220,7 +220,7 @@ function getConstellationItem (constellationId) {
           new WordSearchResultItem(
             'constellation',
             constellationId,
-            `${response.data.name} (COnstellation)`,
+            `${response.data.name} (Constellation)`,
             'constellation.jpg'
           )
         )

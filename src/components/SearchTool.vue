@@ -273,6 +273,20 @@ export default {
             resultItem.label
           )
           break
+        case 'constellation':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Constellation,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'region':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Region,
+            resultItem.id,
+            resultItem.label
+          )
+          break
         case 'group':
           this.addCriteria(
             ZkbSearchCriteriaItemTypes.Group,
