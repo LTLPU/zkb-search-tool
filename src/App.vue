@@ -1,11 +1,22 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-title>zkb-search-tool</v-toolbar-title>
-    </v-app-bar>
     <v-content>
       <router-view/>
     </v-content>
+    <v-footer
+      dark
+    >
+      <v-row
+        no-gutters
+      >
+        <v-col
+          class="ppy-4 text-center font-weight-bold"
+          cols="12"
+        >
+          zkb-search-tool <a href="https://github.com/LTLPU/zkb-search-tool" target="_blank">GitHub</a>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 

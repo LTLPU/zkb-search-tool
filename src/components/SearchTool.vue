@@ -5,7 +5,7 @@
     >
       <v-flex xs12>
         <v-row>
-          <v-col justify="center">
+          <v-col justify="center" class="pt-6 pb-6">
             <vue-responsive-text
               :transition="Number(100)"
               class="display-4 font-weight-bold"
@@ -20,29 +20,35 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col
-            min-height="56px"
-          >
-            <v-chip-group
-              column
+          <v-col>
+            <v-card
+              min-height="90px"
+              dense
+              outlined
             >
-              <v-chip
-                v-for="criteriaItem in criteriaList"
-                :key="criteriaItem.key"
-                v-on:click="removeCriteria(criteriaItem.key)"
-                @click:close="removeCriteria(criteriaItem.key)"
-                class="ma-2"
-                color="indigo"
-                text-color="white"
-                label
-                close
-              >
-                <v-avatar left>
-                  <v-icon>{{ criteriaItem.class }}</v-icon>
-                </v-avatar>
-                {{ criteriaItem.label }}
-              </v-chip>
-            </v-chip-group>
+              <v-card-text>
+                <v-chip-group
+                  column
+                >
+                  <v-chip
+                    v-for="criteriaItem in criteriaList"
+                    :key="criteriaItem.key"
+                    v-on:click="removeCriteria(criteriaItem.key)"
+                    @click:close="removeCriteria(criteriaItem.key)"
+                    class="ma-2"
+                    color="grey darken-2"
+                    text-color="white"
+                    label
+                    close
+                  >
+                    <v-avatar left>
+                      <v-icon>{{ criteriaItem.class }}</v-icon>
+                    </v-avatar>
+                    {{ criteriaItem.label }}
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
       </v-flex>
@@ -85,7 +91,7 @@
               <v-card-text>
                 <v-btn
                   depressed
-                  color="blue lighten-2"
+                  color="green lighten-2"
                   v-on:click="addSolo()"
                 >
                   Solo
@@ -135,28 +141,37 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-flex>
-
-      <v-flex
-        mb-5
-        xs12
-      >
-        <v-layout>
-          <v-text-field
-            v-model="inputText"
-            label="Keyword"
-            outlined
-          ></v-text-field>
-        </v-layout>
+        <v-row>
+          <v-col>
+            <v-card
+              outlined
+            >
+              <v-card-text>
+                <v-text-field
+                  v-model="inputText"
+                  label="Keyword"
+                  :loading="isLoading"
+                ></v-text-field>
+              </v-card-text>
+              <v-list dense>
+                <v-list-item-group v-model="searchResultList" color="primary">
+                  <v-list-item
+                    v-for="resultItem in searchResultList"
+                    :key="resultItem.key"
+                  >
+                    <v-list-item-content
+                      v-on:click="addSearchItem(resultItem)"
+                    >
+                      <v-list-item-title v-text="resultItem.label"></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-flex>
     </v-layout>
-    <ul class="searchResult">
-      <li v-for="resultItem in searchResultList" :key="resultItem.key">
-        <span v-on:click="addSearchItem(resultItem)">
-          {{ resultItem.label }}
-        </span>
-      </li>
-    </ul>
   </v-container>
 </template>
 
@@ -166,7 +181,6 @@ import VueResponsiveText from 'vue-responsive-text'
 import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService.js'
 import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
 import { WordSearchService } from './service/WordSearchService.js'
-import { WordSearchResultList } from './entity/WordSearchResultList.js'
 import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
 
 export default {
@@ -182,6 +196,7 @@ export default {
       generatedUrl: '',
       criteriaList: {},
       inputText: '',
+      isLoading: false,
       searchResultList: {},
       urlStringTransitionTime: 500
     }
@@ -190,13 +205,11 @@ export default {
     this.debouncedSearch = _.debounce(this.search, 500)
 
     this.criteriaList = new ZkbSearchCriteriaList()
-    this.searchResultList = new WordSearchResultList()
+    this.searchResultList = []
 
     this._zkbSearchCriteriaService = new ZkbSearchCriteriaService(
       this.criteriaList
     )
-
-    this._wordSearchService = new WordSearchService(this.searchResultList)
 
     this.updateUrl()
   },
@@ -275,8 +288,7 @@ export default {
       }
 
       // 入力状態クリア
-      this.inputText = ''
-      this._wordSearchService.clear()
+      this.clear()
     },
     addCriteria: function (itemType, value, label) {
       this._zkbSearchCriteriaService.addCriteria(itemType, value, label)
@@ -291,19 +303,32 @@ export default {
       this.updateUrl()
     },
     clear: function () {
-      this._wordSearchService.clear()
+      this.inputText = ''
+      this.searchResultList = []
     },
     updateUrl: function () {
       this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
     search: function (searchWord) {
-      this._wordSearchService.search(searchWord)
+      console.log(searchWord)
+
+      const searchService = new WordSearchService()
+      searchService.search(searchWord)
+        .then(res => {
+          this.searchResultList = res
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
     }
   },
   watch: {
     inputText: {
       handler (n, o) {
-        this.debouncedSearch(n)
+        if (n.length > 2) {
+          this.isLoading = true
+          this.debouncedSearch(n)
+        }
       },
       deep: true
     }
