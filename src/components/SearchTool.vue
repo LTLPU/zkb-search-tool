@@ -23,7 +23,6 @@
           <v-col>
             <v-card
               min-height="90px"
-              dense
               outlined
             >
               <v-card-text>
@@ -35,13 +34,17 @@
                     :key="criteriaItem.key"
                     v-on:click="removeCriteria(criteriaItem.key)"
                     @click:close="removeCriteria(criteriaItem.key)"
-                    class="ma-2"
+                    class="ma-2 font-weight-bold"
                     color="grey darken-2"
                     text-color="white"
                     label
+                    pill
                     close
                   >
-                    <v-avatar left>
+                    <v-avatar
+                      left
+                      tile
+                    >
                       <v-icon>{{ criteriaItem.class }}</v-icon>
                     </v-avatar>
                     {{ criteriaItem.label }}
@@ -60,13 +63,13 @@
         <v-row>
           <v-col md="auto">
             <v-card
-              class="mx-auto"
+              class="mx-auto text-no-wrap overflow-x-auto"
               outlined
             >
               <v-card-text>
                 <v-btn
                   depressed
-                  class="mr-2"
+                  class="mr-2 font-weight-bold"
                   color="green lighten-2"
                   v-on:click="addKills()"
                 >
@@ -74,7 +77,7 @@
                 </v-btn>
                 <v-btn
                   depressed
-                  class="mr-2"
+                  class="font-weight-bold"
                   color="red lighten-2"
                   v-on:click="addLosses()"
                 >
@@ -85,12 +88,13 @@
           </v-col>
           <v-col md="auto">
             <v-card
-              class="mx-auto"
+              class="mx-auto text-no-wrap overflow-x-auto"
               outlined
             >
               <v-card-text>
                 <v-btn
                   depressed
+                  class="font-weight-bold"
                   color="green lighten-2"
                   v-on:click="addSolo()"
                 >
@@ -101,13 +105,13 @@
           </v-col>
           <v-col md="auto">
             <v-card
-              class="mx-auto"
+              class="mx-auto text-no-wrap overflow-x-auto"
               outlined
             >
               <v-card-text>
                 <v-btn
                   depressed
-                  class="mr-2"
+                  class="mr-2 font-weight-bold"
                   color="blue lighten-2"
                   v-on:click="addHighsec()"
                 >
@@ -115,7 +119,7 @@
                 </v-btn>
                 <v-btn
                   depressed
-                  class="mr-2"
+                  class="mr-2 font-weight-bold"
                   color="orange lighten-2"
                   v-on:click="addLowsec()"
                 >
@@ -123,7 +127,7 @@
                 </v-btn>
                 <v-btn
                   depressed
-                  class="mr-2"
+                  class="mr-2 font-weight-bold"
                   color="red lighten-2"
                   v-on:click="addNullsec()"
                 >
@@ -131,7 +135,7 @@
                 </v-btn>
                 <v-btn
                   depressed
-                  class="mr-2"
+                  class="font-weight-bold"
                   color="grey lighten-2"
                   v-on:click="addAbyssal()"
                 >
@@ -152,21 +156,21 @@
                   label="Keyword"
                   :loading="isLoading"
                 ></v-text-field>
-              </v-card-text>
-              <v-list dense>
-                <v-list-item-group v-model="searchResultList" color="primary">
-                  <v-list-item
-                    v-for="resultItem in searchResultList"
-                    :key="resultItem.key"
-                  >
-                    <v-list-item-content
-                      v-on:click="addSearchItem(resultItem)"
+                <v-list dense>
+                  <v-list-item-group v-model="searchResultList" color="primary">
+                    <v-list-item
+                      v-for="resultItem in searchResultList"
+                      :key="resultItem.key"
                     >
-                      <v-list-item-title v-text="resultItem.label"></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
+                      <v-list-item-content
+                        v-on:click="addSearchItem(resultItem)"
+                      >
+                        <v-list-item-title v-text="resultItem.label"></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -193,7 +197,7 @@ export default {
   },
   data: function () {
     return {
-      generatedUrl: '',
+      generatedUrl: 'https://zkillboard.com/',
       criteriaList: {},
       inputText: '',
       isLoading: false,
