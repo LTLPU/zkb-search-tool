@@ -10,14 +10,14 @@ zKillboardの検索URLを生成するツール。
 
 ## 検索条件
 
+- カテゴリ
+  - /losses/, /kills/, /solo/
 - セキュリティ
   - /highsec/, /lowsec/, /nullsec/, /abyssal/
-- カテゴリ
-  - /losses/, /kills/, /solo/, /ganked/
 - 艦種
   - /ship/[SHIPID]/
-- グループ(Ship配下)
-  - /group/[GROUPID]/ for example /group/25/ for frigates.
+- 艦種グループ
+  - /group/[GROUPID]/
 - キャラクター
   - /character/[CHARACTERID]/
 - コーポレーション
@@ -28,8 +28,6 @@ zKillboardの検索URLを生成するツール。
   - /system/[SYSTEMID]/
 - リージョン
   - /region/[REGIONID]/
-- ロケーション
-  - /location/[LOCATIONID]/
 
 ## 参考URL
 
