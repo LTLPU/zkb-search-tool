@@ -310,8 +310,6 @@ export default {
       this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
     search: function (searchWord) {
-      console.log(searchWord)
-
       const searchService = new WordSearchService()
       searchService.search(searchWord)
         .then(res => {
