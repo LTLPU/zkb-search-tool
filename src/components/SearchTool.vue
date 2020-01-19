@@ -1,52 +1,193 @@
 <template>
-  <div class="searchTool">
-    <p class="generatedUrl">
-      <a :href="generatedUrl" target="_blank">{{ generatedUrl }}</a>
-    </p>
-    <ul class="searchCriteria">
-      <li
-        v-for="criteriaItem in criteriaList"
-        :key="criteriaItem.key"
-        class="searchCriteria"
-        v-on:click="removeCriteria(criteriaItem.key)"
+  <v-container>
+    <v-layout
+      wrap
+    >
+      <v-flex xs12>
+        <v-row>
+          <v-col justify="center" class="pt-6 pb-6">
+            <vue-responsive-text
+              :transition="Number(100)"
+              class="display-4 font-weight-bold"
+            >
+              <a
+                :href="generatedUrl"
+                target="_blank"
+              >
+                  {{ generatedUrl }}
+              </a>
+            </vue-responsive-text>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card
+              min-height="90px"
+              dense
+              outlined
+            >
+              <v-card-text>
+                <v-chip-group
+                  column
+                >
+                  <v-chip
+                    v-for="criteriaItem in criteriaList"
+                    :key="criteriaItem.key"
+                    v-on:click="removeCriteria(criteriaItem.key)"
+                    @click:close="removeCriteria(criteriaItem.key)"
+                    class="ma-2"
+                    color="grey darken-2"
+                    text-color="white"
+                    label
+                    close
+                  >
+                    <v-avatar left>
+                      <v-icon>{{ criteriaItem.class }}</v-icon>
+                    </v-avatar>
+                    {{ criteriaItem.label }}
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-flex>
+
+      <v-flex
+        mb-5
+        xs12
       >
-        <span>◆</span> {{ criteriaItem.label }}
-      </li>
-    </ul>
-    <hr />
-    <input type="button" value="Kills" v-on:click="addKills()" />
-    <input type="button" value="Losses" v-on:click="addLosses()" />
-    <input type="button" value="Solo" v-on:click="addSolo()" />
-    <br />
-    <input type="button" value="Highsec" v-on:click="addHighsec()" />
-    <input type="button" value="Lowsec" v-on:click="addLowsec()" />
-    <input type="button" value="Nullsec" v-on:click="addNullsec()" />
-    <input type="button" value="Abyssal" v-on:click="addAbyssal()" />
-    <hr />
-    <input type="text" v-model="inputText" />
-    <br />
-    <input type="button" value="Clear" v-on:click="clear()" />
-    <hr />
-    <ul class="searchResult">
-      <li v-for="resultItem in searchResultList" :key="resultItem.key">
-        <span v-on:click="addSearchItem(resultItem)">
-          {{ resultItem.label }}
-        </span>
-      </li>
-    </ul>
-  </div>
+        <v-row>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="green lighten-2"
+                  v-on:click="addKills()"
+                >
+                  Kills
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="red lighten-2"
+                  v-on:click="addLosses()"
+                >
+                  Losses
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  depressed
+                  color="green lighten-2"
+                  v-on:click="addSolo()"
+                >
+                  Solo
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="blue lighten-2"
+                  v-on:click="addHighsec()"
+                >
+                  Highsec
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="orange lighten-2"
+                  v-on:click="addLowsec()"
+                >
+                  Lowsec
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="red lighten-2"
+                  v-on:click="addNullsec()"
+                >
+                  Nullsec
+                </v-btn>
+                <v-btn
+                  depressed
+                  class="mr-2"
+                  color="grey lighten-2"
+                  v-on:click="addAbyssal()"
+                >
+                  Abyssal
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card
+              outlined
+            >
+              <v-card-text>
+                <v-text-field
+                  v-model="inputText"
+                  label="Keyword"
+                  :loading="isLoading"
+                ></v-text-field>
+              </v-card-text>
+              <v-list dense>
+                <v-list-item-group v-model="searchResultList" color="primary">
+                  <v-list-item
+                    v-for="resultItem in searchResultList"
+                    :key="resultItem.key"
+                  >
+                    <v-list-item-content
+                      v-on:click="addSearchItem(resultItem)"
+                    >
+                      <v-list-item-title v-text="resultItem.label"></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import _ from 'lodash'
+import VueResponsiveText from 'vue-responsive-text'
 import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService.js'
 import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
 import { WordSearchService } from './service/WordSearchService.js'
-import { WordSearchResultList } from './entity/WordSearchResultList.js'
 import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
 
 export default {
   name: 'SearchTool',
+  components: {
+    VueResponsiveText
+  },
   props: {
     msg: String
   },
@@ -55,20 +196,20 @@ export default {
       generatedUrl: '',
       criteriaList: {},
       inputText: '',
-      searchResultList: {}
+      isLoading: false,
+      searchResultList: {},
+      urlStringTransitionTime: 500
     }
   },
   created: function () {
     this.debouncedSearch = _.debounce(this.search, 500)
 
     this.criteriaList = new ZkbSearchCriteriaList()
-    this.searchResultList = new WordSearchResultList()
+    this.searchResultList = []
 
     this._zkbSearchCriteriaService = new ZkbSearchCriteriaService(
       this.criteriaList
     )
-
-    this._wordSearchService = new WordSearchService(this.searchResultList)
 
     this.updateUrl()
   },
@@ -147,8 +288,7 @@ export default {
       }
 
       // 入力状態クリア
-      this.inputText = ''
-      this._wordSearchService.clear()
+      this.clear()
     },
     addCriteria: function (itemType, value, label) {
       this._zkbSearchCriteriaService.addCriteria(itemType, value, label)
@@ -163,40 +303,35 @@ export default {
       this.updateUrl()
     },
     clear: function () {
-      this._wordSearchService.clear()
+      this.inputText = ''
+      this.searchResultList = []
     },
     updateUrl: function () {
       this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
     search: function (searchWord) {
-      this._wordSearchService.search(searchWord)
+      console.log(searchWord)
+
+      const searchService = new WordSearchService()
+      searchService.search(searchWord)
+        .then(res => {
+          this.searchResultList = res
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
     }
   },
   watch: {
     inputText: {
       handler (n, o) {
-        this.debouncedSearch(n)
+        if (n.length > 2) {
+          this.isLoading = true
+          this.debouncedSearch(n)
+        }
       },
       deep: true
     }
   }
 }
 </script>
-<style>
-p.generatedUrl {
-  font-size: 150%;
-}
-
-ul.searchCriteria {
-  list-style-type: none;
-  padding: 0;
-}
-
-li.searchCriteria {
-  display: inline;
-  border: 1px solid #000;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 5px;
-}
-</style>

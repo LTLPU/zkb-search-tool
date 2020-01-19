@@ -1,5 +1,3 @@
-// import { WordSearchResultItem } from './WordSearchResultItem.js'
-
 export class WordSearchResultList {
   constructor () {
     this._wordSearchResultList = []
@@ -12,7 +10,9 @@ export class WordSearchResultList {
   }
 
   add (resultItem) {
-    this._wordSearchResultList.push(resultItem)
+    if (this._wordSearchResultList.length < 20) {
+      this._wordSearchResultList.push(resultItem)
+    }
   }
 
   clear () {

@@ -1,19 +1,31 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-content>
+      <router-view/>
+    </v-content>
+    <v-footer
+      dark
+    >
+      <v-row
+        no-gutters
+      >
+        <v-col
+          class="ppy-4 text-center font-weight-bold"
+          cols="12"
+        >
+          zkb-search-tool <a href="https://github.com/LTLPU/zkb-search-tool" target="_blank">GitHub</a>
+        </v-col>
+      </v-row>
+    </v-footer>
+  </v-app>
 </template>
 
-<style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
-</style>
+<script>
+export default {
+  name: 'App',
+
+  data: () => ({
+    //
+  })
+}
+</script>

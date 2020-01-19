@@ -1,27 +1,26 @@
 import axios from 'axios'
 import { WordSearchResultItem } from '../entity/WordSearchResultItem.js'
 
-const CHARACTER_MAX = 20
-const ALLIANCE_MAX = 10
-const CORPORATION_MAX = 10
-const SYSTEM_MAX = 5
-const CONSTELLATION_MAX = 5
-const REGION_MAX = 5
+const CHARACTER_MAX = 5
+const ALLIANCE_MAX = 3
+const CORPORATION_MAX = 3
+const SYSTEM_MAX = 3
+const CONSTELLATION_MAX = 3
+const REGION_MAX = 3
 
 const GROUPS_PATH = './Groups.json'
 const SHIPS_PATH = './Ships.json'
 
 export class WordSearchService {
-  constructor (searchResultList) {
-    this._searchResultList = searchResultList
-  }
+  async search (searchWord = '') {
+    let searchResultList = []
 
-  async search (searchWord) {
-    this._searchResultList.clear()
-    if (searchWord.length > 2) {
-      await getSearchResultItems(this._searchResultList, searchWord)
-      await getSearchResultItemsFromCsv(this._searchResultList, searchWord)
+    if (searchWord !== null && searchWord.length > 2) {
+      searchResultList = searchResultList.concat(await getSearchResultItemsFromCsv(searchWord))
+      searchResultList = searchResultList.concat(await getSearchResultItems(searchWord))
     }
+
+    return searchResultList
   }
 
   clear () {
@@ -29,106 +28,76 @@ export class WordSearchService {
   }
 }
 
-async function getSearchResultItemsFromCsv (searchResultList, searchWord) {
-  searchCsv(GROUPS_PATH, searchWord)
-    .then(response => {
-      response.forEach(item => {
-        searchResultList.add(
-          new WordSearchResultItem(
-            'group',
-            item.typeId,
-            `${item.name} (Group)`,
-            'groups.png'
-          )
-        )
-      })
-    })
-  searchCsv(SHIPS_PATH, searchWord).then(response => {
-    response.forEach(item => {
-      searchResultList.add(
-        new WordSearchResultItem(
-          'ship',
-          item.typeId,
-          `${item.name} (Ship)`,
-          'ships.png'
-        )
+async function getSearchResultItemsFromCsv (searchWord) {
+  const searchResultList = []
+
+  const groupsSearchResult = await searchCsv(GROUPS_PATH, searchWord)
+  groupsSearchResult.forEach(item => {
+    searchResultList.push(
+      new WordSearchResultItem(
+        'group',
+        item.typeId,
+        `${item.name} (Group)`,
+        'groups.png'
       )
-    })
+    )
   })
+
+  const shipSearchResult = await searchCsv(SHIPS_PATH, searchWord)
+  shipSearchResult.forEach(item => {
+    searchResultList.push(
+      new WordSearchResultItem(
+        'ship',
+        item.typeId,
+        `${item.name} (Ship)`,
+        'ships.png'
+      )
+    )
+  })
+  return searchResultList
 }
 
-async function getSearchResultItems (searchResultList, searchWord) {
+async function getSearchResultItems (searchWord) {
+  const searchResultList = []
+
   // 検索値 : alliance,character,constellation,corporation,region,solar_system
-  axios
-    .get(
+  const searchResult =
+    await axios.get(
       `https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=false`
     )
-    .then(response => {
-      const promises = []
 
-      if ('character' in response.data) {
-        for (
-          let i = 0;
-          i < CHARACTER_MAX && i < response.data.character.length;
-          i++
-        ) {
-          promises.push(getCharacterItem(response.data.character[i]))
-        }
-      }
-      if ('alliance' in response.data) {
-        for (
-          let i = 0;
-          i < ALLIANCE_MAX && i < response.data.alliance.length;
-          i++
-        ) {
-          promises.push(getAllianceItem(response.data.alliance[i]))
-        }
-      }
-      if ('corporation' in response.data) {
-        for (
-          let i = 0;
-          i < CORPORATION_MAX && i < response.data.corporation.length;
-          i++
-        ) {
-          promises.push(getCorporationItem(response.data.corporation[i]))
-        }
-      }
-      if ('solar_system' in response.data) {
-        for (
-          let i = 0;
-          i < SYSTEM_MAX && i < response.data.solar_system.length;
-          i++
-        ) {
-          promises.push(getSystemItem(response.data.solar_system[i]))
-        }
-      }
-      if ('constellation' in response.data) {
-        for (
-          let i = 0;
-          i < CONSTELLATION_MAX && i < response.data.constellation.length;
-          i++
-        ) {
-          promises.push(getConstellationItem(response.data.constellation[i]))
-        }
-      }
-      if ('region' in response.data) {
-        for (
-          let i = 0;
-          i < REGION_MAX && i < response.data.region.length;
-          i++
-        ) {
-          promises.push(getRegionItem(response.data.region[i]))
-        }
-      }
+  if ('character' in searchResult.data) {
+    for (let i = 0; i < CHARACTER_MAX && i < searchResult.data.character.length; i++) {
+      searchResultList.push(await getCharacterItem(searchResult.data.character[i]))
+    }
+  }
+  if ('alliance' in searchResult.data) {
+    for (let i = 0; i < ALLIANCE_MAX && i < searchResult.data.alliance.length; i++) {
+      searchResultList.push(await getAllianceItem(searchResult.data.alliance[i]))
+    }
+  }
+  if ('corporation' in searchResult.data) {
+    for (let i = 0; i < CORPORATION_MAX && i < searchResult.data.corporation.length; i++) {
+      searchResultList.push(await getCorporationItem(searchResult.data.corporation[i]))
+    }
+  }
+  if ('solar_system' in searchResult.data) {
+    for (let i = 0; i < SYSTEM_MAX && i < searchResult.data.solar_system.length; i++) {
+      searchResultList.push(await getSystemItem(searchResult.data.solar_system[i]))
+    }
+  }
+  if ('constellation' in searchResult.data) {
+    for (let i = 0; i < CONSTELLATION_MAX && i < searchResult.data.constellation.length; i++) {
+      searchResultList.push(await getConstellationItem(searchResult.data.constellation[i]))
+    }
+  }
+  if ('region' in searchResult.data) {
+    for (let i = 0; i < REGION_MAX && i < searchResult.data.region.length; i++) {
+      searchResultList.push(await getRegionItem(searchResult.data.region[i]))
+    }
+  }
 
-      Promise.all(promises).then(responses => {
-        responses.forEach(response => {
-          searchResultList.add(response)
-        })
-
-        Promise.resolve(searchResultList)
-      })
-    })
+  return searchResultList
 }
 
 function getCharacterItem (characterId) {
