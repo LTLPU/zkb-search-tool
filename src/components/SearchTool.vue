@@ -135,6 +135,14 @@
                 </v-btn>
                 <v-btn
                   depressed
+                  class="mr-2 font-weight-bold"
+                  color="purple lighten-2"
+                  v-on:click="addWSpace()"
+                >
+                  W-Space
+                </v-btn>
+                <v-btn
+                  depressed
                   class="font-weight-bold"
                   color="grey lighten-2"
                   v-on:click="addAbyssal()"
@@ -235,6 +243,9 @@ export default {
     },
     addLowsec: function () {
       this.addCriteria(ZkbSearchCriteriaItemTypes.Lowsec)
+    },
+    addWSpace: function () {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.WSpace)
     },
     addNullsec: function () {
       this.addCriteria(ZkbSearchCriteriaItemTypes.Nullsec)

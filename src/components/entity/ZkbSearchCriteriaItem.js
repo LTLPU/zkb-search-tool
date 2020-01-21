@@ -23,6 +23,8 @@ export class ZkbSearchCriteriaItemFactory {
         return new LowsecSearchCriteriaListItem()
       case ZkbSearchCriteriaItemTypes.Nullsec:
         return new NullsecSearchCriteriaListItem()
+      case ZkbSearchCriteriaItemTypes.WSpace:
+        return new WSpaceSearchCriteriaListItem()
       case ZkbSearchCriteriaItemTypes.Abyssal:
         return new AbyssalSearchCriteriaListItem()
       case ZkbSearchCriteriaItemTypes.Group:
@@ -52,6 +54,7 @@ export const ZkbSearchCriteriaItemTypes = {
   Highsec: 'highsec',
   Lowsec: 'lowsec',
   Nullsec: 'nullsec',
+  WSpace: 'w-space',
   Abyssal: 'abyssal',
   Group: 'group',
   Ship: 'ship',
@@ -266,6 +269,20 @@ export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
     this._type = ZkbSearchCriteriaItemTypes.Nullsec
     this._class = 'mdi-diameter'
     this._label = 'Nullsec'
+    this._conflictKey = 2
+    this._sortOrder = 7
+  }
+}
+
+/**
+ * W-Space
+ */
+export class WSpaceSearchCriteriaListItem extends ZkbSearchCriteriaItem {
+  constructor () {
+    super()
+    this._type = ZkbSearchCriteriaItemTypes.WSpace
+    this._class = 'mdi-diameter'
+    this._label = 'W-Space'
     this._conflictKey = 2
     this._sortOrder = 7
   }
