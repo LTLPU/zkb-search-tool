@@ -224,6 +224,8 @@ export default {
     }
   },
   created: function () {
+    this.setPreFetch()
+
     this.debouncedSearch = _.debounce(this.search, 500)
 
     this.criteriaList = new ZkbSearchCriteriaList()
@@ -357,6 +359,23 @@ export default {
         .finally(() => {
           this.isLoading = false
         })
+    },
+    setPreFetch: () => {
+      const head = document.getElementsByTagName('head').item(0)
+
+      const jsonList = [
+        './Groups.json',
+        './Ships.json'
+      ]
+
+      jsonList.forEach(url => {
+        const link = document.createElement('link')
+        link.rel = 'prefetch'
+        link.href = url
+        link.as = 'fetch'
+        link.type = 'application/json'
+        head.appendChild(link)
+      })
     }
   },
   watch: {
