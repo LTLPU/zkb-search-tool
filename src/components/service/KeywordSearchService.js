@@ -58,7 +58,7 @@ async function getSearchResultItemsFromCsv (searchWord) {
 }
 
 async function getSearchResultItems (searchWord) {
-  const searchResultList = []
+  const promises = []
 
   // 検索値 : alliance,character,constellation,corporation,region,solar_system
   const searchResult =
@@ -68,34 +68,43 @@ async function getSearchResultItems (searchWord) {
 
   if ('solar_system' in searchResult.data) {
     for (let i = 0; i < SYSTEM_MAX && i < searchResult.data.solar_system.length; i++) {
-      searchResultList.push(await getSystemItem(searchResult.data.solar_system[i]))
+      promises.push(getSystemItem(searchResult.data.solar_system[i]))
     }
   }
   if ('constellation' in searchResult.data) {
     for (let i = 0; i < CONSTELLATION_MAX && i < searchResult.data.constellation.length; i++) {
-      searchResultList.push(await getConstellationItem(searchResult.data.constellation[i]))
+      promises.push(getConstellationItem(searchResult.data.constellation[i]))
     }
   }
   if ('region' in searchResult.data) {
     for (let i = 0; i < REGION_MAX && i < searchResult.data.region.length; i++) {
-      searchResultList.push(await getRegionItem(searchResult.data.region[i]))
+      promises.push(getRegionItem(searchResult.data.region[i]))
     }
   }
   if ('character' in searchResult.data) {
     for (let i = 0; i < CHARACTER_MAX && i < searchResult.data.character.length; i++) {
-      searchResultList.push(await getCharacterItem(searchResult.data.character[i]))
+      promises.push(getCharacterItem(searchResult.data.character[i]))
     }
   }
   if ('corporation' in searchResult.data) {
     for (let i = 0; i < CORPORATION_MAX && i < searchResult.data.corporation.length; i++) {
-      searchResultList.push(await getCorporationItem(searchResult.data.corporation[i]))
+      promises.push(getCorporationItem(searchResult.data.corporation[i]))
     }
   }
   if ('alliance' in searchResult.data) {
     for (let i = 0; i < ALLIANCE_MAX && i < searchResult.data.alliance.length; i++) {
-      searchResultList.push(await getAllianceItem(searchResult.data.alliance[i]))
+      promises.push(getAllianceItem(searchResult.data.alliance[i]))
     }
   }
+
+  const searchResultList = []
+
+  await Promise.all(promises)
+    .then(resultList => {
+      resultList.forEach(result => {
+        searchResultList.push(result)
+      })
+    })
 
   return searchResultList
 }
