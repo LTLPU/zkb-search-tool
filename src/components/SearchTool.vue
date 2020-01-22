@@ -16,7 +16,7 @@
           >
             <vue-responsive-text
               :transition="Number(100)"
-              class="display-4 font-weight-medium"
+              class="font-weight-medium"
             >
               <a
                 :href="generatedUrl"
