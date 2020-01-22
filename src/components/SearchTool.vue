@@ -12,7 +12,6 @@
           <v-col
             class="d-flex pa-3 ma-3"
             justify="center"
-            style="width:80%"
           >
             <vue-responsive-text
               :transition="Number(100)"
@@ -234,7 +233,8 @@ export default {
     this._zkbSearchCriteriaService = new ZkbSearchCriteriaService(
       this.criteriaList
     )
-
+  },
+  mounted: function () {
     this.updateUrl()
   },
   methods: {
