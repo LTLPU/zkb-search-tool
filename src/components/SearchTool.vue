@@ -3,12 +3,20 @@
     <v-layout
       wrap
     >
-      <v-flex xs12>
-        <v-row>
-          <v-col justify="center" class="pt-6 pb-6">
+      <v-flex
+        xs12
+      >
+        <v-row
+          class="py-8"
+        >
+          <v-col
+            class="d-flex pa-3 ma-3"
+            justify="center"
+            style="width:80%"
+          >
             <vue-responsive-text
               :transition="Number(100)"
-              class="display-4 font-weight-bold"
+              class="display-4 font-weight-medium"
             >
               <a
                 :href="generatedUrl"
@@ -37,7 +45,6 @@
                     class="ma-2 font-weight-bold"
                     color="grey darken-2"
                     text-color="white"
-                    label
                     pill
                     close
                   >
@@ -57,7 +64,6 @@
       </v-flex>
 
       <v-flex
-        mb-5
         xs12
       >
         <v-row>
@@ -68,17 +74,17 @@
             >
               <v-card-text>
                 <v-btn
-                  depressed
+                  outlined
                   class="mr-2 font-weight-bold"
-                  color="green lighten-2"
+                  color="green darken-4"
                   v-on:click="addKills()"
                 >
                   Kills
                 </v-btn>
                 <v-btn
-                  depressed
+                  outlined
                   class="font-weight-bold"
-                  color="red lighten-2"
+                  color="red darken-4"
                   v-on:click="addLosses()"
                 >
                   Losses
@@ -93,9 +99,9 @@
             >
               <v-card-text>
                 <v-btn
-                  depressed
+                  outlined
                   class="font-weight-bold"
-                  color="green lighten-2"
+                  color="green darken-4"
                   v-on:click="addSolo()"
                 >
                   Solo
@@ -110,41 +116,41 @@
             >
               <v-card-text>
                 <v-btn
-                  depressed
+                  outlined
                   class="mr-2 font-weight-bold"
-                  color="blue lighten-2"
+                  color="blue darken-4"
                   v-on:click="addHighsec()"
                 >
                   Highsec
                 </v-btn>
                 <v-btn
-                  depressed
+                  outlined
                   class="mr-2 font-weight-bold"
-                  color="orange lighten-2"
+                  color="orange darken-4"
                   v-on:click="addLowsec()"
                 >
                   Lowsec
                 </v-btn>
                 <v-btn
-                  depressed
+                  outlined
                   class="mr-2 font-weight-bold"
-                  color="red lighten-2"
+                  color="red darken-4"
                   v-on:click="addNullsec()"
                 >
                   Nullsec
                 </v-btn>
                 <v-btn
-                  depressed
+                  outlined
                   class="mr-2 font-weight-bold"
-                  color="purple lighten-2"
+                  color="purple darken-4"
                   v-on:click="addWSpace()"
                 >
                   W-Space
                 </v-btn>
                 <v-btn
-                  depressed
+                  outlined
                   class="font-weight-bold"
-                  color="grey lighten-2"
+                  color="grey darken-4"
                   v-on:click="addAbyssal()"
                 >
                   Abyssal
@@ -153,6 +159,10 @@
             </v-card>
           </v-col>
         </v-row>
+      </v-flex>
+      <v-flex
+        xs12
+      >
         <v-row>
           <v-col>
             <v-card
@@ -192,7 +202,7 @@ import _ from 'lodash'
 import VueResponsiveText from 'vue-responsive-text'
 import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService.js'
 import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
-import { WordSearchService } from './service/WordSearchService.js'
+import { KeywordSearchService } from './service/KeywordSearchService.js'
 import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
 
 export default {
@@ -339,7 +349,7 @@ export default {
       this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
     search: function (searchWord) {
-      const searchService = new WordSearchService()
+      const searchService = new KeywordSearchService()
       searchService.search(searchWord)
         .then(res => {
           this.searchResultList = res

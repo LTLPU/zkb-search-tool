@@ -1,6 +1,6 @@
 let key = 0
 
-export class WordSearchResultItem {
+export class KeywordSearchResultItem {
   constructor (type, id, label, icon) {
     this._key = key++
     this._type = type

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { WordSearchResultItem } from '../entity/WordSearchResultItem.js'
+import { KeywordSearchResultItem } from '../entity/KeywordSearchResultItem.js'
 
 const CHARACTER_MAX = 5
 const ALLIANCE_MAX = 3
@@ -11,7 +11,7 @@ const REGION_MAX = 3
 const GROUPS_PATH = './Groups.json'
 const SHIPS_PATH = './Ships.json'
 
-export class WordSearchService {
+export class KeywordSearchService {
   async search (searchWord = '') {
     let searchResultList = []
 
@@ -34,7 +34,7 @@ async function getSearchResultItemsFromCsv (searchWord) {
   const groupsSearchResult = await searchCsv(GROUPS_PATH, searchWord)
   groupsSearchResult.forEach(item => {
     searchResultList.push(
-      new WordSearchResultItem(
+      new KeywordSearchResultItem(
         'group',
         item.typeId,
         `${item.name} (Group)`,
@@ -46,7 +46,7 @@ async function getSearchResultItemsFromCsv (searchWord) {
   const shipSearchResult = await searchCsv(SHIPS_PATH, searchWord)
   shipSearchResult.forEach(item => {
     searchResultList.push(
-      new WordSearchResultItem(
+      new KeywordSearchResultItem(
         'ship',
         item.typeId,
         `${item.name} (Ship)`,
@@ -109,7 +109,7 @@ function getCharacterItem (characterId) {
       .then(response => {
         // TODO キャラクター画像アドレス取得
         resolve(
-          new WordSearchResultItem(
+          new KeywordSearchResultItem(
             'character',
             characterId,
             `${response.data.name} (Character)`,
@@ -136,7 +136,7 @@ function getAllianceItem (allianceId) {
       .then(response => {
         // TODO キャラクター画像アドレス取得
         resolve(
-          new WordSearchResultItem(
+          new KeywordSearchResultItem(
             'alliance',
             allianceId,
             `${response.data.name} (Alliance)`,
@@ -163,7 +163,7 @@ function getCorporationItem (corporationId) {
       .then(response => {
         // TODO キャラクタ画像取得
         resolve(
-          new WordSearchResultItem(
+          new KeywordSearchResultItem(
             'corporation',
             corporationId,
             `${response.data.name} (Corporation)`,
@@ -190,7 +190,7 @@ function getSystemItem (systemId) {
       .then(response => {
         // TODO ソーラーシステム画像取得
         resolve(
-          new WordSearchResultItem(
+          new KeywordSearchResultItem(
             'system',
             systemId,
             `${response.data.name} (System)`,
@@ -217,7 +217,7 @@ function getConstellationItem (constellationId) {
       .then(response => {
         // TODO コンステレーション画像アドレス取得
         resolve(
-          new WordSearchResultItem(
+          new KeywordSearchResultItem(
             'constellation',
             constellationId,
             `${response.data.name} (Constellation)`,
@@ -244,7 +244,7 @@ function getRegionItem (regionId) {
       .then(response => {
         // TODO リージョン画像アドレス取得
         resolve(
-          new WordSearchResultItem(
+          new KeywordSearchResultItem(
             'region',
             regionId,
             `${response.data.name} (Region)`,

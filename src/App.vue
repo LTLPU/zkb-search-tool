@@ -5,10 +5,9 @@
     </v-content>
     <v-footer
       dark
+      class="mt-5"
     >
-      <v-row
-        no-gutters
-      >
+      <v-row>
         <v-col
           class="ppy-4 text-center font-weight-bold"
           cols="12"
