@@ -39,9 +39,12 @@
 	{ "typeId": "1202", "name": "Blockade Runner" },
 	{ "typeId": "1283", "name": "Expedition Frigate" },
 	{ "typeId": "1305", "name": "Tactical Destroyer" },
+	{ "typeId": "1404", "name": "Engineering Complex" },
+	{ "typeId": "1406", "name": "Refinery" },
 	{ "typeId": "1527", "name": "Logistics Frigate" },
 	{ "typeId": "1534", "name": "Command Destroyer" },
 	{ "typeId": "1538", "name": "Force Auxiliary" },
+	{ "typeId": "1657", "name": "Citadel" },
 	{ "typeId": "1972", "name": "Flag Cruiser" },
 	{ "typeId": "2001", "name": "Citizen Ships" }
 ]

@@ -495,5 +495,19 @@
 	{ "typeId": "9854", "name": "Polaris Inspector Frigate" },
 	{ "typeId": "9858", "name": "Polaris Centurion TEST" },
 	{ "typeId": "9860", "name": "Polaris Legatus Frigate" },
-	{ "typeId": "9862", "name": "Polaris Centurion Frigate" }
+	{ "typeId": "9862", "name": "Polaris Centurion Frigate" },
+	{ "typeId": "35825", "name": "Raitaru" },
+	{ "typeId": "35826", "name": "Azbel" },
+	{ "typeId": "35827", "name": "Sotiyo" },
+	{ "typeId": "35835", "name": "Athanor" },
+	{ "typeId": "35836", "name": "Tatara" },
+	{ "typeId": "35832", "name": "Astrahus" },
+	{ "typeId": "35833", "name": "Fortizar" },
+	{ "typeId": "35834", "name": "Keepstar" },
+	{ "typeId": "40340", "name": "Upwell Palatine Keepstar" },
+	{ "typeId": "47512", "name": "'Moreau' Fortizar" },
+	{ "typeId": "47513", "name": "'Draccous' Fortizar" },
+	{ "typeId": "47514", "name": "'Horizon' Fortizar" },
+	{ "typeId": "47515", "name": "'Marginis' Fortizar" },
+	{ "typeId": "47516", "name": "'Prometheus' Fortizar" }
 ]
