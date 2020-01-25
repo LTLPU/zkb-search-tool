@@ -82,7 +82,6 @@ async function getSearchResultItems (searchWord) {
     .then(resultList => {
       console.log(resultList)
       resultList.forEach(result => {
-        // 検索結果のマージ
         resultItemPromises = resultItemPromises.concat(getResultItemPromises(result.data))
       })
     })
