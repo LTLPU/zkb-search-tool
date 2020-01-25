@@ -15,10 +15,12 @@ export class KeywordSearchService {
   async search (searchWord = '') {
     let searchResultList = []
 
-    if (searchWord !== null && searchWord.length > 2) {
-      searchResultList = searchResultList.concat(await getSearchResultItemsFromCsv(searchWord))
-      searchResultList = searchResultList.concat(await getSearchResultItems(searchWord))
+    if (searchWord === null || searchWord.length < 3) {
+      return searchResultList
     }
+
+    searchResultList = searchResultList.concat(await getSearchResultItemsFromCsv(searchWord))
+    searchResultList = searchResultList.concat(await getSearchResultItems(searchWord))
 
     return searchResultList
   }
@@ -58,48 +60,34 @@ async function getSearchResultItemsFromCsv (searchWord) {
 }
 
 async function getSearchResultItems (searchWord) {
-  const promises = []
+  const searchResultPromises = []
 
   // 検索値 : alliance,character,constellation,corporation,region,solar_system
-  const searchResult =
-    await axios.get(
+  // strict = true
+  searchResultPromises.push(
+    axios.get(
+      `https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=true`
+    )
+  )
+  // strict = false
+  searchResultPromises.push(
+    axios.get(
       `https://esi.evetech.net/latest/search/?categories=alliance,character,constellation,corporation,region,solar_system&datasource=tranquility&language=en-us&search=${searchWord}&strict=false`
     )
+  )
 
-  if ('solar_system' in searchResult.data) {
-    for (let i = 0; i < SYSTEM_MAX && i < searchResult.data.solar_system.length; i++) {
-      promises.push(getSystemItem(searchResult.data.solar_system[i]))
-    }
-  }
-  if ('constellation' in searchResult.data) {
-    for (let i = 0; i < CONSTELLATION_MAX && i < searchResult.data.constellation.length; i++) {
-      promises.push(getConstellationItem(searchResult.data.constellation[i]))
-    }
-  }
-  if ('region' in searchResult.data) {
-    for (let i = 0; i < REGION_MAX && i < searchResult.data.region.length; i++) {
-      promises.push(getRegionItem(searchResult.data.region[i]))
-    }
-  }
-  if ('character' in searchResult.data) {
-    for (let i = 0; i < CHARACTER_MAX && i < searchResult.data.character.length; i++) {
-      promises.push(getCharacterItem(searchResult.data.character[i]))
-    }
-  }
-  if ('corporation' in searchResult.data) {
-    for (let i = 0; i < CORPORATION_MAX && i < searchResult.data.corporation.length; i++) {
-      promises.push(getCorporationItem(searchResult.data.corporation[i]))
-    }
-  }
-  if ('alliance' in searchResult.data) {
-    for (let i = 0; i < ALLIANCE_MAX && i < searchResult.data.alliance.length; i++) {
-      promises.push(getAllianceItem(searchResult.data.alliance[i]))
-    }
-  }
+  let resultItemPromises = []
+
+  await Promise.all(searchResultPromises)
+    .then(resultList => {
+      resultList.forEach(result => {
+        resultItemPromises = resultItemPromises.concat(getResultItemPromises(result.data))
+      })
+    })
 
   const searchResultList = []
 
-  await Promise.all(promises)
+  await Promise.all(resultItemPromises)
     .then(resultList => {
       resultList.forEach(result => {
         searchResultList.push(result)
@@ -107,6 +95,43 @@ async function getSearchResultItems (searchWord) {
     })
 
   return searchResultList
+}
+
+function getResultItemPromises (searchResultData) {
+  const promises = []
+
+  if ('solar_system' in searchResultData) {
+    for (let i = 0; i < SYSTEM_MAX && i < searchResultData.solar_system.length; i++) {
+      promises.push(getSystemItem(searchResultData.solar_system[i]))
+    }
+  }
+  if ('constellation' in searchResultData) {
+    for (let i = 0; i < CONSTELLATION_MAX && i < searchResultData.constellation.length; i++) {
+      promises.push(getConstellationItem(searchResultData.constellation[i]))
+    }
+  }
+  if ('region' in searchResultData) {
+    for (let i = 0; i < REGION_MAX && i < searchResultData.region.length; i++) {
+      promises.push(getRegionItem(searchResultData.region[i]))
+    }
+  }
+  if ('character' in searchResultData) {
+    for (let i = 0; i < CHARACTER_MAX && i < searchResultData.character.length; i++) {
+      promises.push(getCharacterItem(searchResultData.character[i]))
+    }
+  }
+  if ('corporation' in searchResultData) {
+    for (let i = 0; i < CORPORATION_MAX && i < searchResultData.corporation.length; i++) {
+      promises.push(getCorporationItem(searchResultData.corporation[i]))
+    }
+  }
+  if ('alliance' in searchResultData) {
+    for (let i = 0; i < ALLIANCE_MAX && i < searchResultData.alliance.length; i++) {
+      promises.push(getAllianceItem(searchResultData.alliance[i]))
+    }
+  }
+
+  return promises
 }
 
 function getCharacterItem (characterId) {

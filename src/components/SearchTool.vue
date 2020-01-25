@@ -204,6 +204,8 @@ import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
 import { KeywordSearchService } from './service/KeywordSearchService.js'
 import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
 
+const keywordSearchService = new KeywordSearchService()
+
 export default {
   name: 'SearchTool',
   components: {
@@ -351,8 +353,7 @@ export default {
       this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
     search: function (searchWord) {
-      const searchService = new KeywordSearchService()
-      searchService.search(searchWord)
+      keywordSearchService.search(searchWord)
         .then(res => {
           this.searchResultList = res
         })
