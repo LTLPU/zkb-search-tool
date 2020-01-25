@@ -80,7 +80,6 @@ async function getSearchResultItems (searchWord) {
 
   await Promise.all(searchResultPromises)
     .then(resultList => {
-      console.log(resultList)
       resultList.forEach(result => {
         resultItemPromises = resultItemPromises.concat(getResultItemPromises(result.data))
       })
