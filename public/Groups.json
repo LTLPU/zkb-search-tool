@@ -35,6 +35,7 @@
 	{ "typeId": "941", "name": "Industrial Command Ship" },
 	{ "typeId": "963", "name": "Strategic Cruiser" },
 	{ "typeId": "1022", "name": "Prototype Exploration Ship" },
+	{ "typeId": "1025", "name": "Orbital Infrastructure" },
 	{ "typeId": "1201", "name": "Attack Battlecruiser" },
 	{ "typeId": "1202", "name": "Blockade Runner" },
 	{ "typeId": "1283", "name": "Expedition Frigate" },
@@ -45,6 +46,5 @@
 	{ "typeId": "1534", "name": "Command Destroyer" },
 	{ "typeId": "1538", "name": "Force Auxiliary" },
 	{ "typeId": "1657", "name": "Citadel" },
-	{ "typeId": "1972", "name": "Flag Cruiser" },
-	{ "typeId": "2001", "name": "Citizen Ships" }
+	{ "typeId": "1972", "name": "Flag Cruiser" }
 ]
