@@ -22,7 +22,7 @@
                   <v-chip
                     v-for="criteriaItem in criteriaList"
                     :key="criteriaItem.key"
-                    v-on:click="removeCriteria(criteriaItem.key)"
+                    @click="removeCriteria(criteriaItem.key)"
                     @click:close="removeCriteria(criteriaItem.key)"
                     class="ma-2 font-weight-bold"
                     color="grey darken-2"
@@ -51,7 +51,7 @@
                   outlined
                   class="mr-2 font-weight-bold"
                   color="green darken-4"
-                  v-on:click="addKills()"
+                  @click="addKills()"
                 >
                   Kills
                 </v-btn>
@@ -59,7 +59,7 @@
                   outlined
                   class="font-weight-bold"
                   color="red darken-4"
-                  v-on:click="addLosses()"
+                  @click="addLosses()"
                 >
                   Losses
                 </v-btn>
@@ -73,7 +73,7 @@
                   outlined
                   class="font-weight-bold"
                   color="green darken-4"
-                  v-on:click="addSolo()"
+                  @click="addSolo()"
                 >
                   Solo
                 </v-btn>
@@ -87,7 +87,7 @@
                   outlined
                   class="mr-2 font-weight-bold"
                   color="blue darken-4"
-                  v-on:click="addHighsec()"
+                  @click="addHighsec()"
                 >
                   Highsec
                 </v-btn>
@@ -95,7 +95,7 @@
                   outlined
                   class="mr-2 font-weight-bold"
                   color="orange darken-4"
-                  v-on:click="addLowsec()"
+                  @click="addLowsec()"
                 >
                   Lowsec
                 </v-btn>
@@ -103,7 +103,7 @@
                   outlined
                   class="mr-2 font-weight-bold"
                   color="red darken-4"
-                  v-on:click="addNullsec()"
+                  @click="addNullsec()"
                 >
                   Nullsec
                 </v-btn>
@@ -111,7 +111,7 @@
                   outlined
                   class="mr-2 font-weight-bold"
                   color="purple darken-4"
-                  v-on:click="addWSpace()"
+                  @click="addWSpace()"
                 >
                   W-Space
                 </v-btn>
@@ -119,7 +119,7 @@
                   outlined
                   class="font-weight-bold"
                   color="grey darken-4"
-                  v-on:click="addAbyssal()"
+                  @click="addAbyssal()"
                 >
                   Abyssal
                 </v-btn>
@@ -144,9 +144,7 @@
                       v-for="resultItem in searchResultList"
                       :key="resultItem.key"
                     >
-                      <v-list-item-content
-                        v-on:click="addSearchItem(resultItem)"
-                      >
+                      <v-list-item-content @click="addSearchItem(resultItem)">
                         <v-list-item-title
                           v-text="resultItem.label"
                         ></v-list-item-title>
@@ -189,6 +187,17 @@
         isLoading: false,
         searchResultList: {},
         urlStringTransitionTime: 500
+      }
+    },
+    watch: {
+      inputText: {
+        handler(n, o) {
+          if (n.length > 2) {
+            this.isLoading = true
+            this.debouncedSearch(n)
+          }
+        },
+        deep: true
       }
     },
     created: function() {
@@ -342,17 +351,6 @@
           link.type = 'application/json'
           head.appendChild(link)
         })
-      }
-    },
-    watch: {
-      inputText: {
-        handler(n, o) {
-          if (n.length > 2) {
-            this.isLoading = true
-            this.debouncedSearch(n)
-          }
-        },
-        deep: true
       }
     }
   }
