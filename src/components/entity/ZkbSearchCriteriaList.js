@@ -1,14 +1,14 @@
 import { ZkbSearchCriteriaItem } from './ZkbSearchCriteriaItem.js'
 
 export class ZkbSearchCriteriaList {
-  constructor () {
+  constructor() {
     this._searchCriteriaList = []
   }
 
   /**
    * iterator
    */
-  * [Symbol.iterator] () {
+  *[Symbol.iterator]() {
     for (const listItem of this._searchCriteriaList) {
       yield listItem
     }
@@ -19,7 +19,7 @@ export class ZkbSearchCriteriaList {
    *
    * @param {ZkbSearchCriteriaItem} newItem 追加する条件
    */
-  add (newItem) {
+  add(newItem) {
     if (!(newItem instanceof ZkbSearchCriteriaItem)) {
       throw new Error('newItem must be ZkbSearchCriteriaItem.')
     }
@@ -29,7 +29,7 @@ export class ZkbSearchCriteriaList {
     this._searchCriteriaList.push(newItem)
   }
 
-  remove (key) {
+  remove(key) {
     const findIdx = this._searchCriteriaList.findIndex(current => {
       return current.key === key
     })
@@ -38,11 +38,11 @@ export class ZkbSearchCriteriaList {
     }
   }
 
-  clear () {
+  clear() {
     this._searchCriteriaList = []
   }
 
-  _removeConflictItem (newItem) {
+  _removeConflictItem(newItem) {
     if (newItem.conflictKey === -1) {
       return
     }
@@ -54,5 +54,5 @@ export class ZkbSearchCriteriaList {
     })
   }
 
-  _getSortedList () {}
+  _getSortedList() {}
 }

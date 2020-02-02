@@ -1,12 +1,12 @@
 import { ZkbSearchCriteriaItemFactory } from '../entity/ZkbSearchCriteriaItem.js'
 
 export class ZkbSearchCriteriaService {
-  constructor (zkbSearchCriteriaList) {
+  constructor(zkbSearchCriteriaList) {
     this._zkbSearchCriteriaList = zkbSearchCriteriaList
   }
 
   /** 検索条件追加 */
-  addCriteria (itemType, value, label) {
+  addCriteria(itemType, value, label) {
     const criteriaItem = new ZkbSearchCriteriaItemFactory().create(
       itemType,
       value,
@@ -16,17 +16,17 @@ export class ZkbSearchCriteriaService {
   }
 
   /** 検索条件削除 */
-  removeCriteria (idx) {
+  removeCriteria(idx) {
     this._zkbSearchCriteriaList.remove(idx)
   }
 
   /** 検索条件全削除 */
-  removeAllCriteria () {
+  removeAllCriteria() {
     this._zkbSearchCriteriaList.clear()
   }
 
   /** URL取得 */
-  getSearchUrl () {
+  getSearchUrl() {
     let url = 'https://zkillboard.com/'
 
     const criteriaList = Array.from(this._zkbSearchCriteriaList)

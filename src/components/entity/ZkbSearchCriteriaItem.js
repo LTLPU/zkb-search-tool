@@ -1,7 +1,7 @@
 let key = 0
 
 export class ZkbSearchCriteriaItemFactory {
-  create (itemType, value, label) {
+  create(itemType, value, label) {
     switch (itemType) {
       case ZkbSearchCriteriaItemTypes.Kills:
         return new KillsSearchCriteriaListItem()
@@ -64,7 +64,7 @@ export const ZkbSearchCriteriaItemTypes = {
 }
 
 export class ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     // 自動で設定
     this._key = key++
     this._type = ''
@@ -77,47 +77,47 @@ export class ZkbSearchCriteriaItem {
     this._label = ''
   }
 
-  get key () {
+  get key() {
     return this._key
   }
 
-  get type () {
+  get type() {
     return this._type
   }
 
-  get class () {
+  get class() {
     return this._class
   }
 
-  get value () {
+  get value() {
     return this._value
   }
 
-  get label () {
+  get label() {
     return this._label
   }
 
-  get conflictKey () {
+  get conflictKey() {
     return this._conflictKey
   }
 
-  get sortOrder () {
+  get sortOrder() {
     return this._sortOrder
   }
 
-  get urlString () {
+  get urlString() {
     return this._type + '/'
   }
 }
 
 export class ZkbSearchCriteriaValueItem extends ZkbSearchCriteriaItem {
-  constructor (value, label) {
+  constructor(value, label) {
     super()
     this._value = value
     this._label = label
   }
 
-  get urlString () {
+  get urlString() {
     return this._type + '/' + this._value + '/'
   }
 }
@@ -126,7 +126,7 @@ export class ZkbSearchCriteriaValueItem extends ZkbSearchCriteriaItem {
  * Kills
  */
 export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Kills
     this._class = 'mdi-circle-double'
@@ -140,7 +140,7 @@ export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
  * Losses
  */
 export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Losses
     this._class = 'mdi-circle-double'
@@ -154,7 +154,7 @@ export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
  * Ganked
  */
 export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Ganked
     this._class = 'mdi-circle-double'
@@ -168,7 +168,7 @@ export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
  * Solo
  */
 export class SoloSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Solo
     this._class = 'mdi-circle-double'
@@ -187,7 +187,7 @@ export class AllianceSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    * @param {String} value AllianceId
    * @param {String} label AllianceName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Alliance
     this._class = 'mdi-account-supervisor-circle'
@@ -205,7 +205,7 @@ export class CorporationSearchCriteriaListItem extends ZkbSearchCriteriaValueIte
    * @param {String} value CorporationId
    * @param {String} label CorporationName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Corporation
     this._class = 'mdi-account-supervisor-circle'
@@ -223,7 +223,7 @@ export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem 
    * @param {String} value CharacterId
    * @param {String} label CharacterName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Character
     this._class = 'mdi-account-circle'
@@ -236,7 +236,7 @@ export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem 
  * Highsec
  */
 export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Highsec
     this._class = 'mdi-diameter'
@@ -250,7 +250,7 @@ export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
  * Lowsec
  */
 export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Lowsec
     this._class = 'mdi-diameter'
@@ -264,7 +264,7 @@ export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
  * Nullsec
  */
 export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Nullsec
     this._class = 'mdi-diameter'
@@ -278,7 +278,7 @@ export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
  * W-Space
  */
 export class WSpaceSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.WSpace
     this._class = 'mdi-diameter'
@@ -292,7 +292,7 @@ export class WSpaceSearchCriteriaListItem extends ZkbSearchCriteriaItem {
  * Abyssal
  */
 export class AbyssalSearchCriteriaListItem extends ZkbSearchCriteriaItem {
-  constructor () {
+  constructor() {
     super()
     this._type = ZkbSearchCriteriaItemTypes.Abyssal
     this._class = 'mdi-diameter'
@@ -311,7 +311,7 @@ export class GroupSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    * @param {String} value GroupId
    * @param {String} label GroupName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Group
     this._class = 'mdi-circle-double'
@@ -329,7 +329,7 @@ export class ShipSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    * @param {String} value ItemId
    * @param {String} label ItemName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Ship
     this._class = 'mdi-circle-double'
@@ -347,7 +347,7 @@ export class RegionSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    * @param {String} value RegionId
    * @param {String} label RegionName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Region
     this._class = 'mdi-map-marker-circle'
@@ -365,7 +365,7 @@ export class ConstellationSearchCriteriaListItem extends ZkbSearchCriteriaValueI
    * @param {String} value ConstellationId
    * @param {String} label ConstellationName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.Constellation
     this._class = 'mdi-map-marker-circle'
@@ -383,7 +383,7 @@ export class SystemSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    * @param {String} value SystemId
    * @param {String} label SystemName
    */
-  constructor (value, label) {
+  constructor(value, label) {
     super(value, label)
     this._type = ZkbSearchCriteriaItemTypes.System
     this._class = 'mdi-map-marker-circle'

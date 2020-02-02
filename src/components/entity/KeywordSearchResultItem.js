@@ -1,7 +1,7 @@
 let key = 0
 
 export class KeywordSearchResultItem {
-  constructor (type, id, label, icon) {
+  constructor(type, id, label, icon) {
     this._key = key++
     this._type = type
     this._id = id
@@ -9,23 +9,23 @@ export class KeywordSearchResultItem {
     this._icon = icon
   }
 
-  get key () {
+  get key() {
     return this._key
   }
 
-  get type () {
+  get type() {
     return this._type
   }
 
-  get id () {
+  get id() {
     return this._id
   }
 
-  get label () {
+  get label() {
     return this._label
   }
 
-  get icon () {
+  get icon() {
     return this._icon
   }
 }
