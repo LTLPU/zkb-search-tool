@@ -12,25 +12,29 @@ const GROUPS_PATH = './Groups.json'
 const SHIPS_PATH = './Ships.json'
 
 export class KeywordSearchService {
-  async search (searchWord = '') {
+  async search(searchWord = '') {
     let searchResultList = []
 
     if (searchWord === null || searchWord.length < 3) {
       return searchResultList
     }
 
-    searchResultList = searchResultList.concat(await getSearchResultItemsFromCsv(searchWord))
-    searchResultList = searchResultList.concat(await getSearchResultItems(searchWord))
+    searchResultList = searchResultList.concat(
+      await getSearchResultItemsFromCsv(searchWord)
+    )
+    searchResultList = searchResultList.concat(
+      await getSearchResultItems(searchWord)
+    )
 
     return searchResultList
   }
 
-  clear () {
+  clear() {
     this._searchResultList.clear()
   }
 }
 
-async function getSearchResultItemsFromCsv (searchWord) {
+async function getSearchResultItemsFromCsv(searchWord) {
   const searchResultList = []
 
   const groupsSearchResult = await searchCsv(GROUPS_PATH, searchWord)
@@ -59,7 +63,7 @@ async function getSearchResultItemsFromCsv (searchWord) {
   return searchResultList
 }
 
-async function getSearchResultItems (searchWord) {
+async function getSearchResultItems(searchWord) {
   const searchResultPromises = []
 
   // 検索値 : alliance,character,constellation,corporation,region,solar_system
@@ -78,35 +82,43 @@ async function getSearchResultItems (searchWord) {
 
   let resultItemPromises = []
 
-  await Promise.all(searchResultPromises)
-    .then(resultList => {
-      resultList.forEach(result => {
-        resultItemPromises = resultItemPromises.concat(getResultItemPromises(result.data))
-      })
+  await Promise.all(searchResultPromises).then(resultList => {
+    resultList.forEach(result => {
+      resultItemPromises = resultItemPromises.concat(
+        getResultItemPromises(result.data)
+      )
     })
+  })
 
   const searchResultList = []
 
-  await Promise.all(resultItemPromises)
-    .then(resultList => {
-      resultList.forEach(result => {
-        searchResultList.push(result)
-      })
+  await Promise.all(resultItemPromises).then(resultList => {
+    resultList.forEach(result => {
+      searchResultList.push(result)
     })
+  })
 
   return searchResultList
 }
 
-function getResultItemPromises (searchResultData) {
+function getResultItemPromises(searchResultData) {
   const promises = []
 
   if ('solar_system' in searchResultData) {
-    for (let i = 0; i < SYSTEM_MAX && i < searchResultData.solar_system.length; i++) {
+    for (
+      let i = 0;
+      i < SYSTEM_MAX && i < searchResultData.solar_system.length;
+      i++
+    ) {
       promises.push(getSystemItem(searchResultData.solar_system[i]))
     }
   }
   if ('constellation' in searchResultData) {
-    for (let i = 0; i < CONSTELLATION_MAX && i < searchResultData.constellation.length; i++) {
+    for (
+      let i = 0;
+      i < CONSTELLATION_MAX && i < searchResultData.constellation.length;
+      i++
+    ) {
       promises.push(getConstellationItem(searchResultData.constellation[i]))
     }
   }
@@ -116,17 +128,29 @@ function getResultItemPromises (searchResultData) {
     }
   }
   if ('character' in searchResultData) {
-    for (let i = 0; i < CHARACTER_MAX && i < searchResultData.character.length; i++) {
+    for (
+      let i = 0;
+      i < CHARACTER_MAX && i < searchResultData.character.length;
+      i++
+    ) {
       promises.push(getCharacterItem(searchResultData.character[i]))
     }
   }
   if ('corporation' in searchResultData) {
-    for (let i = 0; i < CORPORATION_MAX && i < searchResultData.corporation.length; i++) {
+    for (
+      let i = 0;
+      i < CORPORATION_MAX && i < searchResultData.corporation.length;
+      i++
+    ) {
       promises.push(getCorporationItem(searchResultData.corporation[i]))
     }
   }
   if ('alliance' in searchResultData) {
-    for (let i = 0; i < ALLIANCE_MAX && i < searchResultData.alliance.length; i++) {
+    for (
+      let i = 0;
+      i < ALLIANCE_MAX && i < searchResultData.alliance.length;
+      i++
+    ) {
       promises.push(getAllianceItem(searchResultData.alliance[i]))
     }
   }
@@ -134,7 +158,7 @@ function getResultItemPromises (searchResultData) {
   return promises
 }
 
-function getCharacterItem (characterId) {
+function getCharacterItem(characterId) {
   return new Promise((resolve, reject) => {
     axios
       .get(
@@ -161,7 +185,7 @@ function getCharacterItem (characterId) {
   })
 }
 
-function getAllianceItem (allianceId) {
+function getAllianceItem(allianceId) {
   return new Promise((resolve, reject) => {
     axios
       .get(
@@ -173,7 +197,7 @@ function getAllianceItem (allianceId) {
           new KeywordSearchResultItem(
             'alliance',
             allianceId,
-            `${response.data.name} (Alliance)`,
+            `${response.data.name} <${response.data.ticker}> (Alliance)`,
             'alliance.jpg'
           )
         )
@@ -188,7 +212,7 @@ function getAllianceItem (allianceId) {
   })
 }
 
-function getCorporationItem (corporationId) {
+function getCorporationItem(corporationId) {
   return new Promise((resolve, reject) => {
     axios
       .get(
@@ -200,7 +224,7 @@ function getCorporationItem (corporationId) {
           new KeywordSearchResultItem(
             'corporation',
             corporationId,
-            `${response.data.name} (Corporation)`,
+            `${response.data.name} [${response.data.ticker}] (Corporation)`,
             'corporation.jpg'
           )
         )
@@ -215,7 +239,7 @@ function getCorporationItem (corporationId) {
   })
 }
 
-function getSystemItem (systemId) {
+function getSystemItem(systemId) {
   return new Promise((resolve, reject) => {
     axios
       .get(
@@ -242,7 +266,7 @@ function getSystemItem (systemId) {
   })
 }
 
-function getConstellationItem (constellationId) {
+function getConstellationItem(constellationId) {
   return new Promise((resolve, reject) => {
     axios
       .get(
@@ -269,7 +293,7 @@ function getConstellationItem (constellationId) {
   })
 }
 
-function getRegionItem (regionId) {
+function getRegionItem(regionId) {
   return new Promise((resolve, reject) => {
     axios
       .get(
@@ -296,7 +320,7 @@ function getRegionItem (regionId) {
   })
 }
 
-function searchCsv (fileName, searchWord) {
+function searchCsv(fileName, searchWord) {
   const regExp = new RegExp(searchWord, 'i')
   return new Promise((resolve, reject) => {
     axios

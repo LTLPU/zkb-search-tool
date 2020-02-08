@@ -1,21 +1,21 @@
 export class KeywordSearchResultList {
-  constructor () {
+  constructor() {
     this._keywordSearchResultList = []
   }
 
-  * [Symbol.iterator] () {
+  *[Symbol.iterator]() {
     for (const resultItem of this._keywordSearchResultList) {
       yield resultItem
     }
   }
 
-  add (resultItem) {
+  add(resultItem) {
     if (this._keywordSearchResultList.length < 20) {
       this._keywordSearchResultList.push(resultItem)
     }
   }
 
-  clear () {
+  clear() {
     this._keywordSearchResultList = []
   }
 }
