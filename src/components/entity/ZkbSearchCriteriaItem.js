@@ -1,5 +1,3 @@
-let key = 0
-
 export class ZkbSearchCriteriaItemFactory {
   create(itemType, value, label) {
     switch (itemType) {
@@ -66,7 +64,6 @@ export const ZkbSearchCriteriaItemTypes = {
 export class ZkbSearchCriteriaItem {
   constructor() {
     // 自動で設定
-    this._key = key++
     this._type = ''
     this._class = ''
     this._conflictKey = -1
@@ -75,10 +72,6 @@ export class ZkbSearchCriteriaItem {
     // 引数で設定
     this._value = ''
     this._label = ''
-  }
-
-  get key() {
-    return this._key
   }
 
   get type() {

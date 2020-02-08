@@ -30,12 +30,7 @@ export class ZkbSearchCriteriaList {
   }
 
   remove(key) {
-    const findIdx = this._searchCriteriaList.findIndex(current => {
-      return current.key === key
-    })
-    if (findIdx !== -1) {
-      this._searchCriteriaList.splice(findIdx, 1)
-    }
+    this._searchCriteriaList.splice(key, 1)
   }
 
   clear() {

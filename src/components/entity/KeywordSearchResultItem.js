@@ -1,8 +1,5 @@
-let key = 0
-
 export class KeywordSearchResultItem {
   constructor(type, id, label, icon) {
-    this._key = key++
     this._type = type
     this._id = id
     this._label = label

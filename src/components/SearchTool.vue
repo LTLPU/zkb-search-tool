@@ -20,10 +20,10 @@
               <v-card-text>
                 <v-chip-group column>
                   <v-chip
-                    v-for="criteriaItem in criteriaList"
-                    :key="criteriaItem.key"
-                    @click="removeCriteria(criteriaItem.key)"
-                    @click:close="removeCriteria(criteriaItem.key)"
+                    v-for="(criteriaItem, key) in criteriaList"
+                    :key="key"
+                    @click="removeCriteria(key)"
+                    @click:close="removeCriteria(key)"
                     class="ma-2 font-weight-bold"
                     color="grey darken-2"
                     text-color="white"
@@ -36,6 +36,36 @@
                     {{ criteriaItem.label }}
                   </v-chip>
                 </v-chip-group>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-flex>
+
+      <v-flex xs12>
+        <v-row>
+          <v-col>
+            <v-card outlined>
+              <v-card-text>
+                <v-text-field
+                  v-model="inputText"
+                  label="Keyword"
+                  :loading="isLoading"
+                ></v-text-field>
+                <v-list dense>
+                  <v-list-item-group v-model="searchResultList" color="primary">
+                    <v-list-item
+                      v-for="resultItem in searchResultList"
+                      :key="resultItem.key"
+                    >
+                      <v-list-item-content @click="addSearchItem(resultItem)">
+                        <v-list-item-title
+                          v-text="resultItem.label"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
               </v-card-text>
             </v-card>
           </v-col>
@@ -123,35 +153,6 @@
                 >
                   Abyssal
                 </v-btn>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-flex>
-      <v-flex xs12>
-        <v-row>
-          <v-col>
-            <v-card outlined>
-              <v-card-text>
-                <v-text-field
-                  v-model="inputText"
-                  label="Keyword"
-                  :loading="isLoading"
-                ></v-text-field>
-                <v-list dense>
-                  <v-list-item-group v-model="searchResultList" color="primary">
-                    <v-list-item
-                      v-for="resultItem in searchResultList"
-                      :key="resultItem.key"
-                    >
-                      <v-list-item-content @click="addSearchItem(resultItem)">
-                        <v-list-item-title
-                          v-text="resultItem.label"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
               </v-card-text>
             </v-card>
           </v-col>
