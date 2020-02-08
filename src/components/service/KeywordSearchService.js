@@ -197,7 +197,7 @@ function getAllianceItem(allianceId) {
           new KeywordSearchResultItem(
             'alliance',
             allianceId,
-            `${response.data.name} (Alliance)`,
+            `${response.data.name} <${response.data.ticker}> (Alliance)`,
             'alliance.jpg'
           )
         )
@@ -224,7 +224,7 @@ function getCorporationItem(corporationId) {
           new KeywordSearchResultItem(
             'corporation',
             corporationId,
-            `${response.data.name} (Corporation)`,
+            `${response.data.name} [${response.data.ticker}] (Corporation)`,
             'corporation.jpg'
           )
         )
