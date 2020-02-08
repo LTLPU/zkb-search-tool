@@ -15,8 +15,7 @@ module.exports = {
         semi: false,
         singleQuote: true,
         trailingComma: 'none',
-        bracketSpacing: true,
-        vueIndentScriptAndStyle: true
+        bracketSpacing: true
       }
     ],
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',

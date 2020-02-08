@@ -176,178 +176,178 @@
 </template>
 
 <script>
-  import _ from 'lodash'
-  import VueResponsiveText from 'vue-responsive-text'
-  import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService.js'
-  import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
-  import { KeywordSearchService } from './service/KeywordSearchService.js'
-  import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
+import _ from 'lodash'
+import VueResponsiveText from 'vue-responsive-text'
+import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService.js'
+import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList.js'
+import { KeywordSearchService } from './service/KeywordSearchService.js'
+import { ZkbSearchCriteriaItemTypes } from './entity/ZkbSearchCriteriaItem.js'
 
-  const keywordSearchService = new KeywordSearchService()
+const keywordSearchService = new KeywordSearchService()
 
-  export default {
-    name: 'SearchTool',
-    components: {
-      VueResponsiveText
+export default {
+  name: 'SearchTool',
+  components: {
+    VueResponsiveText
+  },
+  props: {
+    msg: String
+  },
+  data: function() {
+    return {
+      generatedUrl: 'https://zkillboard.com/',
+      criteriaList: {},
+      inputText: '',
+      isLoading: false,
+      searchResultList: {},
+      urlStringTransitionTime: 500
+    }
+  },
+  watch: {
+    inputText: {
+      handler(n, o) {
+        this.isLoading = true
+        this.debouncedSearch(n)
+      },
+      deep: true
+    }
+  },
+  created: function() {
+    this.debouncedSearch = _.debounce(this.search, 500)
+
+    this.criteriaList = new ZkbSearchCriteriaList()
+    this.searchResultList = []
+
+    this._zkbSearchCriteriaService = new ZkbSearchCriteriaService(
+      this.criteriaList
+    )
+  },
+  mounted: function() {
+    this.updateUrl()
+  },
+  methods: {
+    /**
+     * kills/を追加する。
+     */
+    addKills: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Kills)
     },
-    props: {
-      msg: String
+    addLosses: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Losses)
     },
-    data: function() {
-      return {
-        generatedUrl: 'https://zkillboard.com/',
-        criteriaList: {},
-        inputText: '',
-        isLoading: false,
-        searchResultList: {},
-        urlStringTransitionTime: 500
+    addSolo: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Solo)
+    },
+    addHighsec: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Highsec)
+    },
+    addLowsec: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Lowsec)
+    },
+    addWSpace: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.WSpace)
+    },
+    addNullsec: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Nullsec)
+    },
+    addAbyssal: function() {
+      this.addCriteria(ZkbSearchCriteriaItemTypes.Abyssal)
+    },
+    addSearchItem: function(resultItem) {
+      // 検索条件追加
+      switch (resultItem.type) {
+        case 'character':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Character,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'corporation':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Corporation,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'alliance':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Alliance,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'system':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.System,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'constellation':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Constellation,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'region':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Region,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'group':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Group,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        case 'ship':
+          this.addCriteria(
+            ZkbSearchCriteriaItemTypes.Ship,
+            resultItem.id,
+            resultItem.label
+          )
+          break
+        default:
+          throw new Error('something wrong')
       }
-    },
-    watch: {
-      inputText: {
-        handler(n, o) {
-          this.isLoading = true
-          this.debouncedSearch(n)
-        },
-        deep: true
-      }
-    },
-    created: function() {
-      this.debouncedSearch = _.debounce(this.search, 500)
 
-      this.criteriaList = new ZkbSearchCriteriaList()
-      this.searchResultList = []
-
-      this._zkbSearchCriteriaService = new ZkbSearchCriteriaService(
-        this.criteriaList
-      )
+      // 入力状態クリア
+      this.clear()
     },
-    mounted: function() {
+    addCriteria: function(itemType, value, label) {
+      this._zkbSearchCriteriaService.addCriteria(itemType, value, label)
       this.updateUrl()
     },
-    methods: {
-      /**
-       * kills/を追加する。
-       */
-      addKills: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.Kills)
-      },
-      addLosses: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.Losses)
-      },
-      addSolo: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.Solo)
-      },
-      addHighsec: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.Highsec)
-      },
-      addLowsec: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.Lowsec)
-      },
-      addWSpace: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.WSpace)
-      },
-      addNullsec: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.Nullsec)
-      },
-      addAbyssal: function() {
-        this.addCriteria(ZkbSearchCriteriaItemTypes.Abyssal)
-      },
-      addSearchItem: function(resultItem) {
-        // 検索条件追加
-        switch (resultItem.type) {
-          case 'character':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.Character,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          case 'corporation':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.Corporation,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          case 'alliance':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.Alliance,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          case 'system':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.System,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          case 'constellation':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.Constellation,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          case 'region':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.Region,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          case 'group':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.Group,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          case 'ship':
-            this.addCriteria(
-              ZkbSearchCriteriaItemTypes.Ship,
-              resultItem.id,
-              resultItem.label
-            )
-            break
-          default:
-            throw new Error('something wrong')
-        }
-
-        // 入力状態クリア
-        this.clear()
-      },
-      addCriteria: function(itemType, value, label) {
-        this._zkbSearchCriteriaService.addCriteria(itemType, value, label)
-        this.updateUrl()
-      },
-      removeCriteria: function(idx) {
-        this._zkbSearchCriteriaService.removeCriteria(idx)
-        this.updateUrl()
-      },
-      clearCriteria: function() {
-        this._zkbSearchCriteriaService.removeAllCriteria()
-        this.updateUrl()
-      },
-      clear: function() {
-        this.inputText = ''
-        this.searchResultList = []
-      },
-      updateUrl: function() {
-        this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
-      },
-      search: function(searchWord) {
-        keywordSearchService
-          .search(searchWord)
-          .then(res => {
-            this.searchResultList = res
-          })
-          .finally(() => {
-            this.isLoading = false
-          })
-      }
+    removeCriteria: function(idx) {
+      this._zkbSearchCriteriaService.removeCriteria(idx)
+      this.updateUrl()
+    },
+    clearCriteria: function() {
+      this._zkbSearchCriteriaService.removeAllCriteria()
+      this.updateUrl()
+    },
+    clear: function() {
+      this.inputText = ''
+      this.searchResultList = []
+    },
+    updateUrl: function() {
+      this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
+    },
+    search: function(searchWord) {
+      keywordSearchService
+        .search(searchWord)
+        .then(res => {
+          this.searchResultList = res
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
     }
   }
+}
 </script>
