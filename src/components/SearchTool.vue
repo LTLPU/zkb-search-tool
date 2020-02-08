@@ -20,10 +20,10 @@
               <v-card-text>
                 <v-chip-group column>
                   <v-chip
-                    v-for="(criteriaItem, key) in criteriaList"
-                    :key="key"
-                    @click="removeCriteria(key)"
-                    @click:close="removeCriteria(key)"
+                    v-for="(criteriaItem, idx) in criteriaList"
+                    :key="idx"
+                    @click="removeCriteria(idx)"
+                    @click:close="removeCriteria(idx)"
                     class="ma-2 font-weight-bold"
                     color="grey darken-2"
                     text-color="white"
@@ -56,8 +56,8 @@
                 <v-list dense v-if="searchResultList.length > 0">
                   <v-list-item-group v-model="searchResultList" color="primary">
                     <v-list-item
-                      v-for="(resultItem, key) in searchResultList"
-                      :key="key"
+                      v-for="(resultItem, idx) in searchResultList"
+                      :key="idx"
                     >
                       <v-list-item-content @click="addSearchItem(resultItem)">
                         <v-list-item-title

@@ -29,8 +29,8 @@ export class ZkbSearchCriteriaList {
     this._searchCriteriaList.push(newItem)
   }
 
-  remove(key) {
-    this._searchCriteriaList.splice(key, 1)
+  remove(idx) {
+    this._searchCriteriaList.splice(idx, 1)
   }
 
   clear() {
@@ -42,9 +42,9 @@ export class ZkbSearchCriteriaList {
       return
     }
 
-    this._searchCriteriaList.forEach(listItem => {
+    this._searchCriteriaList.forEach((listItem, idx) => {
       if (listItem.conflictKey === newItem.conflictKey) {
-        this.remove(listItem.key)
+        this.remove(idx)
       }
     })
   }
