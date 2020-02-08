@@ -55,8 +55,8 @@
                 <v-list dense>
                   <v-list-item-group v-model="searchResultList" color="primary">
                     <v-list-item
-                      v-for="resultItem in searchResultList"
-                      :key="resultItem.key"
+                      v-for="(resultItem, key) in searchResultList"
+                      :key="key"
                     >
                       <v-list-item-content @click="addSearchItem(resultItem)">
                         <v-list-item-title

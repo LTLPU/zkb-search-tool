@@ -6,10 +6,6 @@ export class KeywordSearchResultItem {
     this._icon = icon
   }
 
-  get key() {
-    return this._key
-  }
-
   get type() {
     return this._type
   }
