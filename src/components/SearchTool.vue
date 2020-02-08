@@ -50,9 +50,10 @@
                 <v-text-field
                   v-model="inputText"
                   label="Keyword"
+                  clearable
                   :loading="isLoading"
                 ></v-text-field>
-                <v-list dense>
+                <v-list dense v-if="searchResultList.length > 0">
                   <v-list-item-group v-model="searchResultList" color="primary">
                     <v-list-item
                       v-for="(resultItem, key) in searchResultList"
