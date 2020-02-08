@@ -76,7 +76,11 @@
       <v-flex xs12>
         <v-row>
           <v-col md="auto">
-            <v-card class="mx-auto text-no-wrap overflow-x-auto" outlined>
+            <v-card
+              class="mx-auto text-no-wrap overflow-x-auto"
+              cols="2"
+              outlined
+            >
               <v-card-text>
                 <v-btn
                   outlined
@@ -98,7 +102,11 @@
             </v-card>
           </v-col>
           <v-col md="auto">
-            <v-card class="mx-auto text-no-wrap overflow-x-auto" outlined>
+            <v-card
+              class="mx-auto text-no-wrap overflow-x-auto"
+              cols="1"
+              outlined
+            >
               <v-card-text>
                 <v-btn
                   outlined
@@ -112,7 +120,11 @@
             </v-card>
           </v-col>
           <v-col md="auto">
-            <v-card class="mx-auto text-no-wrap overflow-x-auto" outlined>
+            <v-card
+              class="mx-auto text-no-wrap overflow-x-auto"
+              cols="5"
+              outlined
+            >
               <v-card-text>
                 <v-btn
                   outlined
@@ -194,10 +206,8 @@
     watch: {
       inputText: {
         handler(n, o) {
-          if (n.length > 2) {
-            this.isLoading = true
-            this.debouncedSearch(n)
-          }
+          this.isLoading = true
+          this.debouncedSearch(n)
         },
         deep: true
       }

@@ -3,7 +3,7 @@
     <v-content>
       <router-view />
     </v-content>
-    <v-footer dark class="mt-5">
+    <v-footer dark>
       <v-row>
         <v-col class="ppy-4 text-center font-weight-bold" cols="12">
           zkb-search-tool
