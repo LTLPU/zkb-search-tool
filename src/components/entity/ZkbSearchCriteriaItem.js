@@ -1,64 +1,46 @@
+import { ZkbSearchCriteriaTypes } from '../enum/ZkbSearchCriteriaTypes'
+
 export class ZkbSearchCriteriaItemFactory {
   create(itemType, value, label) {
     switch (itemType) {
-      case ZkbSearchCriteriaItemTypes.Kills:
+      case ZkbSearchCriteriaTypes.Kills:
         return new KillsSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Losses:
+      case ZkbSearchCriteriaTypes.Losses:
         return new LossesSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Ganked:
+      case ZkbSearchCriteriaTypes.Ganked:
         return new GankedSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Solo:
+      case ZkbSearchCriteriaTypes.Solo:
         return new SoloSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Alliance:
+      case ZkbSearchCriteriaTypes.Alliance:
         return new AllianceSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.Corporation:
+      case ZkbSearchCriteriaTypes.Corporation:
         return new CorporationSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.Character:
+      case ZkbSearchCriteriaTypes.Character:
         return new CharacterSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.Highsec:
+      case ZkbSearchCriteriaTypes.Highsec:
         return new HighsecSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Lowsec:
+      case ZkbSearchCriteriaTypes.Lowsec:
         return new LowsecSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Nullsec:
+      case ZkbSearchCriteriaTypes.Nullsec:
         return new NullsecSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.WSpace:
+      case ZkbSearchCriteriaTypes.WSpace:
         return new WSpaceSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Abyssal:
+      case ZkbSearchCriteriaTypes.Abyssal:
         return new AbyssalSearchCriteriaListItem()
-      case ZkbSearchCriteriaItemTypes.Group:
+      case ZkbSearchCriteriaTypes.Group:
         return new GroupSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.Ship:
+      case ZkbSearchCriteriaTypes.Ship:
         return new ShipSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.Region:
+      case ZkbSearchCriteriaTypes.Region:
         return new RegionSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.Constellation:
+      case ZkbSearchCriteriaTypes.Constellation:
         return new ConstellationSearchCriteriaListItem(value, label)
-      case ZkbSearchCriteriaItemTypes.System:
+      case ZkbSearchCriteriaTypes.System:
         return new SystemSearchCriteriaListItem(value, label)
       default:
         throw new Error(`invalid itemtype = ${itemType}`)
     }
   }
-}
-
-export const ZkbSearchCriteriaItemTypes = {
-  Kills: 'kills',
-  Losses: 'losses',
-  Ganked: 'ganked',
-  Solo: 'solo',
-  Alliance: 'alliance',
-  Corporation: 'corporation',
-  Character: 'character',
-  Highsec: 'highsec',
-  Lowsec: 'lowsec',
-  Nullsec: 'nullsec',
-  WSpace: 'w-space',
-  Abyssal: 'abyssal',
-  Group: 'group',
-  Ship: 'ship',
-  Region: 'region',
-  Constellation: 'constellation',
-  System: 'system'
 }
 
 export class ZkbSearchCriteriaItem {
@@ -121,7 +103,7 @@ export class ZkbSearchCriteriaValueItem extends ZkbSearchCriteriaItem {
 export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Kills
+    this._type = ZkbSearchCriteriaTypes.Kills
     this._class = 'mdi-circle-double'
     this._label = 'Kills'
     this._conflictKey = 1
@@ -135,7 +117,7 @@ export class KillsSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Losses
+    this._type = ZkbSearchCriteriaTypes.Losses
     this._class = 'mdi-circle-double'
     this._label = 'Losses'
     this._conflictKey = 1
@@ -149,7 +131,7 @@ export class LossesSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Ganked
+    this._type = ZkbSearchCriteriaTypes.Ganked
     this._class = 'mdi-circle-double'
     this._label = 'Ganked'
     this._conflictKey = 3
@@ -163,7 +145,7 @@ export class GankedSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class SoloSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Solo
+    this._type = ZkbSearchCriteriaTypes.Solo
     this._class = 'mdi-circle-double'
     this._label = 'Solo'
     this._conflictKey = 4
@@ -182,7 +164,7 @@ export class AllianceSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Alliance
+    this._type = ZkbSearchCriteriaTypes.Alliance
     this._class = 'mdi-account-supervisor-circle'
     this._conflictKey = -1
     this._sortOrder = 2
@@ -200,7 +182,7 @@ export class CorporationSearchCriteriaListItem extends ZkbSearchCriteriaValueIte
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Corporation
+    this._type = ZkbSearchCriteriaTypes.Corporation
     this._class = 'mdi-account-supervisor-circle'
     this._conflictKey = -1
     this._sortOrder = 3
@@ -218,7 +200,7 @@ export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem 
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Character
+    this._type = ZkbSearchCriteriaTypes.Character
     this._class = 'mdi-account-circle'
     this._conflictKey = -1
     this._sortOrder = 1
@@ -231,7 +213,7 @@ export class CharacterSearchCriteriaListItem extends ZkbSearchCriteriaValueItem 
 export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Highsec
+    this._type = ZkbSearchCriteriaTypes.Highsec
     this._class = 'mdi-diameter'
     this._label = 'Highsec'
     this._conflictKey = 2
@@ -245,7 +227,7 @@ export class HighsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Lowsec
+    this._type = ZkbSearchCriteriaTypes.Lowsec
     this._class = 'mdi-diameter'
     this._label = 'Lowsec'
     this._conflictKey = 2
@@ -259,7 +241,7 @@ export class LowsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Nullsec
+    this._type = ZkbSearchCriteriaTypes.Nullsec
     this._class = 'mdi-diameter'
     this._label = 'Nullsec'
     this._conflictKey = 2
@@ -273,7 +255,7 @@ export class NullsecSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class WSpaceSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.WSpace
+    this._type = ZkbSearchCriteriaTypes.WSpace
     this._class = 'mdi-diameter'
     this._label = 'W-Space'
     this._conflictKey = 2
@@ -287,7 +269,7 @@ export class WSpaceSearchCriteriaListItem extends ZkbSearchCriteriaItem {
 export class AbyssalSearchCriteriaListItem extends ZkbSearchCriteriaItem {
   constructor() {
     super()
-    this._type = ZkbSearchCriteriaItemTypes.Abyssal
+    this._type = ZkbSearchCriteriaTypes.Abyssal
     this._class = 'mdi-diameter'
     this._label = 'Abyssal'
     this._conflictKey = 2
@@ -306,7 +288,7 @@ export class GroupSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Group
+    this._type = ZkbSearchCriteriaTypes.Group
     this._class = 'mdi-circle-double'
     this._conflictKey = -1
     this._sortOrder = 4
@@ -324,7 +306,7 @@ export class ShipSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Ship
+    this._type = ZkbSearchCriteriaTypes.Ship
     this._class = 'mdi-circle-double'
     this._conflictKey = -1
     this._sortOrder = 5
@@ -342,7 +324,7 @@ export class RegionSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Region
+    this._type = ZkbSearchCriteriaTypes.Region
     this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 8
@@ -360,7 +342,7 @@ export class ConstellationSearchCriteriaListItem extends ZkbSearchCriteriaValueI
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.Constellation
+    this._type = ZkbSearchCriteriaTypes.Constellation
     this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 9
@@ -378,7 +360,7 @@ export class SystemSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
    */
   constructor(value, label) {
     super(value, label)
-    this._type = ZkbSearchCriteriaItemTypes.System
+    this._type = ZkbSearchCriteriaTypes.System
     this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 10

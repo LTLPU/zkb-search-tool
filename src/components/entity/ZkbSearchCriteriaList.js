@@ -1,4 +1,4 @@
-import { ZkbSearchCriteriaItem } from './ZkbSearchCriteriaItem.js'
+import { ZkbSearchCriteriaItem } from '../entity/ZkbSearchCriteriaItem'
 
 export class ZkbSearchCriteriaList {
   constructor() {

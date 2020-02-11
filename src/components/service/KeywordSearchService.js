@@ -1,30 +1,55 @@
-import axios from 'axios'
-import { KeywordSearchResultItem } from '../entity/KeywordSearchResultItem.js'
+import { EntityId } from '../entity/EntityId'
+import { KeywordSearchResultItem } from '../entity/KeywordSearchResultItem'
 
-const CHARACTER_MAX = 5
-const ALLIANCE_MAX = 3
-const CORPORATION_MAX = 3
-const SYSTEM_MAX = 3
-const CONSTELLATION_MAX = 3
-const REGION_MAX = 3
+import { EntityTypes } from '../enum/EntityTypes'
+
+import { EntityInfoService } from '../service/EntityInfoService'
+
+import axios from 'axios'
+
+const MAX_SEARCH_RESULT = 5
 
 const GROUPS_PATH = './Groups.json'
 const SHIPS_PATH = './Ships.json'
 
+const entityInfoService = new EntityInfoService()
+
 export class KeywordSearchService {
   async search(searchWord = '') {
-    let searchResultList = []
+    const searchResultList = []
 
     if (searchWord === null || searchWord.length < 3) {
       return searchResultList
     }
 
-    searchResultList = searchResultList.concat(
-      await getSearchResultItemsFromCsv(searchWord)
-    )
-    searchResultList = searchResultList.concat(
-      await getSearchResultItems(searchWord)
-    )
+    const searchResultIdList = new SearchResultIdList()
+    searchResultIdList.append(await getCsvSearchResultEntityIds(searchWord))
+    searchResultIdList.append(await getEsiSearchResultEntityIds(searchWord))
+
+    // infoList取得
+    const promises = []
+    for (const entityId of searchResultIdList) {
+      promises.push(entityInfoService.getInfo(entityId))
+    }
+
+    const entityInfoList = []
+    await Promise.all(promises).then(resultList => {
+      resultList.forEach(result => {
+        entityInfoList.push(result)
+      })
+    })
+
+    // searchResultList取得
+    entityInfoList.forEach(entityInfo => {
+      searchResultList.push(
+        new KeywordSearchResultItem(
+          entityInfo.type,
+          entityInfo.id,
+          entityInfo.label,
+          entityInfo.img
+        )
+      )
+    })
 
     return searchResultList
   }
@@ -34,36 +59,21 @@ export class KeywordSearchService {
   }
 }
 
-async function getSearchResultItemsFromCsv(searchWord) {
-  const searchResultList = []
+async function getCsvSearchResultEntityIds(searchWord) {
+  const searchResultIdList = new SearchResultIdList()
 
-  const groupsSearchResult = await searchCsv(GROUPS_PATH, searchWord)
-  groupsSearchResult.forEach(item => {
-    searchResultList.push(
-      new KeywordSearchResultItem(
-        'group',
-        item.typeId,
-        `${item.name} (Group)`,
-        'groups.png'
-      )
-    )
-  })
+  searchResultIdList.append(
+    await searchCsv(GROUPS_PATH, EntityTypes.Group, searchWord)
+  )
 
-  const shipSearchResult = await searchCsv(SHIPS_PATH, searchWord)
-  shipSearchResult.forEach(item => {
-    searchResultList.push(
-      new KeywordSearchResultItem(
-        'ship',
-        item.typeId,
-        `${item.name} (Ship)`,
-        'ships.png'
-      )
-    )
-  })
-  return searchResultList
+  searchResultIdList.append(
+    await searchCsv(SHIPS_PATH, EntityTypes.Ship, searchWord)
+  )
+
+  return searchResultIdList
 }
 
-async function getSearchResultItems(searchWord) {
+async function getEsiSearchResultEntityIds(searchWord) {
   const searchResultPromises = []
 
   // 検索値 : alliance,character,constellation,corporation,region,solar_system
@@ -80,259 +90,121 @@ async function getSearchResultItems(searchWord) {
     )
   )
 
-  let resultItemPromises = []
+  const searchResultIdList = new SearchResultIdList()
 
+  // idList取得
   await Promise.all(searchResultPromises).then(resultList => {
     resultList.forEach(result => {
-      resultItemPromises = resultItemPromises.concat(
-        getResultItemPromises(result.data)
-      )
+      searchResultIdList.append(getSearchResultIdList(result.data))
     })
   })
 
-  const searchResultList = []
-
-  await Promise.all(resultItemPromises).then(resultList => {
-    resultList.forEach(result => {
-      searchResultList.push(result)
-    })
-  })
-
-  return searchResultList
+  return searchResultIdList
 }
 
-function getResultItemPromises(searchResultData) {
-  const promises = []
+function getSearchResultIdList(searchResultData) {
+  const searchResultIdList = new SearchResultIdList()
 
-  if ('solar_system' in searchResultData) {
-    for (
-      let i = 0;
-      i < SYSTEM_MAX && i < searchResultData.solar_system.length;
-      i++
-    ) {
-      promises.push(getSystemItem(searchResultData.solar_system[i]))
+  // Resultに追加する順番
+  const order = [
+    SearchCategories.System,
+    SearchCategories.Constellation,
+    SearchCategories.Region,
+    SearchCategories.Character,
+    SearchCategories.Corporation,
+    SearchCategories.Alliance
+  ]
+
+  order.forEach(category => {
+    if (category in searchResultData) {
+      const data = searchResultData[category]
+      for (let i = 0; i < MAX_SEARCH_RESULT && i < data.length; i++) {
+        searchResultIdList.push(
+          new EntityId(SearchCategoriesMap.get(category), data[i])
+        )
+      }
     }
-  }
-  if ('constellation' in searchResultData) {
-    for (
-      let i = 0;
-      i < CONSTELLATION_MAX && i < searchResultData.constellation.length;
-      i++
-    ) {
-      promises.push(getConstellationItem(searchResultData.constellation[i]))
-    }
-  }
-  if ('region' in searchResultData) {
-    for (let i = 0; i < REGION_MAX && i < searchResultData.region.length; i++) {
-      promises.push(getRegionItem(searchResultData.region[i]))
-    }
-  }
-  if ('character' in searchResultData) {
-    for (
-      let i = 0;
-      i < CHARACTER_MAX && i < searchResultData.character.length;
-      i++
-    ) {
-      promises.push(getCharacterItem(searchResultData.character[i]))
-    }
-  }
-  if ('corporation' in searchResultData) {
-    for (
-      let i = 0;
-      i < CORPORATION_MAX && i < searchResultData.corporation.length;
-      i++
-    ) {
-      promises.push(getCorporationItem(searchResultData.corporation[i]))
-    }
-  }
-  if ('alliance' in searchResultData) {
-    for (
-      let i = 0;
-      i < ALLIANCE_MAX && i < searchResultData.alliance.length;
-      i++
-    ) {
-      promises.push(getAllianceItem(searchResultData.alliance[i]))
-    }
-  }
-
-  return promises
-}
-
-function getCharacterItem(characterId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `https://esi.evetech.net/latest/characters/${characterId}/?datasource=tranquility`
-      )
-      .then(response => {
-        // TODO キャラクター画像アドレス取得
-        resolve(
-          new KeywordSearchResultItem(
-            'character',
-            characterId,
-            `${response.data.name} (Character)`,
-            'character.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(
-          new Error(
-            `キャラクター検索時エラー CharacterId=${characterId} Error=${error}`
-          )
-        )
-      })
   })
+
+  return searchResultIdList
 }
 
-function getAllianceItem(allianceId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `https://esi.evetech.net/latest/alliances/${allianceId}/?datasource=tranquility`
-      )
-      .then(response => {
-        // TODO キャラクター画像アドレス取得
-        resolve(
-          new KeywordSearchResultItem(
-            'alliance',
-            allianceId,
-            `${response.data.name} <${response.data.ticker}> (Alliance)`,
-            'alliance.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(
-          new Error(
-            `アライアンス検索時エラー AllianceId=${allianceId}} Error=${error}`
-          )
-        )
-      })
-  })
-}
-
-function getCorporationItem(corporationId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `https://esi.evetech.net/latest/corporations/${corporationId}/?datasource=tranquility`
-      )
-      .then(response => {
-        // TODO キャラクタ画像取得
-        resolve(
-          new KeywordSearchResultItem(
-            'corporation',
-            corporationId,
-            `${response.data.name} [${response.data.ticker}] (Corporation)`,
-            'corporation.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(
-          new Error(
-            `コーポレーション検索時エラー CorporationId=${corporationId}} Error=${error}`
-          )
-        )
-      })
-  })
-}
-
-function getSystemItem(systemId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility&language=en-us`
-      )
-      .then(response => {
-        // TODO ソーラーシステム画像取得
-        resolve(
-          new KeywordSearchResultItem(
-            'system',
-            systemId,
-            `${response.data.name} (System)`,
-            'system.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(
-          new Error(
-            `ソーラーシステム検索時エラー SystemId=${systemId}} Error=${error}`
-          )
-        )
-      })
-  })
-}
-
-function getConstellationItem(constellationId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `https://esi.evetech.net/latest/universe/constellations/${constellationId}/?datasource=tranquility&language=en-us`
-      )
-      .then(response => {
-        // TODO コンステレーション画像アドレス取得
-        resolve(
-          new KeywordSearchResultItem(
-            'constellation',
-            constellationId,
-            `${response.data.name} (Constellation)`,
-            'constellation.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(
-          new Error(
-            `コンステレーション検索時エラー ConstellationId=${constellationId}} Error=${error}`
-          )
-        )
-      })
-  })
-}
-
-function getRegionItem(regionId) {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `https://esi.evetech.net/latest/universe/regions/${regionId}/?datasource=tranquility&language=en-us`
-      )
-      .then(response => {
-        // TODO リージョン画像アドレス取得
-        resolve(
-          new KeywordSearchResultItem(
-            'region',
-            regionId,
-            `${response.data.name} (Region)`,
-            'region.jpg'
-          )
-        )
-      })
-      .catch(error => {
-        reject(
-          new Error(
-            `リージョン検索時エラー RegionId=${regionId}} Error=${error}`
-          )
-        )
-      })
-  })
-}
-
-function searchCsv(fileName, searchWord) {
+function searchCsv(fileName, EntityTypes, searchWord) {
   const regExp = new RegExp(searchWord, 'i')
   return new Promise((resolve, reject) => {
     axios
       .get(fileName)
       .then(response => {
+        const searchResultIdList = new SearchResultIdList()
         const resultList = response.data.filter(item => {
           return item.name.match(regExp) !== null
         })
-        resolve(resultList)
+        resultList.forEach(item => {
+          if (item.name.match(regExp) !== null) {
+            searchResultIdList.push(new EntityId(EntityTypes, item.typeId))
+          }
+        })
+        resolve(searchResultIdList)
       })
       .catch(error => {
         reject(error)
       })
   })
 }
+
+class SearchResultIdList {
+  constructor() {
+    this._idItemList = []
+  }
+
+  *[Symbol.iterator]() {
+    for (const idItem of this._idItemList) {
+      yield idItem
+    }
+  }
+
+  append(idList) {
+    if (!(idList instanceof SearchResultIdList)) {
+      throw new Error('idList must be SearchResultIdList')
+    }
+    for (const newItem of idList) {
+      this.push(newItem)
+    }
+  }
+
+  push(item) {
+    if (!(item instanceof EntityId)) {
+      throw new Error('item must be EntityId')
+    }
+    if (!this._isConflict(item)) {
+      this._idItemList.push(item)
+    }
+  }
+
+  _isConflict(newItem) {
+    for (const item of this._idItemList) {
+      if (item.equals(newItem)) {
+        return true
+      }
+    }
+    return false
+  }
+}
+
+const SearchCategories = {
+  System: 'solar_system',
+  Constellation: 'constellation',
+  Region: 'region',
+  Character: 'character',
+  Corporation: 'corporation',
+  Alliance: 'alliance'
+}
+
+const SearchCategoriesMap = new Map([
+  [SearchCategories.System, EntityTypes.System],
+  [SearchCategories.Constellation, EntityTypes.Constellation],
+  [SearchCategories.Region, EntityTypes.Region],
+  [SearchCategories.Character, EntityTypes.Character],
+  [SearchCategories.Corporation, EntityTypes.Corporation],
+  [SearchCategories.Alliance, EntityTypes.Alliance]
+])
