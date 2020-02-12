@@ -209,7 +209,7 @@ export class EntityInfoService {
           }
           resolve(
             new EntityInfo(
-              EntityType.Group,
+              EntityType.Ship,
               shipId,
               resultList[0].name,
               `${resultList[0].name} (Ship)`,
