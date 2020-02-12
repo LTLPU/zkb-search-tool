@@ -1,6 +1,6 @@
 import { EntityId } from '../entity/EntityId'
 import { EntityInfo } from '../entity/EntityInfo'
-import { EntityTypes } from '../enum/EntityTypes'
+import { EntityType } from '../enum/EntityType'
 
 import axios from 'axios'
 
@@ -13,24 +13,24 @@ export class EntityInfoService {
       throw new Error('entityId must be EntityId')
     }
     switch (entityId.type) {
-      case EntityTypes.System:
+      case EntityType.System:
         return this.getSystemInfo(entityId.id)
-      case EntityTypes.Constellation:
+      case EntityType.Constellation:
         return this.getConstellationInfo(entityId.id)
-      case EntityTypes.Region:
+      case EntityType.Region:
         return this.getRegionInfo(entityId.id)
-      case EntityTypes.Character:
+      case EntityType.Character:
         return this.getCharacterInfo(entityId.id)
-      case EntityTypes.Corporation:
+      case EntityType.Corporation:
         return this.getCorporationInfo(entityId.id)
-      case EntityTypes.Alliance:
+      case EntityType.Alliance:
         return this.getAllianceInfo(entityId.id)
-      case EntityTypes.Ship:
+      case EntityType.Ship:
         return this.getShipInfo(entityId.id)
-      case EntityTypes.Group:
+      case EntityType.Group:
         return this.getGroupInfo(entityId.id)
       default:
-        throw new Error(`Invalid EntityTypes. (${entityId.type})`)
+        throw new Error(`Invalid EntityType. (${entityId.type})`)
     }
   }
 
@@ -43,7 +43,7 @@ export class EntityInfoService {
         .then(response => {
           resolve(
             new EntityInfo(
-              EntityTypes.Character,
+              EntityType.Character,
               characterId,
               response.data.name,
               `${response.data.name} (Character)`,
@@ -70,7 +70,7 @@ export class EntityInfoService {
         .then(response => {
           resolve(
             new EntityInfo(
-              EntityTypes.Alliance,
+              EntityType.Alliance,
               allianceId,
               response.data.name,
               `${response.data.name} <${response.data.ticker}> (Alliance)`,
@@ -97,7 +97,7 @@ export class EntityInfoService {
         .then(response => {
           resolve(
             new EntityInfo(
-              EntityTypes.Corporation,
+              EntityType.Corporation,
               corporationId,
               response.data.name,
               `${response.data.name} [${response.data.ticker}] (Corporation)`,
@@ -124,7 +124,7 @@ export class EntityInfoService {
         .then(response => {
           resolve(
             new EntityInfo(
-              EntityTypes.System,
+              EntityType.System,
               systemId,
               response.data.name,
               `${response.data.name} (System)`,
@@ -151,7 +151,7 @@ export class EntityInfoService {
         .then(response => {
           resolve(
             new EntityInfo(
-              EntityTypes.Constellation,
+              EntityType.Constellation,
               constellationId,
               response.data.name,
               `${response.data.name} (Constellation)`,
@@ -178,7 +178,7 @@ export class EntityInfoService {
         .then(response => {
           resolve(
             new EntityInfo(
-              EntityTypes.Region,
+              EntityType.Region,
               regionId,
               response.data.name,
               `${response.data.name} (Region)`,
@@ -209,7 +209,7 @@ export class EntityInfoService {
           }
           resolve(
             new EntityInfo(
-              EntityTypes.Group,
+              EntityType.Group,
               shipId,
               resultList[0].name,
               `${resultList[0].name} (Ship)`,
@@ -236,7 +236,7 @@ export class EntityInfoService {
           }
           resolve(
             new EntityInfo(
-              EntityTypes.Group,
+              EntityType.Group,
               groupId,
               resultList[0].name,
               `${resultList[0].name} (Group)`,

@@ -1,4 +1,4 @@
-export const EntityTypes = {
+export const EntityType = {
   Alliance: 'alliance',
   Corporation: 'corporation',
   Character: 'character',

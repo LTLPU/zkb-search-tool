@@ -1,7 +1,7 @@
 import { EntityId } from '../entity/EntityId'
 import { KeywordSearchResultItem } from '../entity/KeywordSearchResultItem'
 
-import { EntityTypes } from '../enum/EntityTypes'
+import { EntityType } from '../enum/EntityType'
 
 import { EntityInfoService } from '../service/EntityInfoService'
 
@@ -63,11 +63,11 @@ async function getCsvSearchResultEntityIds(searchWord) {
   const searchResultIdList = new SearchResultIdList()
 
   searchResultIdList.append(
-    await searchCsv(GROUPS_PATH, EntityTypes.Group, searchWord)
+    await searchCsv(GROUPS_PATH, EntityType.Group, searchWord)
   )
 
   searchResultIdList.append(
-    await searchCsv(SHIPS_PATH, EntityTypes.Ship, searchWord)
+    await searchCsv(SHIPS_PATH, EntityType.Ship, searchWord)
   )
 
   return searchResultIdList
@@ -129,7 +129,7 @@ function getSearchResultIdList(searchResultData) {
   return searchResultIdList
 }
 
-function searchCsv(fileName, EntityTypes, searchWord) {
+function searchCsv(fileName, entityType, searchWord) {
   const regExp = new RegExp(searchWord, 'i')
   return new Promise((resolve, reject) => {
     axios
@@ -141,7 +141,7 @@ function searchCsv(fileName, EntityTypes, searchWord) {
         })
         resultList.forEach(item => {
           if (item.name.match(regExp) !== null) {
-            searchResultIdList.push(new EntityId(EntityTypes, item.typeId))
+            searchResultIdList.push(new EntityId(entityType, item.typeId))
           }
         })
         resolve(searchResultIdList)
@@ -201,10 +201,10 @@ const SearchCategories = {
 }
 
 const SearchCategoriesMap = new Map([
-  [SearchCategories.System, EntityTypes.System],
-  [SearchCategories.Constellation, EntityTypes.Constellation],
-  [SearchCategories.Region, EntityTypes.Region],
-  [SearchCategories.Character, EntityTypes.Character],
-  [SearchCategories.Corporation, EntityTypes.Corporation],
-  [SearchCategories.Alliance, EntityTypes.Alliance]
+  [SearchCategories.System, EntityType.System],
+  [SearchCategories.Constellation, EntityType.Constellation],
+  [SearchCategories.Region, EntityType.Region],
+  [SearchCategories.Character, EntityType.Character],
+  [SearchCategories.Corporation, EntityType.Corporation],
+  [SearchCategories.Alliance, EntityType.Alliance]
 ])

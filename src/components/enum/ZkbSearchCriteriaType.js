@@ -1,4 +1,4 @@
-export const ZkbSearchCriteriaTypes = {
+export const ZkbSearchCriteriaType = {
   Kills: 'kills',
   Losses: 'losses',
   Ganked: 'ganked',

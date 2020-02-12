@@ -177,7 +177,7 @@
 
 <script>
 import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList'
-import { ZkbSearchCriteriaTypes } from './enum/ZkbSearchCriteriaTypes'
+import { ZkbSearchCriteriaType } from './enum/ZkbSearchCriteriaType'
 
 import { KeywordSearchService } from './service/KeywordSearchService'
 import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService'
@@ -232,84 +232,84 @@ export default {
      * kills/を追加する。
      */
     addKills: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.Kills)
+      this.addCriteria(ZkbSearchCriteriaType.Kills)
     },
     addLosses: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.Losses)
+      this.addCriteria(ZkbSearchCriteriaType.Losses)
     },
     addSolo: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.Solo)
+      this.addCriteria(ZkbSearchCriteriaType.Solo)
     },
     addHighsec: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.Highsec)
+      this.addCriteria(ZkbSearchCriteriaType.Highsec)
     },
     addLowsec: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.Lowsec)
+      this.addCriteria(ZkbSearchCriteriaType.Lowsec)
     },
     addWSpace: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.WSpace)
+      this.addCriteria(ZkbSearchCriteriaType.WSpace)
     },
     addNullsec: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.Nullsec)
+      this.addCriteria(ZkbSearchCriteriaType.Nullsec)
     },
     addAbyssal: function() {
-      this.addCriteria(ZkbSearchCriteriaTypes.Abyssal)
+      this.addCriteria(ZkbSearchCriteriaType.Abyssal)
     },
     addSearchItem: function(resultItem) {
       // 検索条件追加
       switch (resultItem.type) {
         case 'character':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.Character,
+            ZkbSearchCriteriaType.Character,
             resultItem.id,
             resultItem.label
           )
           break
         case 'corporation':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.Corporation,
+            ZkbSearchCriteriaType.Corporation,
             resultItem.id,
             resultItem.label
           )
           break
         case 'alliance':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.Alliance,
+            ZkbSearchCriteriaType.Alliance,
             resultItem.id,
             resultItem.label
           )
           break
         case 'system':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.System,
+            ZkbSearchCriteriaType.System,
             resultItem.id,
             resultItem.label
           )
           break
         case 'constellation':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.Constellation,
+            ZkbSearchCriteriaType.Constellation,
             resultItem.id,
             resultItem.label
           )
           break
         case 'region':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.Region,
+            ZkbSearchCriteriaType.Region,
             resultItem.id,
             resultItem.label
           )
           break
         case 'group':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.Group,
+            ZkbSearchCriteriaType.Group,
             resultItem.id,
             resultItem.label
           )
           break
         case 'ship':
           this.addCriteria(
-            ZkbSearchCriteriaTypes.Ship,
+            ZkbSearchCriteriaType.Ship,
             resultItem.id,
             resultItem.label
           )
