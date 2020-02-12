@@ -1,9 +1,10 @@
 export class KeywordSearchResultItem {
-  constructor(type, id, label, icon) {
+  constructor(type, id, label, img, isStrict) {
     this._type = type
     this._id = id
     this._label = label
-    this._icon = icon
+    this._img = img
+    this._isStrict = isStrict
   }
 
   get type() {
@@ -18,7 +19,11 @@ export class KeywordSearchResultItem {
     return this._label
   }
 
-  get icon() {
-    return this._icon
+  get img() {
+    return this._img
+  }
+
+  get isStrict() {
+    return this._isStrict
   }
 }

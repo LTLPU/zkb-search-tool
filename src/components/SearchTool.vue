@@ -58,12 +58,24 @@
                     <v-list-item
                       v-for="(resultItem, idx) of searchResultList"
                       :key="idx"
+                      @click="addSearchItem(resultItem)"
                     >
-                      <v-list-item-content @click="addSearchItem(resultItem)">
+                      <v-list-item-content>
                         <v-list-item-title
                           v-text="resultItem.label"
+                          v-if="resultItem.isStrict"
+                          class="font-weight-bold"
+                        ></v-list-item-title>
+                        <v-list-item-title
+                          v-text="resultItem.label"
+                          v-else
                         ></v-list-item-title>
                       </v-list-item-content>
+                      <v-list-item-icon>
+                        <v-icon v-if="resultItem.isStrict" color="primary"
+                          >mdi-check</v-icon
+                        >
+                      </v-list-item-icon>
                     </v-list-item>
                   </v-list-item-group>
                 </v-list>
@@ -179,13 +191,13 @@
 import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList'
 import { ZkbSearchCriteriaType } from './enum/ZkbSearchCriteriaType'
 
-import { KeywordSearchService } from './service/KeywordSearchService'
+import { KeywordSearchApplication } from './application/KeywordSearchApplication'
 import { ZkbSearchCriteriaService } from './service/ZkbSearchCriteriaService'
 
 import _ from 'lodash'
 import VueResponsiveText from 'vue-responsive-text'
 
-const keywordSearchService = new KeywordSearchService()
+const keywordSearchApplication = new KeywordSearchApplication()
 
 export default {
   name: 'SearchTool',
@@ -341,7 +353,7 @@ export default {
       this.generatedUrl = this._zkbSearchCriteriaService.getSearchUrl()
     },
     search: function(searchWord) {
-      keywordSearchService
+      keywordSearchApplication
         .search(searchWord)
         .then(res => {
           this.searchResultList = res
