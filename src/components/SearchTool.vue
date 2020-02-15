@@ -74,7 +74,7 @@
                           v-else
                         ></v-list-item-title>
                       </v-list-item-content>
-                      <v-list-item-avatar v-if="resultItem.isStrict">
+                      <v-list-item-avatar size="32" v-if="resultItem.isStrict">
                         <v-icon color="primary">mdi-circle-small</v-icon>
                       </v-list-item-avatar>
                     </v-list-item>
