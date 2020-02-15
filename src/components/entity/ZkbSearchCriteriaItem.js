@@ -11,6 +11,8 @@ export class ZkbSearchCriteriaItemFactory {
         return new GankedSearchCriteriaListItem()
       case ZkbSearchCriteriaType.Solo:
         return new SoloSearchCriteriaListItem()
+      case ZkbSearchCriteriaType.Finalblow:
+        return new FinalblowSearchCriteriaListItem()
       case ZkbSearchCriteriaType.Alliance:
         return new AllianceSearchCriteriaListItem(value, label)
       case ZkbSearchCriteriaType.Corporation:
@@ -37,6 +39,8 @@ export class ZkbSearchCriteriaItemFactory {
         return new ConstellationSearchCriteriaListItem(value, label)
       case ZkbSearchCriteriaType.System:
         return new SystemSearchCriteriaListItem(value, label)
+      case ZkbSearchCriteriaType.IskValue:
+        return new IskValueSearchCriteriaListItem(value, label)
       default:
         throw new Error(`invalid itemtype = ${itemType}`)
     }
@@ -150,6 +154,20 @@ export class SoloSearchCriteriaListItem extends ZkbSearchCriteriaItem {
     this._label = 'Solo'
     this._conflictKey = 4
     this._sortOrder = 11
+  }
+}
+
+/**
+ * Finalblow
+ */
+export class FinalblowSearchCriteriaListItem extends ZkbSearchCriteriaItem {
+  constructor() {
+    super()
+    this._type = ZkbSearchCriteriaType.Finalblow
+    this._class = 'mdi-circle-double'
+    this._label = 'Finalblow'
+    this._conflictKey = 5
+    this._sortOrder = 12
   }
 }
 
@@ -364,5 +382,23 @@ export class SystemSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
     this._class = 'mdi-map-marker-circle'
     this._conflictKey = -1
     this._sortOrder = 10
+  }
+}
+
+/**
+ * IskValue
+ */
+export class IskValueSearchCriteriaListItem extends ZkbSearchCriteriaValueItem {
+  /**
+   *
+   * @param {String} value IskValue
+   * @param {String} label IskValueLabel
+   */
+  constructor(value, label) {
+    super(value, label)
+    this._type = ZkbSearchCriteriaType.IskValue
+    this._class = 'mdi-currency-usd'
+    this._conflictKey = 6
+    this._sortOrder = 13
   }
 }

@@ -3,6 +3,7 @@ export const ZkbSearchCriteriaType = {
   Losses: 'losses',
   Ganked: 'ganked',
   Solo: 'solo',
+  Finalblow: 'finalblow-only',
   Alliance: 'alliance',
   Corporation: 'corporation',
   Character: 'character',
@@ -15,5 +16,6 @@ export const ZkbSearchCriteriaType = {
   Ship: 'ship',
   Region: 'region',
   Constellation: 'constellation',
-  System: 'system'
+  System: 'system',
+  IskValue: 'iskValue'
 }

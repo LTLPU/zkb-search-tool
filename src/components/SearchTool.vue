@@ -181,6 +181,58 @@
               </v-card-text>
             </v-card>
           </v-col>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto text-no-wrap overflow-x-auto"
+              cols="1"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  outlined
+                  class="mr-2 font-weight-bold"
+                  color="pink darken-4"
+                  @click="addFinalblow()"
+                >
+                  Finalblow
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col md="auto">
+            <v-card
+              class="mx-auto text-no-wrap overflow-x-auto"
+              cols="3"
+              outlined
+            >
+              <v-card-text>
+                <v-btn
+                  outlined
+                  class="mr-2 font-weight-bold"
+                  color="amber darken-4"
+                  @click="addIskValue(5000000000, '5b+')"
+                >
+                  5B+
+                </v-btn>
+                <v-btn
+                  outlined
+                  class="mr-2 font-weight-bold"
+                  color="orange darken-4"
+                  @click="addIskValue(10000000000, '10b+')"
+                >
+                  10B+
+                </v-btn>
+                <v-btn
+                  outlined
+                  class="mr-2 font-weight-bold"
+                  color="deep-orange darken-4"
+                  @click="addIskValue(20000000000, '20b+')"
+                >
+                  20B+
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
       </v-flex>
     </v-layout>
@@ -268,6 +320,12 @@ export default {
     },
     addAbyssal: function() {
       this.addCriteria(ZkbSearchCriteriaType.Abyssal)
+    },
+    addFinalblow: function() {
+      this.addCriteria(ZkbSearchCriteriaType.Finalblow)
+    },
+    addIskValue: function(price, label) {
+      this.addCriteria(ZkbSearchCriteriaType.IskValue, price, label)
     },
     addSearchItem: function(resultItem) {
       // 検索条件追加
