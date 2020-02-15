@@ -73,7 +73,7 @@
                       </v-list-item-content>
                       <v-list-item-icon>
                         <v-icon v-if="resultItem.isStrict" color="primary"
-                          >mdi-check</v-icon
+                          >mdi-circle-small</v-icon
                         >
                       </v-list-item-icon>
                     </v-list-item>
