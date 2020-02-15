@@ -273,7 +273,9 @@ export default {
       // 検索条件追加
       if (EntityTypeMap.has(resultItem.type)) {
         this.addCriteria(
-          EntityTypeMap.get(resultItem.type, resultItem.id, resultItem.label)
+          EntityTypeMap.get(resultItem.type),
+          resultItem.id,
+          resultItem.label
         )
       } else {
         throw new Error('something wrong')
