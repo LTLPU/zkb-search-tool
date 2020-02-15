@@ -189,6 +189,8 @@
 
 <script>
 import { ZkbSearchCriteriaList } from './entity/ZkbSearchCriteriaList'
+
+import { EntityType } from './enum/EntityType'
 import { ZkbSearchCriteriaType } from './enum/ZkbSearchCriteriaType'
 
 import { KeywordSearchApplication } from './application/KeywordSearchApplication'
@@ -269,65 +271,12 @@ export default {
     },
     addSearchItem: function(resultItem) {
       // 検索条件追加
-      switch (resultItem.type) {
-        case 'character':
-          this.addCriteria(
-            ZkbSearchCriteriaType.Character,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        case 'corporation':
-          this.addCriteria(
-            ZkbSearchCriteriaType.Corporation,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        case 'alliance':
-          this.addCriteria(
-            ZkbSearchCriteriaType.Alliance,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        case 'system':
-          this.addCriteria(
-            ZkbSearchCriteriaType.System,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        case 'constellation':
-          this.addCriteria(
-            ZkbSearchCriteriaType.Constellation,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        case 'region':
-          this.addCriteria(
-            ZkbSearchCriteriaType.Region,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        case 'group':
-          this.addCriteria(
-            ZkbSearchCriteriaType.Group,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        case 'ship':
-          this.addCriteria(
-            ZkbSearchCriteriaType.Ship,
-            resultItem.id,
-            resultItem.label
-          )
-          break
-        default:
-          throw new Error('something wrong')
+      if (EntityTypeMap.has(resultItem.type)) {
+        this.addCriteria(
+          EntityTypeMap.get(resultItem.type, resultItem.id, resultItem.label)
+        )
+      } else {
+        throw new Error('something wrong')
       }
 
       // 入力状態クリア
@@ -364,4 +313,15 @@ export default {
     }
   }
 }
+
+const EntityTypeMap = new Map([
+  [EntityType.Character, ZkbSearchCriteriaType.Character],
+  [EntityType.Corporation, ZkbSearchCriteriaType.Corporation],
+  [EntityType.Alliance, ZkbSearchCriteriaType.Alliance],
+  [EntityType.System, ZkbSearchCriteriaType.System],
+  [EntityType.Constellation, ZkbSearchCriteriaType.Constellation],
+  [EntityType.Region, ZkbSearchCriteriaType.Region],
+  [EntityType.Ship, ZkbSearchCriteriaType.Ship],
+  [EntityType.Group, ZkbSearchCriteriaType.Group]
+])
 </script>
