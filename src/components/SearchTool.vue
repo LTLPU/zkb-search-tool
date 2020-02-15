@@ -25,8 +25,8 @@
                     @click="removeCriteria(idx)"
                     @click:close="removeCriteria(idx)"
                     class="ma-2 font-weight-bold"
-                    color="grey darken-2"
-                    text-color="white"
+                    :color="criteriaItem.color"
+                    outlined
                     pill
                     close
                   >
@@ -97,7 +97,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="green darken-4"
+                  color="kills"
                   @click="addKills()"
                 >
                   Kills
@@ -105,7 +105,7 @@
                 <v-btn
                   outlined
                   class="font-weight-bold"
-                  color="red darken-4"
+                  color="losses"
                   @click="addLosses()"
                 >
                   Losses
@@ -123,7 +123,7 @@
                 <v-btn
                   outlined
                   class="font-weight-bold"
-                  color="green darken-4"
+                  color="solo"
                   @click="addSolo()"
                 >
                   Solo
@@ -141,7 +141,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="blue darken-4"
+                  color="highsec"
                   @click="addHighsec()"
                 >
                   Highsec
@@ -149,7 +149,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="orange darken-4"
+                  color="lowsec"
                   @click="addLowsec()"
                 >
                   Lowsec
@@ -157,7 +157,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="red darken-4"
+                  color="nullsec"
                   @click="addNullsec()"
                 >
                   Nullsec
@@ -165,7 +165,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="purple darken-4"
+                  color="wspace"
                   @click="addWSpace()"
                 >
                   W-Space
@@ -173,7 +173,7 @@
                 <v-btn
                   outlined
                   class="font-weight-bold"
-                  color="grey darken-4"
+                  color="abyssal"
                   @click="addAbyssal()"
                 >
                   Abyssal
@@ -191,7 +191,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="pink darken-4"
+                  color="finalblow"
                   @click="addFinalblow()"
                 >
                   Finalblow
@@ -209,7 +209,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="amber darken-4"
+                  color="isk5b"
                   @click="addIskValue(5000000000, '5b+')"
                 >
                   5B+
@@ -217,7 +217,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="orange darken-4"
+                  color="isk10b"
                   @click="addIskValue(10000000000, '10b+')"
                 >
                   10B+
@@ -225,7 +225,7 @@
                 <v-btn
                   outlined
                   class="mr-2 font-weight-bold"
-                  color="deep-orange darken-4"
+                  color="isk20b"
                   @click="addIskValue(20000000000, '20b+')"
                 >
                   20B+
