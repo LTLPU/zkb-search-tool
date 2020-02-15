@@ -47,16 +47,12 @@ export class EntityInfoService {
               characterId,
               response.data.name,
               `${response.data.name} (Character)`,
-              'character.jpg'
+              `https://images.evetech.net/characters/${characterId}/portrait?size=64`
             )
           )
         })
         .catch(error => {
-          reject(
-            new Error(
-              `キャラクター検索エラー CharacterId=${characterId} Error=${error}`
-            )
-          )
+          reject(new Error(`CharacterId=${characterId} / ${error}`))
         })
     })
   }
@@ -74,16 +70,12 @@ export class EntityInfoService {
               allianceId,
               response.data.name,
               `${response.data.name} <${response.data.ticker}> (Alliance)`,
-              'alliance.jpg'
+              `https://images.evetech.net/alliances/${allianceId}/logo?size=64`
             )
           )
         })
         .catch(error => {
-          reject(
-            new Error(
-              `アライアンス検索エラー AllianceId=${allianceId} Error=${error}`
-            )
-          )
+          reject(new Error(`AllianceId=${allianceId} / ${error}`))
         })
     })
   }
@@ -101,16 +93,12 @@ export class EntityInfoService {
               corporationId,
               response.data.name,
               `${response.data.name} [${response.data.ticker}] (Corporation)`,
-              'corporation.jpg'
+              `https://images.evetech.net/corporations/${corporationId}/logo?size=64`
             )
           )
         })
         .catch(error => {
-          reject(
-            new Error(
-              `コーポレーション検索エラー CorporationId=${corporationId} Error=${error}`
-            )
-          )
+          reject(new Error(`CorporationId=${corporationId} / ${error}`))
         })
     })
   }
@@ -128,16 +116,12 @@ export class EntityInfoService {
               systemId,
               response.data.name,
               `${response.data.name} (System)`,
-              'system.jpg'
+              './img/systems.png'
             )
           )
         })
         .catch(error => {
-          reject(
-            new Error(
-              `ソーラーシステム検索エラー SystemId=${systemId} Error=${error}`
-            )
-          )
+          reject(new Error(`SystemId=${systemId} / ${error}`))
         })
     })
   }
@@ -155,16 +139,12 @@ export class EntityInfoService {
               constellationId,
               response.data.name,
               `${response.data.name} (Constellation)`,
-              'constellation.jpg'
+              './img/systems.png'
             )
           )
         })
         .catch(error => {
-          reject(
-            new Error(
-              `コンステレーション検索エラー ConstellationId=${constellationId} Error=${error}`
-            )
-          )
+          reject(new Error(`ConstellationId=${constellationId} / ${error}`))
         })
     })
   }
@@ -182,16 +162,12 @@ export class EntityInfoService {
               regionId,
               response.data.name,
               `${response.data.name} (Region)`,
-              'region.jpg'
+              './img/systems.png'
             )
           )
         })
         .catch(error => {
-          reject(
-            new Error(
-              `リージョン検索エラー RegionId=${regionId} Error=${error}`
-            )
-          )
+          reject(new Error(`RegionId=${regionId} / ${error}`))
         })
     })
   }
@@ -213,12 +189,12 @@ export class EntityInfoService {
               shipId,
               resultList[0].name,
               `${resultList[0].name} (Ship)`,
-              'ship.jpg'
+              `https://images.evetech.net/types/${shipId}/icon?size=64`
             )
           )
         })
         .catch(error => {
-          reject(new Error(`Ship検索エラー RegionId=${shipId}} Error=${error}`))
+          reject(new Error(`ShipId=${shipId}} / ${error}`))
         })
     })
   }
@@ -240,14 +216,12 @@ export class EntityInfoService {
               groupId,
               resultList[0].name,
               `${resultList[0].name} (Group)`,
-              'group.jpg'
+              './img/ship.png'
             )
           )
         })
         .catch(error => {
-          reject(
-            new Error(`Group検索エラー RegionId=${groupId}}} Error=${error}`)
-          )
+          reject(new Error(`GroupId=${groupId} / ${error}`))
         })
     })
   }

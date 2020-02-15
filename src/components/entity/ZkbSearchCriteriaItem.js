@@ -68,7 +68,6 @@ export class ZkbSearchCriteriaItem {
   }
 
   get color() {
-    console.log(this._color)
     return this._color
   }
 

@@ -60,6 +60,9 @@
                       :key="idx"
                       @click="addSearchItem(resultItem)"
                     >
+                      <v-list-item-avatar size="32">
+                        <v-img :src="resultItem.img"></v-img>
+                      </v-list-item-avatar>
                       <v-list-item-content>
                         <v-list-item-title
                           v-text="resultItem.label"
@@ -71,11 +74,9 @@
                           v-else
                         ></v-list-item-title>
                       </v-list-item-content>
-                      <v-list-item-icon>
-                        <v-icon v-if="resultItem.isStrict" color="primary"
-                          >mdi-circle-small</v-icon
-                        >
-                      </v-list-item-icon>
+                      <v-list-item-avatar v-if="resultItem.isStrict">
+                        <v-icon color="primary">mdi-circle-small</v-icon>
+                      </v-list-item-avatar>
                     </v-list-item>
                   </v-list-item-group>
                 </v-list>

@@ -25,14 +25,14 @@ export default new Vuetify({
         isk5b: colors.amber.darken4,
         isk10b: colors.orange.darken4,
         isk20b: colors.red.darken4,
-        character: colors.grey.darken4,
-        corporation: colors.grey.darken4,
-        alliance: colors.grey.darken4,
-        system: colors.grey.darken4,
-        constellation: colors.grey.darken4,
-        region: colors.grey.darken4,
-        ship: colors.grey.darken4,
-        group: colors.grey.darken4
+        character: colors.blueGrey.darken4,
+        corporation: colors.blueGrey.darken4,
+        alliance: colors.blueGrey.darken4,
+        system: colors.teal.darken4,
+        constellation: colors.teal.darken4,
+        region: colors.teal.darken4,
+        ship: colors.lime.darken4,
+        group: colors.lime.darken4
       }
     }
   }
