@@ -31,8 +31,8 @@ export default new Vuetify({
         system: colors.teal.darken4,
         constellation: colors.teal.darken4,
         region: colors.teal.darken4,
-        ship: colors.lime.darken4,
-        group: colors.lime.darken4
+        ship: colors.brown.darken4,
+        group: colors.brown.darken4
       }
     }
   }
