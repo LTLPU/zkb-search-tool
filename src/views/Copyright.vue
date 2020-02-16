@@ -5,12 +5,9 @@
         <v-flex xs12>
           <v-row class="py-8">
             <v-col class="d-flex pa-3 ma-3" justify="center">
-              <vue-responsive-text
-                :transition="Number(0)"
-                class="font-weight-medium"
-              >
-                CCP Copyright Notice
-              </vue-responsive-text>
+              <v-spacer></v-spacer>
+              <h1 class="display-4 font-weight-bold">zkb-search-tool</h1>
+              <v-spacer></v-spacer>
             </v-col>
           </v-row>
         </v-flex>
@@ -19,6 +16,7 @@
           <v-row>
             <v-col>
               <v-card outlined>
+                <v-card-title>COPYRIGHT NOTICE</v-card-title>
                 <v-card-text>
                   <p>
                     EVE Online and the EVE logo are the registered trademarks of
@@ -54,12 +52,8 @@
 </template>
 
 <script>
-import VueResponsiveText from 'vue-responsive-text'
-
 export default {
   name: 'copyright',
-  components: {
-    VueResponsiveText
-  }
+  components: {}
 }
 </script>
