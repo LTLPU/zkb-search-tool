@@ -2,12 +2,15 @@
   <div class="copyright">
     <v-container>
       <v-layout wrap>
-        <v-flex xs12>
-          <v-row class="py-8">
+        <v-flex xs12 class="pa-8">
+          <v-row>
             <v-col class="d-flex pa-3 ma-3" justify="center">
-              <v-spacer></v-spacer>
-              <h1 class="display-4 font-weight-bold">zkb-search-tool</h1>
-              <v-spacer></v-spacer>
+              <vue-responsive-text
+                :transition="Number(100)"
+                class="font-weight-medium"
+              >
+                <span>zkb-search-tool</span>
+              </vue-responsive-text>
             </v-col>
           </v-row>
         </v-flex>
@@ -52,8 +55,12 @@
 </template>
 
 <script>
+import VueResponsiveText from 'vue-responsive-text'
+
 export default {
   name: 'copyright',
-  components: {}
+  components: {
+    VueResponsiveText
+  }
 }
 </script>
