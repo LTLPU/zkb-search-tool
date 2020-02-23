@@ -45,7 +45,9 @@
           </v-row>
           <v-row>
             <v-col justify="center">
-              <p class="text-center"><a href="./">Back</a></p>
+              <p class="text-center">
+                <router-link to="/">Back</router-link>
+              </p>
             </v-col>
           </v-row>
         </v-flex>

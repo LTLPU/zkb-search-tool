@@ -11,7 +11,7 @@
             >GitHub</a
           >
           /
-          <a href="./copyright">CCP Copyright Notice</a>
+          <router-link to="/copyright">CCP Copyright Notice</router-link>
         </v-col>
       </v-row>
     </v-footer>
