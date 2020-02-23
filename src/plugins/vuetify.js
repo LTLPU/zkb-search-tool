@@ -7,6 +7,7 @@ Vue.use(Vuetify)
 
 export default new Vuetify({
   theme: {
+    dark: false,
     themes: {
       light: {
         primary: colors.blue.darken2,
@@ -35,30 +36,30 @@ export default new Vuetify({
         group: colors.brown.darken4
       },
       dark: {
-        primary: colors.blue.lighten2,
+        primary: colors.blue.darken2,
         secondary: colors.red.darken4,
         accent: colors.indigo.base,
-        kills: colors.green.lighten4,
-        losses: colors.red.lighten4,
-        solo: colors.green.lighten4,
-        highsec: colors.blue.lighten4,
-        lowsec: colors.orange.lighten4,
-        nullsec: colors.red.lighten4,
-        wspace: colors.purple.lighten4,
-        abyssal: colors.grey.lighten4,
-        finalblow: colors.pink.lighten4,
-        iskvalue: colors.cyan.lighten4,
-        isk5b: colors.amber.lighten4,
-        isk10b: colors.orange.lighten4,
-        isk20b: colors.red.lighten4,
-        character: colors.blueGrey.lighten4,
-        corporation: colors.blueGrey.lighten4,
-        alliance: colors.blueGrey.lighten4,
-        system: colors.teal.lighten4,
-        constellation: colors.teal.lighten4,
-        region: colors.teal.lighten4,
-        ship: colors.brown.lighten4,
-        group: colors.brown.lighten4
+        kills: colors.green.lighten1,
+        losses: colors.red.lighten1,
+        solo: colors.green.lighten1,
+        highsec: colors.blue.lighten1,
+        lowsec: colors.orange.lighten1,
+        nullsec: colors.red.lighten1,
+        wspace: colors.purple.lighten1,
+        abyssal: colors.grey.lighten1,
+        finalblow: colors.pink.lighten1,
+        iskvalue: colors.cyan.lighten1,
+        isk5b: colors.amber.lighten1,
+        isk10b: colors.orange.lighten1,
+        isk20b: colors.red.lighten1,
+        character: colors.blueGrey.lighten1,
+        corporation: colors.blueGrey.lighten1,
+        alliance: colors.blueGrey.lighten1,
+        system: colors.teal.lighten1,
+        constellation: colors.teal.lighten1,
+        region: colors.teal.lighten1,
+        ship: colors.brown.lighten1,
+        group: colors.brown.lighten1
       }
     }
   }
