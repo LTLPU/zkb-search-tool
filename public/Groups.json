@@ -6,6 +6,7 @@
 	{ "typeId": "29", "name": "Capsule" },
 	{ "typeId": "30", "name": "Titan" },
 	{ "typeId": "31", "name": "Shuttle" },
+	{ "typeId": "101", "name": "Mining Drone"},
 	{ "typeId": "237", "name": "Corvette" },
 	{ "typeId": "324", "name": "Assault Frigate" },
 	{ "typeId": "358", "name": "Heavy Assault Cruiser" },
